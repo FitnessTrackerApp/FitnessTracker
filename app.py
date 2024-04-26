@@ -1,18 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='fitnesstracker/static', template_folder='fitnesstracker/templates')
 
-@app.route("/")
-def home():
-    return "Hello, World!"
+@app.route('/')
+def index():
+    return render_template('login.html')
 
-@app.route("/shares")
-def shares():
-    return "Shares page"
-
-@app.route("/profile")
-def profile():
-    return {"id":1, "name": "Serhat", "age":22, "following":15, "followers":50, "followersList":["Yagiz","Kaan", "Melih", "Bartu"]}
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
