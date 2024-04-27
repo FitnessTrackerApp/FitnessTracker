@@ -10,21 +10,31 @@ body {
 }
 
 .container {
-    display: flex;
+    display:flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+.form-analysis {
+    margin: 100px; /* Adjust spacing between form box and form analysis */
+    margin-bottom: 200px;
+    color: white;
+    margin-right: 300px;
+    font-size:xx-large;
 }
 
 .form-box {
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.4);
+    padding: 50px;
+    padding-top: 20px;
 }
 
 .form-box h2 {
     color: black;
-    text-align: center;
+    text-align: left;
+    margin-bottom: 30px;
 }
 
 .form-group {
@@ -38,25 +48,23 @@ body {
 }
 
 .form-group input {
-    width: 100%;
+    width: 250px;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 12px;
 }
 
 .form-group button {
-    width: 100%;
+    width: 100px;
     padding: 10px;
-    border: none;
+    border:1px solid #ccc;
     border-radius: 5px;
     background-color: #56ED65;
     color: white;
     font-weight: bold;
+    font-size: medium;
     cursor: pointer;
-}
-
-.form-analysis {
-    margin-left: 20px; /* Adjust spacing between form box and form analysis */
+    
 }
 
 /* Responsive Design */
