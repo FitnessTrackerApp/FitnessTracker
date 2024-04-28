@@ -1,3 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-decoration: none;
+    list-style: none;
+    border: none;
+    outline: none;
+}
+
 body {
     background-color:rgb(255, 255, 255);
     font-family: Arial, sans-serif;
@@ -13,13 +28,33 @@ body {
     display: flex;
     background-color:#56ED65;
     color: white;
-    height: auto;
+    height: 70px;
+
+}
+
+.form-analysis h1 {
+    width: 210px;
+}
+
+.form-analysis h1:hover {
+    opacity: 40%;
+}
+
+.form-analysis a {
+    width: 210px;
 }
 
 .form-analysis {
-    margin-left: 132px;
+    margin-left: 610px;
+    width: 210px;
+    font-size: xx-large;
     flex-grow: 1;
     text-align: center; 
+    margin-right: 500px;
+}
+
+.form-analysis div {
+    width: 100px;
 }
 
 .icons {
@@ -37,15 +72,25 @@ body {
     background-color: #000000;
 }
 
+.icons a:hover{
+    opacity: 75%;
+}
+
 .main {
     padding-left: 15px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: xx-large;
+    margin: 20px 0px 20px 0px;
 }
 
 .form-group {
     display: flex;
 }
 
-.form-group button {
+.form-group div {
     width: 300px;
     height: 200px;
     padding: 8px;
@@ -63,8 +108,20 @@ body {
     display: flex; /* Display the elements as flex */
     align-items: center; /* Align items vertically center */
     cursor: pointer;
+    
+}
+
+.form-group div:hover {
+    opacity: 85%;
 }
 
 .form-group img {
-    height: 70px;
+    height: 80px;
+    margin-left: -10px;
+}
+
+.form-group p {
+
+    margin-right: -10px;
+
 }

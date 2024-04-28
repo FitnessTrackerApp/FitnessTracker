@@ -10,9 +10,14 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/homepage')
-def homepage():
-    return render_template('homepage.html')
+@app.route('/traineehomepage')
+def traineehomepage():
+    return render_template('traineehomepage.html')
+
+@app.route('/traineeprofile')
+def traineeprofile():
+    return render_template('traineeprofile.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
