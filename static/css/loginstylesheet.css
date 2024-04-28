@@ -86,6 +86,10 @@ body {
     
 }
 
+.form-group button:hover {
+    opacity: 85%;
+}
+
 .form-group2 {
     margin-bottom: 20px;
     display: flex; 
