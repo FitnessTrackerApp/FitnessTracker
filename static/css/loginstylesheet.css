@@ -9,12 +9,6 @@ body {
     height: 100vh;
 }
 
-.container {
-    display:flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
 .brand {
     display: flex;
     justify-content: center;
@@ -53,7 +47,7 @@ body {
 
 .form-group {
     margin-bottom: 20px;
-    display: flex; /* Add this line */
+    display: flex; 
     justify-content: flex-end;
 }
 
@@ -73,7 +67,7 @@ body {
     color: #000000;
 }
 
-.form-group button {
+button {
     width: 90px;
     padding: 8px;
     border:1px solid #ccc;
@@ -86,28 +80,30 @@ body {
     
 }
 
-.form-group button:hover {
+.form-box button:hover {
     opacity: 85%;
 }
 
-.form-group2 {
-    margin-bottom: 20px;
-    display: flex; 
-    justify-content:left;
-    flex-direction: column;
+.form-box input:hover {
+    opacity: 85%;
 }
 
-.form-group2 p {
+.form-box p {
     color: #909090;
     margin-bottom: 0;
     margin-top: 20px;
 }
 
-.form-group2 a {
+.form-box a {
     color: #15A723;
     display: block;
     
 }
+
+.form-box a:hover {
+    opacity: 75%;
+}
+
 
 /* Responsive Design */
 
