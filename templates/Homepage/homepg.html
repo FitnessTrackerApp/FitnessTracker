@@ -6,50 +6,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
+
 <body>
 
-    <body>
-    
-        <div class = "container">
-            <div class="form-analysis">
-                <a href=""> 
-                    <h1>FormAnalysis</h1> 
-                </a>
-            </div>
-
-            <div>
-                <div class= "icons"> 
-                    <a href=""><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
-                        <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
-                </div>
+    <div class = "container">
+        <div class="form-analysis">
+            <a href=""> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
+        <div>
+            <div class= "icons"> 
+                <a href=""><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+                    <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
             </div>
         </div>
-        
-        
+    </div>
 
-        <div>
-            <h1>Welcome back x </h1>
-            <h3>From My Trainer</h3>
+    <div class= "main">
+        <h1>Welcome back, X </h1>
+        <h1>From My Trainer</h1>
+
+        <div class= "form-group">
             <form action="{{ url_for('add_pt') }}" method="get">
-                <button>Add Personal Trainer</button>
+                <button>
+                    <img src= "/static/image/plus.png">
+                    Add Personal Trainer
+                </button>
             </form>
+
             <form action="{{ url_for('programs') }}" method="get">
-                <button type="submit">John Doe</button>
-                <div>23years old, 32kgs, 110cm</div>
+                <button>
+                    <div>
+                        <p>John Doe</p>
+                        <p>male, 23 y.o.</p>
+                    </div>
+                </button>
+            </form>
+        </div>
+
+        <h1>My Progress</h1>
+
+        <div class= "form-group">
+            <form action="{{url_for('add_goal')}}" method="get">    
+                <button>
+                    <img src= "/static/image/plus.png">  
+                    Add Goal
+                </button> 
+            </form>
+
+            <form action="{{url_for('my_goals')}}" method="get"> 
+                <button>
+                    <img src= "/static/image/progress.png">  
+                    My Goals
+                </button> 
             </form>
             
-        </div>
-
-        <div>
-            <h3>My Progress</h3>
-
-            <form action="{{url_for('add_goals')}}" method="get"> <button>Add Goal</button> </form>
-
-            <form action="{{url_for('my_goals')}}" method="get"> <button>My Goals</button> </form>
-            
-            <form action="{{url_for('workout_session')}}" method="get"> <button>Workout Session</button> </form>
+            <form action="{{url_for('workout_session')}}" method="get"> 
+                <button>
+                    <img src= "/static/image/dumbbell.png" style= "rotate: 135deg;"> 
+                    Workout Session
+                </button> 
+            </form>
         </div>
         
-        
-    </body>
+    </div>
+
+</body>
 </html>
