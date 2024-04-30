@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     if 'loggedin' in session:
-        return redirect(url_for('main_page'))
+        return redirect(url_for('homepage'))
     else:
         return redirect(url_for('login'))
 
@@ -86,10 +86,10 @@ def add_pt():
     
     return render_template('Homepage/add-pt.html')
 
-@app.route('/add-goals')
-def add_goals():
+@app.route('/add-goal')
+def add_goal():
 
-    return render_template('Homepage/add-goals.html')
+    return render_template('Homepage/add-goal.html')
 
 @app.route('/my-goals')
 def my_goals():
