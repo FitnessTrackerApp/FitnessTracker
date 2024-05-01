@@ -76,6 +76,7 @@ CREATE TABLE PremiumAccount (
 CREATE TABLE Messages (
     sender-id INT,
     receiver-id INT,
+    message VARCHAR(100),
     PRIMARY KEY (sender-id, receiver-id),
     FOREIGN KEY (sender-id) REFERENCES Users(user-id),
     FOREIGN KEY (receiver-id) REFERENCES Users(user-id)
@@ -201,3 +202,113 @@ CREATE TABLE plans-nutrition(
 	FOREIGN KEY (user-ID) REFERENCES Trainer,
     FOREIGN KEY (plan-ID) REFERENCES NutritionPlan
 );
+
+INSERT INTO User (first-name, last-name, date-of-birth, age, gender, email, password, phone-no)
+VALUES 
+('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789'),
+('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513'),
+('Yağız', 'Soyad', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426'),
+('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234');
+
+INSERT INTO Admin (user-ID)
+VALUES 
+(1);
+
+INSERT INTO Trainer (user-ID, specialization, certification, height, weight)
+VALUES 
+(1, 'Strength Training', 'Certified Strength Coach', 180, 80),
+(2, 'Corssfit Training', 'Certification of Professional Crossfit Coach', 190, 83);
+
+INSERT INTO Trainee (user-ID, fitness-goals, height, weight, fat-percentage)
+VALUES 
+(3, 'Weight Loss', 1.65, 90, 24.5);
+(4, 'Body Build', 1.90, 100, 14);
+
+INSERT INTO NutritionLog (meal-items, calories-consumed)
+VALUES 
+('Chicken salad', 350),
+('Meat Doner', 780);
+
+INSERT INTO ExerciseLog (duration, exercise-list, notes)
+VALUES 
+(90.0, 'Running, Squats', 'Rested for 2 minutes'),
+(15, 'Triceps Pull Down', 'Superset');
+
+INSERT INTO NutritionPlan (trainee.user-ID, trainer.user-ID, plan-name, description, meal-items)
+VALUES 
+(3, 1, 'Weight Loss Basic', 'Basic plan for weight loss, low calory', 'Oatmeal, Salad, Chicken Breast'),
+(4,2,'Body Building Standard Calory', 'Rice, Chicken Breast, Salad');
+
+INSERT INTO PremiumAccount (user-ID, premiumAcc-ID, start-date, end-date, payment-method)
+VALUES 
+(3, 101, '2023-01-01', '2024-01-01', 'Credit Card'),
+(4, 102, '2023-02-02', '2024-02-02', 'Credit Card');
+
+INSERT INTO Messages (sender-id, receiver-id, message)
+VALUES 
+(1, 3, 'Can you update my last program, it is hard for me'),
+(3,1, 'Please text me the part you are struggling'),
+(4,2,'This meet we could not talk. Tell me how was your exercise');
+
+INSERT INTO ate (user-id, log-id, calories-taken)
+VALUES 
+(2, 1, 350),
+(1,2,840);
+
+INSERT INTO done (user-ID, log-ID, calories-burned)
+VALUES 
+(2, 1, 400),
+(1,2,700);
+
+INSERT INTO trains (trainee.user-ID, trainer.user-ID, start-date, end-date, recommendations)
+VALUES 
+(3, 1, '2023-01-01', '2023-06-01', 'Your tend to lose weight easy'),
+(4,2,'2023-02-02', '2023-10-02','Keep doing good!');
+
+INSERT INTO planned-for (user-ID, plan-ID, start-date, end-date)
+VALUES 
+(3, 1, '2023-01-01', '2023-03-01'),
+(4,2,'2023-02-02', '2023-03-02');
+
+INSERT INTO ExerciseRoutinePlan (routine-name, description, calories, intensity, duration, equipment, status, exercises-list)
+VALUES 
+('Basic Strength', 'Routine for beginners', '500', 'Medium', '60 mins', 'Dumbbells', 'Active', 'Push-ups, Pull-ups'),
+('Losing Weight', 'Routine for low fat prercentage', '600', 'Advanced', '90 mins', 'Dumbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+
+INSERT INTO Exercise (exercise-name, description, target-muscles, difficulty_level, set-size, repeat-size)
+VALUES 
+('Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
+('Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
+
+INSERT INTO Requests (user_ID, note, type)
+VALUES 
+(2, 'Need a custom plan', 'Nutrition');
+
+INSERT INTO plans-nutrition (user-ID, plan-ID)
+VALUES 
+(1, 1),
+(2, 2);
+
+INSERT INTO includes (routine-ID, exercise-ID)
+VALUES 
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 2);
+
+INSERT INTO Contains (log-ID, exercise-ID)
+VALUES 
+(1, 1),
+(2, 2);
+
+INSERT INTO PlansExercise (routine-ID, exercise-ID, user-ID)
+VALUES 
+(1, 1, 3),
+(1, 2, 4),
+(2, 1, 3),
+(2, 2, 4);
+
+INSERT INTO does (user-ID, routine-ID, exercise-ID, start-date, end-date, planned-calories)
+VALUES 
+(3, 1, 1, '2023-01-01', '2023-06-01', 500),
+(4, 2, 2, '2023-02-02', '2023-10-02', 700);
