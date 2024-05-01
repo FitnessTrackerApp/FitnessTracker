@@ -1,11 +1,18 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
-#from flask_mysqldb import MySQL
-#import MySQLdb.cursors
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 
 app = Flask(__name__)
 
-#mysql = MySQL(app)
+app.secret_key = 'abcdefgh'
+
+app.config['MYSQL_HOST'] = 'db'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'melih123'
+app.config['MYSQL_DB'] = 'fitnesstrackerdb'
+
+mysql = MySQL(app)
 
 @app.route('/')
 def index():
@@ -74,53 +81,53 @@ def homepage():
         #return render_template('main.html', account = data, customer = name) #html yaz dataları çek
     #return redirect(url_for('login'))
 
-    return render_template('Homepage/homepg.html')
+    return render_template('TraineePages/homepg.html')
 
 @app.route('/profile') # <aid> lazım
 def profile():
 
-    return render_template('Homepage/profile.html')
+    return render_template('TraineePages/profile.html')
 
 @app.route('/add-pt') 
 def add_pt():
     
-    return render_template('Homepage/add-pt.html')
+    return render_template('TraineePages/add-pt.html')
 
 @app.route('/add-goal')
 def add_goal():
 
-    return render_template('Homepage/add-goal.html')
+    return render_template('TraineePages/add-goal.html')
 
 @app.route('/my-goals')
 def my_goals():
 
-    return render_template('Homepage/my-goals.html')
+    return render_template('TraineePages/my-goals.html')
 
 @app.route('/workout-session')
 def workout_session():
 
-    return render_template('Homepage/workoutses.html')
+    return render_template('TraineePages/workoutses.html')
 
 # USER'S SELECTED TRAINER PAGE
 @app.route('/program-page')#aid
 def programs():
 
-    return render_template('UsersTrainerPage/programs.html')
+    return render_template('TraineePages/UsersTrainerPage/programs.html')
 
 @app.route('/workout-program')#aid
 def work_prog():
 
-    return render_template('UsersTrainerPage/workoutprog.html')
+    return render_template('TraineePages/UsersTrainerPage/workoutprog.html')
 
 @app.route('/nutr-program')#aid
 def nutr_prog():
 
-    return render_template('UsersTrainerPage/nutritionprog.html')
+    return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
 
 @app.route('/req-programs')#aid
 def req_prog():
 
-    return render_template('UsersTrainerPage/req-program.html')
+    return render_template('TraineePages/UsersTrainerPage/req-program.html')
 
 
 if __name__ == "__main__":
