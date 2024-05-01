@@ -95,7 +95,7 @@ body {
 h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 20px 0px;
+    margin: 20px 0px 15px 0px;
 }
 
 .profile-section {
@@ -116,14 +116,14 @@ h1 {
 }
 
 button {
-    width: 180px;
-    padding: 2px;
+    width: 160px;
+    padding: 4px;
     border:1px solid #ccc;
     border-radius: 15px;
     background-color: #56ED65;
     color: white;
     font-weight: bold;
-    font-size: medium;
+    font-size: small;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 10px;
 }
