@@ -59,7 +59,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 18px;
     text-align: right;
 }
 
@@ -107,6 +107,10 @@ button {
     display: flex; 
     align-items: center; 
     cursor: pointer;
+}
+
+button:hover {
+    opacity: 85%;
 }
 
 .form-group div:hover {
