@@ -76,7 +76,7 @@ body {
 }
 
 .main {
-    padding-left: 15px;
+    margin-left: 15px;
 }
 
 h1 {
@@ -85,45 +85,18 @@ h1 {
     margin: 20px 0px 20px 0px;
 }
 
-.form-group {
+.goals-section {
+    margin-top: 20px;
     display: flex;
 }
 
-button {
-    width: 300px;
-    height: 200px;
-    padding: 8px;
-    border:1px solid #ccc;
-    border-radius: 15px;
-    background-color: #D9D9D9;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    margin-right: 35px;
-    padding: 40px;
-    font-size: x-large;
-    justify-content: space-between;
-    text-align: right;
-
-    display: flex; 
-    align-items: center; 
-    cursor: pointer;
+.goal {
+    padding: 15px;
+    height: 150px;
+    width: 250px;
+    background-color: #E9E9E9;
+    border: 2px solid #000000;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+    margin-right: 20px;
 }
 
-.form-group div:hover {
-    opacity: 85%;
-}
-
-.form-group img {
-    height: 80px;
-    margin-left: -10px;
-}
-
-.form-group p {
-    margin-right: -10px;
-}
-
-#trainerpp {
-    border: 0.5px solid #000000;
-    border-radius: 50%;
-    background-color: #474747;
-}
