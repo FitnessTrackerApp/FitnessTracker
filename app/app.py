@@ -1,11 +1,11 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
-#from flask_mysqldb import MySQL
-#import MySQLdb.cursors
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 
 app = Flask(__name__)
 
-#mysql = MySQL(app)
+mysql = MySQL(app)
 app.secret_key = 'abcdefgh'
 
 app.config['MYSQL_HOST'] = 'db'
@@ -13,7 +13,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'melih123'
 app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
-#mysql = MySQL(app)
+mysql = MySQL(app)
 
 @app.route('/')
 def index():
