@@ -28,14 +28,11 @@ body {
     display: flex;
     background-color:#56ED65;
     color: white;
-    height: 72px;
-
+    height: 70px;
 }
 
 .form-analysis h1 {
     width: 210px;
-    font-weight: bold;
-    padding-bottom: 5px;
 }
 
 .form-analysis h1:hover {
@@ -62,7 +59,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 18px;
     text-align: right;
 }
 
@@ -79,61 +76,37 @@ body {
 }
 
 .main {
-    height: 700px;
+    
     display: flex;
-    margin: 50px;
+    justify-content: center;
+    align-items: center;
+
 }
 
-.main img {
-    height: 250px;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-.main a {
-    border-radius: 50%;
-}
-
-.main a:hover {
-    opacity: 75%;
-}
-
-h1 {
+.container h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 15px 0px;
-}
-
-.profile-section {
-    display: flex;
-    width: 670px;
-}
-
-.trainer-section {
-    margin-left: 20px;
+    margin: 20px 0px 20px 0px;
 
 }
 
-.line {
-    background-color: #15A723;
-    width: 3px;
-    height: 250px;
-
-}
-
-button {
-    width: 160px;
-    padding: 4px;
-    border:1px solid #ccc;
-    border-radius: 15px;
-    background-color: #56ED65;
-    color: white;
+.main h1 {
     font-weight: bold;
-    font-size: small;
-    cursor: pointer;
-    margin-top: 10px;
+    font-size: x-large;
 }
 
-button:hover {
-    opacity: 85%;
+.settings-box {
+    width: 350px;
+    height: 570px;
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    margin-top: 100px;
+
+    flex-direction: column;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
 }

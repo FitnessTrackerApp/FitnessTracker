@@ -110,7 +110,7 @@ button {
 }
 
 button:hover {
-    opacity: 85%;
+    background-color: #a0a0a0;
 }
 
 .form-group div:hover {
@@ -152,4 +152,6 @@ button:hover {
 
 .delete-button:hover {
     cursor: pointer;
+    opacity: 85%;
+    border: 2.5px solid #000000;
 }

@@ -130,6 +130,11 @@ def req_prog():
 
     return render_template('TraineePages/UsersTrainerPage/req-program.html')
 
+@app.route('/settings')#aid
+def settings():
+
+    return render_template('TraineePages/settings.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
