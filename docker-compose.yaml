@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: cs353hw4app
+    image: fitnesstrackerimage
     ports:
       - "5000:5000"
     volumes:
@@ -11,8 +11,8 @@ services:
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: cs353hw4db
+      MYSQL_ROOT_PASSWORD: melih123
+      MYSQL_DATABASE: fitnesstrackerdb
     ports:
       - "3307:3306"
     volumes:

@@ -5,6 +5,7 @@
 </head>
 
 <form action="{{ url_for('register') }}" method="post">
+	
 	{% if message is defined and message %}
 		<div class="alert alert-warning">{{ message }}</div>
 	{% endif %}
