@@ -110,7 +110,7 @@ def workout_session():
     return render_template('TraineePages/workoutses.html')
 
 # USER'S SELECTED TRAINER PAGE
-@app.route('/program-page')#aid
+@app.route('/programs')#aid
 def programs():
 
     return render_template('TraineePages/UsersTrainerPage/programs.html')
