@@ -2,34 +2,60 @@
 
 <head>
     <title>Request Programs</title>
+    <link rel="stylesheet" type="text/css" href="static/css/requestprogstylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
 
 <body>
-    <div class = "container">
+    <div class="container">
+        <div class="form-analysis">
+            <a href="{{ url_for('homepage') }}"> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
         
-        <div class="">
-            <h1> FormAnalysis </h1>
+        <div class="icons">
+            <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+            <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+        </div>
+        
+    </div>
+
+    <div class="main">
+
+        <h1>Request New Programs </h1>
+        <h1>From X Y</h1>
+
+        <div class="box"> 
+            <div class="sub-box1">
+                <div class="icon-box"> 
+                    <img src= "/static/image/dumbbell.png" style= "rotate: 135deg;"> 
+                </div>
+
+                <h3>Request Workout Program</h3>
+                
+                <textarea > </textarea>
+                <button type="submit">Send</button>
+            </div>
+
+            <div class="line"> </div>
+
+            <div class="sub-box2">
+                <div class="icon-box"> 
+                    <img id="forkknife" src= "/static/image/forkknife.png"> 
+                </div>
+
+                <h3>Request Nutrition Program</h3>
+                
+                <textarea > </textarea>
+                <button type="submit">Send</button>
+            </div>
         </div>
 
-        <button>Settings</button>
-        <form action="{{url_for('profile')}}" method="get"><button>Profile Picture</button></form>
-    </div>
-
-    <div>
-        <h3>Request New Programs From X Y</h3>
-    </div>
-    <div>
-        <h5>Request Workout Program</h5>
         
-        <input type="workoutprogram" id="" size="50" spellcheck="true" placeholder="Notes:">
-        <button type="submit">Send</button>
     </div>
-    <div>
-        <h5>Request Nutrition Program</h5>
-        
-        <input type="workoutprogram" id="" size="50" spellcheck="true" placeholder="Notes:">
-        <button type="submit">Send</button>
-    </div>
+    
 </body>
 
 </html>
