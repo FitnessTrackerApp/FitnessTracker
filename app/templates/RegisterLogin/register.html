@@ -16,37 +16,40 @@
 			<div class="alert alert-warning">{{ message }}</div>
 		{% endif %}
 		<div class="form-group">
-			<input type="text" class="form-control" id="username" name="username" placeholder="Enter name">
+			<input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" required>
 		</div>
 		<div class="form-group">
-			<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+			<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" required>
+		</div>
+		<div class="form-group">
+			<input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
 		</div>
 		<div class="form-group">
 			<p>Date of Birth:</p>
-			<input type="date" name="date" id="date" placeholder="Enter your birthday">
+			<input type="date" name="date" id="date" placeholder="Enter your birthday" required>
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+			<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm" placeholder="Enter password again">
+			<input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm" placeholder="Enter password again" required>
 		</div>  
 
 		<div class="radio-forms"> 
-			<div class="radio-form">
+			<div class="radio-form" >
 				
-				<input type="radio" id="trainee" name="typeOfUser" value="trainee">
+				<input type="radio" id="trainee" name="typeOfUser" value="trainee" required>
 				<label for="trainee">Trainee</label>
 				<br>
-				<input type="radio" id="trainer" name="typeOfUser" value="trainer">	
+				<input type="radio" id="trainer" name="typeOfUser" value="trainer" required>	
 				<label for="trainer">Trainer</label>
 			</div>
 			<div class="line"></div>
 			<div class="radio-form">
-				<input type="radio" id="male" name="genderOfUser" value="male">
+				<input type="radio" id="male" name="genderOfUser" value="male" required>
 				<label for="male">Male</label>
 				<br>
-				<input type="radio" id="female" name="genderOfUser" value="female">	
+				<input type="radio" id="female" name="genderOfUser" value="female" required>	
 				<label for="female">Female</label>
 			</div>
 		</div>

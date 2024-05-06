@@ -206,7 +206,7 @@ INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, pass
 VALUES 
 ('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789'),
 ('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513'),
-('Yağız', 'Soyad', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426'),
+('Yagiz', 'Basarn', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426'),
 ('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234');
 
 INSERT INTO Admin (user_ID)

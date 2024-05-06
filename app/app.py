@@ -7,10 +7,10 @@ app = Flask(__name__)
 
 app.secret_key = 'abcdefgh'
 
-#app.config['MYSQL_HOST'] = 'db'
-#app.config['MYSQL_USER'] = 'root'
-#app.config['MYSQL_PASSWORD'] = 'melih123'
-#app.config['MYSQL_DB'] = 'fitnesstrackerdb'
+app.config['MYSQL_HOST'] = 'db'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'melih123'
+app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
 mysql = MySQL(app)
 
@@ -27,41 +27,46 @@ def login():
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
         password = request.form['password']
-        #cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        #cursor.execute('SELECT * FROM customer WHERE name = % s AND cid = % s', (username, password, ))
-        # user = cursor.fetchone()
-        # if user:              
-        #     session['loggedin'] = True
-        #     session['userid'] = user['cid']
-        #     session['username'] = user['name']
-        #     message = 'Logged in successfully!'
-        #     return redirect(url_for('main_page'))
-        # else:
-        #     message = 'Please enter correct email / password !'
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM User  WHERE email = %s AND password = %s', (email, password, ))
+        user = cursor.fetchone()
+        if user:              
+            session['loggedin'] = True
+            session['userid'] = user['user_ID']
+            session['username'] = user['first_name']
+            message = 'Logged in successfully!'
+            return redirect(url_for('homepage'))
+        else:
+            message = 'Please enter correct email / password !'
     return render_template('RegisterLogin/login.html', message = message)
 
 @app.route('/register', methods =['GET', 'POST'])
 def register():
     message = ''
-    if request.method == 'POST' and 'email' in request.form and 'password' in request.form :
+    if request.method == 'POST' and 'first_name' in request.form and 'email' in request.form and 'password' in request.form :
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        b_date = request.form['date']
         email = request.form['email']
         password = request.form['password']
-    #     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #     cursor.execute('SELECT * FROM customer WHERE name = % s', (username, ))
-    #     account = cursor.fetchone()
-    #     if account:
-    #         message = 'Choose a different username!'
+        typeOfUser = request.form['typeOfUser'] #!!!!
+        gender = request.form['genderOfUser']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM User WHERE email = % s', (email, ))
+        account = cursor.fetchone()
+        if account:
+            message = 'Choose a different email!'
   
-    #     elif not username or not password:
-    #         message = 'Please fill out the form!'
+        elif not email or not password:
+            message = 'Please fill out the form!'
 
-    #     else:
-    #         cursor.execute('INSERT INTO customer (cid, name) VALUES (% s, % s)', (password, username))
-    #         mysql.connection.commit()
-    #         message = 'User successfully created!'
+        else:
+            cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no) VALUES (% s, % s, % s, % s, % s, % s, % s, % s)', (first_name, last_name, b_date, 0, gender, email, password, 0))
+            mysql.connection.commit()
+            message = 'User successfully created!'
 
-    # elif request.method == 'POST':
-    #     message = 'Please fill all the fields!'
+    elif request.method == 'POST':
+        message = 'Please fill all the fields!'
 
     return render_template('RegisterLogin/register.html', message = message)
 
@@ -69,19 +74,17 @@ def register():
 
 @app.route('/homepage')
 def homepage():
-    #if 'loggedin' in session:
-        #userID = session['userid'] #cid = userID
-        #cursor = mysql.connection.cursor()
-        #cursor.execute("SELECT * FROM account JOIN owns ON account.aid = owns.aid JOIN customer ON owns.cid = customer.cid WHERE customer.cid = %s",(userID,))
-        # * = account.aid, account.branch, account.balance, account.openDate
-        # data = cursor.fetchall()
-        # cursor.execute("SELECT name FROM customer WHERE cid = %s", (userID,))
-        # name = cursor.fetchone()  # Fetch the name
-        # cursor.close()
-        #return render_template('main.html', account = data, customer = name) #html yaz dataları çek
-    #return redirect(url_for('login'))
+    if 'loggedin' in session:
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
 
-    return render_template('TraineePages/homepg.html')
+        cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (userID,))
+        fname_lname = cursor.fetchone()  # Fetch the first name and last name
+
+        cursor.close()
+        return render_template('TraineePages/homepg.html', fname_lname = fname_lname) #html yaz dataları çek
+    return redirect(url_for('login'))
+
 
 @app.route('/profile') # <aid> lazım
 def profile():
