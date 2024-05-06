@@ -59,7 +59,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 18px;
     text-align: right;
 }
 
@@ -109,6 +109,10 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: #a0a0a0;
+}
+
 .form-group div:hover {
     opacity: 85%;
 }
@@ -122,3 +126,32 @@ button {
     margin-right: -10px;
 }
 
+
+#trainerpp {
+    border: 0.5px solid #000000;
+    border-radius: 50%;
+    background-color: #474747;
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 1px;
+    padding-bottom: 3px;
+    margin-left: -57px;
+    font-weight: bold;
+    font-size: x-large;
+    border: 1px solid #000000;
+}
+
+.delete-button:hover {
+    cursor: pointer;
+    opacity: 85%;
+    border: 2.5px solid #000000;
+}

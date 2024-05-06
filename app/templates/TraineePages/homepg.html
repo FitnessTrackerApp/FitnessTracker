@@ -17,8 +17,8 @@
         </div>
         <div>
             <div class= "icons"> 
-                <a href=""><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
-                    <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+                <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+                <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
             </div>
         </div>
     </div>
@@ -37,12 +37,15 @@
 
             <form action="{{ url_for('programs') }}" method="get">
                 <button>
+                    <img id="trainerpp" src= "/static/image/pp.png">
                     <div>
                         <p>John Doe</p>
                         <p>male, 23 y.o.</p>
                     </div>
+
                 </button>
             </form>
+            <a class="delete-button">x</a>
         </div>
 
         <h1>My Progress</h1>

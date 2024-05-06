@@ -28,14 +28,11 @@ body {
     display: flex;
     background-color:#56ED65;
     color: white;
-    height: 72px;
-
+    height: 70px;
 }
 
 .form-analysis h1 {
     width: 210px;
-    font-weight: bold;
-    padding-bottom: 5px;
 }
 
 .form-analysis h1:hover {
@@ -79,61 +76,62 @@ body {
 }
 
 .main {
-    height: 700px;
+    margin-left: 15px;
     display: flex;
-    margin: 50px;
-}
-
-.main img {
-    height: 250px;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-.main a {
-    border-radius: 50%;
-}
-
-.main a:hover {
-    opacity: 75%;
+    flex-direction: column;
 }
 
 h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 15px 0px;
+    margin: 20px 0px 20px 0px;
 }
 
-.profile-section {
+.form-group {
+    justify-self: center;
+    align-self: center;
+    margin-top: 30px;
     display: flex;
-    width: 670px;
-}
-
-.trainer-section {
-    margin-left: 20px;
-
-}
-
-.line {
-    background-color: #15A723;
-    width: 3px;
-    height: 250px;
-
 }
 
 button {
-    width: 160px;
-    padding: 4px;
+    width: 350px;
+    height: 250px;
+    padding: 8px;
     border:1px solid #ccc;
     border-radius: 15px;
-    background-color: #56ED65;
-    color: white;
+    background-color: #D9D9D9;
+    color: rgb(0, 0, 0);
     font-weight: bold;
-    font-size: small;
+    margin-right: 35px;
+    padding: 40px;
+    font-size: x-large;
+    justify-content: space-between;
+    text-align: right;
+
+    display: flex; 
+    align-items: center; 
     cursor: pointer;
-    margin-top: 10px;
 }
 
 button:hover {
+    background-color: #a0a0a0;
+}
+
+.form-group div:hover {
     opacity: 85%;
+}
+
+.form-group img {
+    height: 90px;
+    margin-left: 10px;
+}
+
+#request {
+    height: 85px;
+    margin-left: 0px;
+}
+
+.form-group p {
+    margin-right: -10px;
 }

@@ -7,10 +7,10 @@ app = Flask(__name__)
 
 app.secret_key = 'abcdefgh'
 
-app.config['MYSQL_HOST'] = 'db'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
-app.config['MYSQL_DB'] = 'cs353hw4db'
+#app.config['MYSQL_HOST'] = 'db'
+#app.config['MYSQL_USER'] = 'root'
+#app.config['MYSQL_PASSWORD'] = 'melih123'
+#app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
 mysql = MySQL(app)
 
@@ -109,7 +109,7 @@ def workout_session():
     return render_template('TraineePages/workoutses.html')
 
 # USER'S SELECTED TRAINER PAGE
-@app.route('/program-page')#aid
+@app.route('/programs')#aid
 def programs():
 
     return render_template('TraineePages/UsersTrainerPage/programs.html')
@@ -128,6 +128,11 @@ def nutr_prog():
 def req_prog():
 
     return render_template('TraineePages/UsersTrainerPage/req-program.html')
+
+@app.route('/settings')#aid
+def settings():
+
+    return render_template('TraineePages/settings.html')
 
 
 if __name__ == "__main__":
