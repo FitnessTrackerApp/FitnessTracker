@@ -61,7 +61,13 @@ def register():
             message = 'Please fill out the form!'
 
         else:
-            cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no) VALUES (% s, % s, % s, % s, % s, % s, % s, % s)', (first_name, last_name, b_date, 0, gender, email, password, 0))
+            if typeOfUser == "trainee":
+                checker = 0
+                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 0, gender, email, password, 0, checker,))
+            else:
+                checker = 1
+                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 0, gender, email, password, 0, checker,))
+
             mysql.connection.commit()
             message = 'User successfully created!'
 
@@ -74,6 +80,7 @@ def register():
 
 @app.route('/homepage')
 def homepage():
+    global user_type_check
     if 'loggedin' in session:
         userID = session['userid'] #cid = userID
         cursor = mysql.connection.cursor()
@@ -81,61 +88,100 @@ def homepage():
         cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (userID,))
         fname_lname = cursor.fetchone()  # Fetch the first name and last name
 
-        cursor.close()
-        return render_template('TraineePages/homepg.html', fname_lname = fname_lname) #html yaz dataları çek
+        cursor.execute("SELECT isTrainer FROM User WHERE user_ID = %s", (userID,))
+        trainer_info = cursor.fetchone()
+
+        #cursor.close()
+
+        if trainer_info[0] == 0:
+
+            #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
+            #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
+
+            cursor.execute("INSERT IGNORE INTO Trainee (user_ID) VALUES (%s)" , (userID,)) #diğer bilgileri profilde form olarak almalıyız
+            return render_template('TraineePages/homepg.html', fname_lname = fname_lname)
+        else:
+
+            #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
+            #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
+
+            cursor.execute("INSERT IGNORE INTO Trainer (user_ID) VALUES (%s)" , (userID,)) #diğer bilgileri profilde form olarak almalıyız
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
+        
     return redirect(url_for('login'))
 
 
 @app.route('/profile') # <aid> lazım
 def profile():
+    if 'loggedin' in session:
 
-    return render_template('TraineePages/profile.html')
+        return render_template('TraineePages/profile.html')
+    
+    return redirect(url_for('login'))
 
 @app.route('/add-pt') 
 def add_pt():
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM User U, Trainer T WHERE T.user_ID = U.user_ID") # User_ID iki kere geliyor onu fixleyelim
+        data = cursor.fetchall()
+
+        return render_template('TraineePages/add-pt.html', trainers=data)
     
-    return render_template('TraineePages/add-pt.html')
+    return redirect(url_for('login'))
 
 @app.route('/add-goal')
 def add_goal():
+    if 'loggedin' in session:
 
-    return render_template('TraineePages/add-goal.html')
+        return render_template('TraineePages/add-goal.html')
+
+    return redirect(url_for('login'))
 
 @app.route('/my-goals')
 def my_goals():
+    if 'loggedin' in session:
 
-    return render_template('TraineePages/my-goals.html')
+        return render_template('TraineePages/my-goals.html')
+    
+    return redirect(url_for('login'))
 
 @app.route('/workout-session')
 def workout_session():
-
-    return render_template('TraineePages/workoutses.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/workoutses.html')
+    return redirect(url_for('login'))
 
 # USER'S SELECTED TRAINER PAGE
 @app.route('/programs')#aid
 def programs():
-
-    return render_template('TraineePages/UsersTrainerPage/programs.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/UsersTrainerPage/programs.html')
+    return redirect(url_for('login'))
 
 @app.route('/workout-program')#aid
 def work_prog():
-
-    return render_template('TraineePages/UsersTrainerPage/workoutprog.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/UsersTrainerPage/workoutprog.html')
+    return redirect(url_for('login'))
 
 @app.route('/nutr-program')#aid
 def nutr_prog():
-
-    return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
+    return redirect(url_for('login'))
 
 @app.route('/req-programs')#aid
 def req_prog():
-
-    return render_template('TraineePages/UsersTrainerPage/req-program.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/UsersTrainerPage/req-program.html')
+    return redirect(url_for('login'))
 
 @app.route('/settings')#aid
 def settings():
-
-    return render_template('TraineePages/settings.html')
+    if 'loggedin' in session:
+        return render_template('TraineePages/settings.html')
+    return redirect(url_for('login'))
 
 
 if __name__ == "__main__":
