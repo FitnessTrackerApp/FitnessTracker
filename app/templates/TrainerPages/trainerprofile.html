@@ -43,9 +43,6 @@
                     <div class="form-group">Weight: {{row.3}} 
                         <input type="text" class="form-control" id="weight" name="weight" placeholder=" Change(kg) ">
                     </div>
-                    <div class="form-group">Fat Percentage: {{row.4}} 
-                        <input type="text" class="form-control" id="fat" name="fat" placeholder=" Change(fat%) ">
-                    </div>
                     <button type="submit"> Change Personal Info</button>
                 </form>
                 {%endfor%}
@@ -55,12 +52,16 @@
         <div class="line"></div>
 
         <div class= "trainer-section">
-            <h1> My Trainer: </h1>
+            {% for row in data%}
+            <h1> Certificate: {{row.4}}</h1>
+            <h1> Speciality: {{row.5}}</h1>
+            {%endfor%}
         </div>
 
     </div>
 
     <hr>
+    
 </body>
 
 </html>

@@ -80,7 +80,7 @@ def register():
 
 @app.route('/homepage')
 def homepage():
-    global user_type_check
+    
     if 'loggedin' in session:
         userID = session['userid'] #cid = userID
         cursor = mysql.connection.cursor()
@@ -111,12 +111,59 @@ def homepage():
     return redirect(url_for('login'))
 
 
-@app.route('/profile') # <aid> lazım
+@app.route('/profile', methods =['GET', 'POST']) # <aid> lazım
 def profile():
     if 'loggedin' in session:
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
 
-        return render_template('TraineePages/profile.html')
-    
+        cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (userID,))
+        fname_lname = cursor.fetchone()  # Fetch the first name and last name
+
+        cursor.execute("SELECT isTrainer FROM User WHERE user_ID = %s", (userID,))
+        trainer_info = cursor.fetchone()
+
+        message = ''
+
+        if trainer_info[0] == 0:
+
+            cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
+            data = cursor.fetchall()
+
+            if request.method == 'POST' and 'height' in request.form and 'weight' in request.form and 'fat' in request.form:
+                height = request.form['height']
+                weight = request.form['weight']
+                fatp = request.form['fat']
+
+                #burası doğru mu?
+                #weight ve height de sınır var hata veriyor oraya farklı handle lazım
+                #bir anda değiştirmiyor sayfayı yenilemek gerekiyor - JS AJAX
+                cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
+                mysql.connection.commit()
+                cursor.close()
+            else:
+                message = 'Please fill everything'
+
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message)
+        
+        else:
+            cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
+            data = cursor.fetchall()
+
+            if request.method == 'POST' and 'height' in request.form and 'weight' in request.form:
+                height = request.form['height']
+                weight = request.form['weight']
+
+                #burası doğru mu?
+                #weight ve height de sınır var hata veriyor oraya farklı handle lazım
+                #bir anda değiştirmiyor sayfayı yenilemek gerekiyor - JS AJAX
+                cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
+                mysql.connection.commit()
+                cursor.close()
+            else:
+                message = 'Please fill everything'
+            return render_template('TrainerPages/trainerprofile.html', fname_lname = fname_lname, data=data, message = message)#html yaz dataları çek
+            
     return redirect(url_for('login'))
 
 @app.route('/add-pt') 
@@ -183,6 +230,11 @@ def settings():
         return render_template('TraineePages/settings.html')
     return redirect(url_for('login'))
 
+@app.route('/logout')
+def logout():
+    session.pop('loggedin', None)
+    #flash('You were logged out')
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
