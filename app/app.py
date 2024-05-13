@@ -137,9 +137,13 @@ def profile():
 
                 #burası doğru mu?
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
-                #bir anda değiştirmiyor sayfayı yenilemek gerekiyor - JS AJAX
+
                 cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
                 mysql.connection.commit()
+
+                cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
+                data = cursor.fetchall()
+
                 cursor.close()
             else:
                 message = 'Please fill everything'
@@ -156,9 +160,13 @@ def profile():
 
                 #burası doğru mu?
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
-                #bir anda değiştirmiyor sayfayı yenilemek gerekiyor - JS AJAX
+
                 cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
                 mysql.connection.commit()
+
+                cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
+                data = cursor.fetchall()
+
                 cursor.close()
             else:
                 message = 'Please fill everything'
@@ -177,19 +185,36 @@ def add_pt():
     
     return redirect(url_for('login'))
 
-@app.route('/add-goal')
+@app.route('/add-goal',  methods =['GET', 'POST'])
 def add_goal():
     if 'loggedin' in session:
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+
+        if request.method == 'POST':
+            text_goal = request.form.get('goal')
+            #print(text_goal)
+            #değişecek burası
+            #cursor.execute("INSERT INTO Trainee (fitness_goals) VALUES (%s) WHERE user_ID = %s", (text_goal, userID,))
+
+            mysql.connection.commit()
 
         return render_template('TraineePages/add-goal.html')
-
+    
     return redirect(url_for('login'))
 
 @app.route('/my-goals')
 def my_goals():
     if 'loggedin' in session:
 
-        return render_template('TraineePages/my-goals.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+
+        #cursor.execute("SELECT fitness_goals FROM Trainee WHERE user_ID = %s ", (userID,))
+        #değişecek
+        goals_data = cursor.fetchall()
+
+        return render_template('TraineePages/my-goals.html', goals_data=goals_data)
     
     return redirect(url_for('login'))
 
