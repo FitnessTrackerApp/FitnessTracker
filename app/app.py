@@ -195,7 +195,7 @@ def add_goal():
             text_goal = request.form.get('goal')
             #print(text_goal)
             #değişecek burası
-            #cursor.execute("INSERT INTO Trainee (fitness_goals) VALUES (%s) WHERE user_ID = %s", (text_goal, userID,))
+            cursor.execute("INSERT INTO FitnessGoals (user_ID, goal_description) VALUES (%s, %s)", (userID, text_goal,))
 
             mysql.connection.commit()
 
@@ -210,8 +210,7 @@ def my_goals():
         userID = session['userid'] #cid = userID
         cursor = mysql.connection.cursor()
 
-        #cursor.execute("SELECT fitness_goals FROM Trainee WHERE user_ID = %s ", (userID,))
-        #değişecek
+        cursor.execute("SELECT goal_description, created_at FROM FitnessGoals WHERE user_ID = %s ", (userID,))
         goals_data = cursor.fetchall()
 
         return render_template('TraineePages/my-goals.html', goals_data=goals_data)

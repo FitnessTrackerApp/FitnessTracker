@@ -30,11 +30,18 @@ CREATE TABLE Trainer (
 
 CREATE TABLE Trainee (
     user_ID INT PRIMARY KEY,
-    fitness_goals VARCHAR(255), 
     height NUMERIC(3,2),
     weight NUMERIC(2,0),
     fat_percentage NUMERIC(4,2),
     FOREIGN KEY(user_ID) REFERENCES User(user_ID)
+);
+
+CREATE TABLE FitnessGoals (
+    goal_ID INT PRIMARY KEY AUTO_INCREMENT,
+    user_ID INT,
+    goal_description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE NutritionLog (
@@ -219,10 +226,10 @@ VALUES
 (1, 'Strength Training', 'Certified Strength Coach', 180, 80),
 (2, 'Corssfit Training', 'Certification of Professional Crossfit Coach', 190, 83);
 
-INSERT INTO Trainee (user_ID, fitness_goals, height, weight, fat_percentage)
+INSERT INTO Trainee (user_ID, height, weight, fat_percentage)
 VALUES 
-(3, 'Weight Loss', 1.65, 90, 24.5),
-(4, 'Body Build', 1.90, 50, 14.2);
+(3, 1.65, 90, 24.5),
+(4, 1.90, 50, 14.2);
 
 INSERT INTO NutritionLog (meal_items, calories_consumed)
 VALUES 
@@ -280,7 +287,7 @@ VALUES
 ('Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
 ('Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
 
-INSERT INTO Requests (user_ID, note, type) --state = 0, state = -1
+INSERT INTO Requests (user_ID, note, type)
 VALUES 
 (2, 'Need a custom plan', 'Nutrition');
 
