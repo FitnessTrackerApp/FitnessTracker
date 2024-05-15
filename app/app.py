@@ -106,7 +106,7 @@ def homepage():
             #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
             certification = "Not uploaded"
             specialization = "Not uploaded"
-            cursor.execute("INSERT IGNORE INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (%s)" , (userID, specialization, certification, 0, 0,)) #diğer bilgileri profilde form olarak almalıyız
+            cursor.execute("INSERT IGNORE INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (%s, %s, %s, %s, %s)" , (userID, specialization, certification, 0, 0,)) #diğer bilgileri profilde form olarak almalıyız
             return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
         
     return redirect(url_for('login'))
