@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+from datetime import datetime
 import MySQLdb.cursors
 
 app = Flask(__name__)
@@ -63,10 +64,14 @@ def register():
         else:
             if typeOfUser == "trainee":
                 checker = 0
-                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 0, gender, email, password, 0, checker,))
+                date_object = datetime.strptime(b_date, "%Y-%m-%d")
+                year_integer = date_object.year
+                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 2024 - year_integer, gender, email, password, 0, checker,))
             else:
                 checker = 1
-                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 0, gender, email, password, 0, checker,))
+                date_object = datetime.strptime(b_date, "%Y-%m-%d")
+                year_integer = date_object.year
+                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 2024- 0, year_integer, email, password, 0, checker,))
 
             mysql.connection.commit()
             message = 'User successfully created!'
