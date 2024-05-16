@@ -197,8 +197,7 @@ def add_pt():
 
         if request.method == 'POST':
             trainee_user_ID = session['userid']
-            trainer_user_ID_key = "trainer_user_ID_{}".format(row[0])
-            trainer_user_ID = request.form.get(trainer_user_ID_key)
+            trainer_user_ID = request.form['trainer_user_ID']
             request_date = datetime.now().date()
             status = 'pending'
 
