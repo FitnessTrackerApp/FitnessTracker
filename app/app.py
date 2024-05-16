@@ -44,41 +44,33 @@ def login():
 @app.route('/register', methods =['GET', 'POST'])
 def register():
     message = ''
-    if request.method == 'POST' and 'first_name' in request.form and 'email' in request.form and 'password' in request.form :
+    if request.method == 'POST' and 'first_name' in request.form and 'email' in request.form and 'password' in request.form:
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         b_date = request.form['date']
         email = request.form['email']
         password = request.form['password']
-        typeOfUser = request.form['typeOfUser'] #!!!!
+        typeOfUser = request.form['typeOfUser']
         gender = request.form['genderOfUser']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM User WHERE email = % s', (email, ))
         account = cursor.fetchone()
         if account:
             message = 'Choose a different email!'
-  
         elif not email or not password:
             message = 'Please fill out the form!'
-
         else:
-            if typeOfUser == "trainee":
-                checker = 0
-                date_object = datetime.strptime(b_date, "%Y-%m-%d")
-                year_integer = date_object.year
-                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 2024 - year_integer, gender, email, password, 0, checker,))
-            else:
-                checker = 1
-                date_object = datetime.strptime(b_date, "%Y-%m-%d")
-                year_integer = date_object.year
-                cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (% s, % s, % s, % s, % s, % s, % s, % s, %s)', (first_name, last_name, b_date, 2024- 0, year_integer, email, password, 0, checker,))
-
+            date_object = datetime.strptime(b_date, "%Y-%m-%d")
+            year_integer = date_object.year
+            isTrainer = 1 if typeOfUser == "trainer" else 0
+            cursor.execute('INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (first_name, last_name, b_date, 2024 - year_integer, gender, email, password, 0, isTrainer,))
             mysql.connection.commit()
+            if isTrainer:
+                cursor.execute('INSERT INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (LAST_INSERT_ID(), %s, %s, %s, %s)', ('Not uploaded', 'Not uploaded', 0, 0,))
+                mysql.connection.commit()
             message = 'User successfully created!'
-
     elif request.method == 'POST':
         message = 'Please fill all the fields!'
-
     return render_template('RegisterLogin/register.html', message = message)
 
 #HOMEPAGE needs to be checked for trainer and trainee users
