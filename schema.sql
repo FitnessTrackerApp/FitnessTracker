@@ -202,6 +202,16 @@ CREATE TABLE Requests (
     FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
+CREATE TABLE CoachingRequests (
+    request_id INT PRIMARY KEY AUTO_INCREMENT,
+    trainee_user_ID INT,
+    trainer_user_ID INT,
+    request_date DATE,
+    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+    FOREIGN KEY (trainee_user_ID) REFERENCES User(user_ID),
+    FOREIGN KEY (trainer_user_ID) REFERENCES User(user_ID)
+);
+
 CREATE TABLE plans_nutrition(
     user_ID INT,
     plan_ID INT,

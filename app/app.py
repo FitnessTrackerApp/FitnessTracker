@@ -107,8 +107,12 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
             trains = cursor.fetchall()
 
+            # bunu sonradan sil
+            cursor.execute("SELECT U.first_name, U.last_name FROM CoachingRequests CR JOIN User U ON CR.trainer_user_ID = U.user_ID WHERE CR.trainee_user_ID = %s", (userID, ))
+            trying = cursor.fetchone()
+
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
-            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains)
+            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, trying = trying)
         else:
 
             #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
@@ -184,12 +188,29 @@ def profile():
             
     return redirect(url_for('login'))
 
-@app.route('/add-pt') 
+@app.route('/add-pt', methods =['GET', 'POST']) 
 def add_pt():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM User U, Trainer T WHERE T.user_ID = U.user_ID") # User_ID iki kere geliyor onu fixleyelim
         data = cursor.fetchall()
+
+        if request.method == 'POST':
+            trainee_user_ID = session['userid']
+            trainer_user_ID_key = "trainer_user_ID_{}".format(row[0])
+            trainer_user_ID = request.form.get(trainer_user_ID_key)
+            request_date = datetime.now().date()
+            status = 'pending'
+
+            # Check if the coaching request already exists
+            cursor.execute("SELECT * FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, trainer_user_ID))
+            existing_request = cursor.fetchone()
+            if existing_request: 
+                print("Already exists")
+            else:
+                cursor.execute("INSERT INTO CoachingRequests (trainee_user_ID, trainer_user_ID, request_date, status) VALUES (%s, %s, %s, %s)", (trainee_user_ID, trainer_user_ID, request_date, status))
+                mysql.connection.commit()
+        
 
         return render_template('TraineePages/add-pt.html', trainers=data)
     

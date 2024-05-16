@@ -27,7 +27,7 @@
         <h1>Add Personal Trainer</h1>
 
         <div class= "trainers-list">
-            <form action="" method="get">
+            <form action="/add-pt" method="post">
                 {% for row in trainers%}
                 <div class="trainer">
                     <img id="trainerpp" src= "/static/image/pp.png">
@@ -39,6 +39,8 @@
                         <p>{{row.15}}</p>
                         <p>Height: {{row.16}}</p>
                         <p>Weight: {{row.17}}</p>
+
+                        <input type="hidden" name="trainer_user_ID_{{row.0}}" value="{{row.0}}">
                         
                         <button type="submit" class="btn btn-primary">Coaching Request</button>	
                     </div>
