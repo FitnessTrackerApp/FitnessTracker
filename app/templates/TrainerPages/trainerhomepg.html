@@ -24,9 +24,17 @@
         </div>
     </div>
 
-    <div class= "main">
-        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
+    <div class="main">
+        <h1>Welcome back, {{ fname_lname['first_name'] }} {{ fname_lname['last_name'] }}</h1>
         <h1>My Trainees and Requests</h1>
+        <div>
+            {% for req in requests %}
+            <div>
+                <p>Request from {{ req['first_name'] }} {{ req['last_name'] }}: {{ req['note'] }}</p>
+                <p>Type: {{ req['type'] }}</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
 </body>

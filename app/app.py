@@ -98,22 +98,24 @@ def homepage():
 
         #cursor.close()
 
-        if trainer_info[0] == 0:
+        if trainer_info['isTrainer'] == 0:
 
             #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
             #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
 
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname)
-        else:
+        elif trainer_info['isTrainer'] == 1:
+            # Fetch requests made to this trainer
+            cursor.execute("""
+                SELECT r.request_id, r.user_ID, r.note, r.type, u.first_name, u.last_name 
+                FROM Requests r
+                JOIN User u ON r.user_ID = u.user_ID
+                WHERE r.trainer_ID = %s
+            """, (userID,))
+            requests = cursor.fetchall()
 
-            #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
-            #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
-            certification = "Not uploaded"
-            specialization = "Not uploaded"
-            cursor.execute("INSERT IGNORE INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (%s, %s, %s, %s, %s)" , (userID, specialization, certification, 0, 0,)) #diğer bilgileri profilde form olarak almalıyız
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
-        
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname=fname_lname, requests=requests)
     return redirect(url_for('login'))
 
 
@@ -229,12 +231,38 @@ def workout_session():
         return render_template('TraineePages/workoutses.html')
     return redirect(url_for('login'))
 
-# USER'S SELECTED TRAINER PAGE
-@app.route('/programs')#aid
+@app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
 def programs():
-    if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/programs.html')
-    return redirect(url_for('login'))
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        user_id = session['user_id']  # The ID of the logged-in user (trainee)
+        trainer_id = request.form.get('trainer_id')  # You need to get this from the form or context
+        workout_request = request.form.get('workout_request')
+        nutrition_request = request.form.get('nutrition_request')
+
+        cursor = mysql.connection.cursor()
+
+        # Check and insert workout and nutrition requests
+        if workout_request:
+            cursor.execute(
+                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                (user_id, trainer_id, workout_request, 'Workout')
+            )
+
+        if nutrition_request:
+            cursor.execute(
+                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                (user_id, trainer_id, nutrition_request, 'Nutrition')
+            )
+
+        cursor.close()
+
+        return redirect(url_for('some_success_page'))  # Redirect to a success page
+
+    return render_template('TraineePages/UsersTrainerPage/programs.html')
+
 
 @app.route('/workout-program')#aid
 def work_prog():
