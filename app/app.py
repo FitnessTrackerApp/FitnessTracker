@@ -99,13 +99,22 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
             trains = cursor.fetchall()
 
-            # bunu sonradan sil
-            cursor.execute("SELECT U.first_name, U.last_name FROM CoachingRequests CR JOIN User U ON CR.trainer_user_ID = U.user_ID WHERE CR.trainee_user_ID = %s", (userID, ))
-            trying = cursor.fetchone()
+                    # Query to get the last added coaching request names
+            query_last_added = """
+            SELECT U1.first_name AS trainee_first_name, U1.last_name AS trainee_last_name, 
+                U2.first_name AS trainer_first_name, U2.last_name AS trainer_last_name 
+            FROM CoachingRequests
+            JOIN User U1 ON CoachingRequests.trainee_user_ID = U1.user_ID
+            JOIN User U2 ON CoachingRequests.trainer_user_ID = U2.user_ID
+            ORDER BY CoachingRequests.request_id DESC
+            LIMIT 1;
+            """
+            cursor.execute(query_last_added)
+            last_added = cursor.fetchone()
 
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             mysql.connection.commit()
-            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, trying = trying)
+            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
         else:
             return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
         
