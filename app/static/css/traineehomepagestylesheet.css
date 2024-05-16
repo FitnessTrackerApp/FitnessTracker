@@ -107,6 +107,8 @@ button {
     display: flex; 
     align-items: center; 
     cursor: pointer;
+
+    margin-bottom: 20px;
 }
 
 button:hover {
