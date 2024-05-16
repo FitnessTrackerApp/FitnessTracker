@@ -1,190 +1,197 @@
 CREATE TABLE User (
-    user-ID INT PRIMARY KEY AUTO_INCREMENT,
-    first-name VARCHAR(50) NOT NULL,
-    last-name VARCHAR(50) NOT NULL,
-    date-of-birth DATE,
+    user_ID INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    date_of_birth DATE,
     age INT,
     gender VARCHAR(10),
     email VARCHAR(100),
     password VARCHAR(100),
-    phone-no VARCHAR(15) DEFAULT NULL,
-    profile-pic VARCHAR(255) DEFAULT NULL,
+    phone_no VARCHAR(15) DEFAULT NULL,
+    profile_pic VARCHAR(255) DEFAULT NULL,
     description TEXT DEFAULT NULL,
-    achievements TEXT DEFAULT NULL
+    achievements TEXT DEFAULT NULL,
+    isTrainer INT
 );
 
 CREATE TABLE Admin (
-    user-ID INT PRIMARY KEY,
-    FOREIGN KEY (user-ID) REFERENCES User 
+    user_ID INT PRIMARY KEY,
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE Trainer (
-    user-ID INT PRIMARY KEY,
+    user_ID INT PRIMARY KEY,
     specialization VARCHAR(255),
     certification VARCHAR(255),
-    height INT
-    weight INT
-    FOREIGN KEY (user-ID) REFERENCES User
+    height INT,
+    weight INT,
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
-
 CREATE TABLE Trainee (
-    user-ID INT PRIMARY KEY,
-    fitness-goals VARCHAR(255), 
+    user_ID INT PRIMARY KEY,
     height NUMERIC(3,2),
     weight NUMERIC(2,0),
-    fat-percentage NUMERIC(3,2)
-    FOREIGN KEY(user-ID) REFERENCES User
+    fat_percentage NUMERIC(4,2),
+    FOREIGN KEY(user_ID) REFERENCES User(user_ID)
+);
+
+CREATE TABLE FitnessGoals (
+    goal_ID INT PRIMARY KEY AUTO_INCREMENT,
+    user_ID INT,
+    goal_description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE NutritionLog (
-    log-ID INT PRIMARY KEY AUTO_INCREMENT,
-    meal-items VARCHAR(255),
-    calories-consumed INT
+    log_ID INT PRIMARY KEY AUTO_INCREMENT,
+    meal_items VARCHAR(255),
+    calories_consumed INT
 );
 
 CREATE TABLE ExerciseLog (
-    log-ID INT PRIMARY KEY AUTO_INCREMENT,
+    log_ID INT PRIMARY KEY AUTO_INCREMENT,
     duration NUMERIC(4,1) DEFAULT 0,
-    exercise-list VARCHAR(255) DEFAULT NULL,
+    exercise_list VARCHAR(255) DEFAULT NULL,
     notes VARCHAR(255) DEFAULT NULL,
     CONSTRAINT max_duration_check CHECK (duration <= 180.0)
 );
 
 CREATE TABLE NutritionPlan (
-    plan-ID INT PRIMARY KEY AUTO_INCREMENT,
-    trainee.user-ID INT,
-    trainer.user-ID INT,
-    plan-name VARCHAR(255),
+    plan_ID INT PRIMARY KEY AUTO_INCREMENT,
+    trainee_user_ID INT,
+    trainer_user_ID INT,
+    plan_name VARCHAR(255),
     description VARCHAR(255),
-    meal-items VARCHAR(255),
-    FOREIGN KEY (trainee.user-ID) REFERENCES Trainee(user-ID),
-    FOREIGN KEY (trainer.user-ID) REFERENCES Trainer(user-ID)
+    meal_items VARCHAR(255),
+    FOREIGN KEY (trainee_user_ID) REFERENCES Trainee(user_ID),
+    FOREIGN KEY (trainer_user_ID) REFERENCES Trainer(user_ID)
 );
 
 CREATE TABLE PremiumAccount (
-    user-ID INT,
-	premiumAcc-ID INT,
-    start-date DATE,
-    end-date DATE,
-    payment-method VARCHAR(100),
-    CONSTRAINT check-start-before-end CHECK (start-date < end-date),
-    PRIMARY KEY (user-ID, premiumAcc-ID),
-    FOREIGN KEY (user-ID) REFERENCES Users(user-ID)
+    user_ID INT,
+    premiumAcc_ID INT,
+    start_date DATE,
+    end_date DATE,
+    payment_method VARCHAR(100),
+    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
+    PRIMARY KEY (user_ID, premiumAcc_ID),
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE Messages (
-    sender-id INT,
-    receiver-id INT,
+    sender_id INT,
+    receiver_id INT,
     message VARCHAR(100),
-    PRIMARY KEY (sender-id, receiver-id),
-    FOREIGN KEY (sender-id) REFERENCES Users(user-id),
-    FOREIGN KEY (receiver-id) REFERENCES Users(user-id)
+    PRIMARY KEY (sender_id, receiver_id),
+    FOREIGN KEY (sender_id) REFERENCES User(user_ID),
+    FOREIGN KEY (receiver_id) REFERENCES User(user_ID)
 );
 
 CREATE TABLE ate (
-    user-id INT,
-    log-id INT,
+    user_id INT,
+    log_id INT,
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    calories-taken INT,
-    PRIMARY KEY (user-id, log-id),
-    FOREIGN KEY (user-id) REFERENCES Users(user-id),
-    FOREIGN KEY (log-id) REFERENCES NutritionLog(log-id)
+    calories_taken INT,
+    PRIMARY KEY (user_id, log_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_ID),
+    FOREIGN KEY (log_id) REFERENCES NutritionLog(log_ID)
 );
 
 CREATE TABLE done (
-    user-ID INT,
-    log-ID INT,
+    user_ID INT,
+    log_ID INT,
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    calories-burned INT,
-    PRIMARY KEY (user-ID, log-ID),
-    FOREIGN KEY (user-ID) REFERENCES Users(user-id),
-    FOREIGN KEY (log-ID) REFERENCES ExerciseLog(log-ID)
+    calories_burned INT,
+    PRIMARY KEY (user_ID, log_ID),
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID),
+    FOREIGN KEY (log_ID) REFERENCES ExerciseLog(log_ID)
 );
 
 CREATE TABLE trains (
-    trainee.user-ID INT,
-    trainer.user-ID INT,
-    start-date DATE,
-    end-date DATE,
+    trainee_user_ID INT,
+    trainer_user_ID INT,
+    start_date DATE,
+    end_date DATE,
     recommendations VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT check-start-before-end CHECK (start-date < end-date)
-    PRIMARY KEY (trainee.user-ID, trainer.user-ID),
-    FOREIGN KEY (trainee.user-ID) REFERENCES Trainee(user-ID),
-    FOREIGN KEY (trainer.user-ID) REFERENCES Trainer(user-ID)
+    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
+    PRIMARY KEY (trainee_user_ID, trainer_user_ID),
+    FOREIGN KEY (trainee_user_ID) REFERENCES Trainee(user_ID),
+    FOREIGN KEY (trainer_user_ID) REFERENCES Trainer(user_ID)
 );
 
-CREATE TABLE planned-for (
-    plan-ID INT,
-    user-ID INT,
-    start-date DATE,
-    end-date DATE,
-    CONSTRAINT check-start-before-end CHECK (start-date < end-date),
-    PRIMARY KEY (user-ID, plan-ID),
-    FOREIGN KEY (plan-ID) REFERENCES NutritionPlan(plan-ID),
-    FOREIGN KEY (user-ID) REFERENCES Users(user-ID)
-);
-
-CREATE TABLE does (
-    user-ID INT,
-    routine-ID INT,
-    exercise-ID INT,
-    start-date DATE,
-    end-date DATE,
-    planned-calories INT,
-    CONSTRAINT check-start-before-end CHECK (start-date < end-date)
-    PRIMARY KEY (user-ID, routine-ID, exercise-ID),
-    FOREIGN KEY (user-ID) REFERENCES Trainee(user-ID),
-    FOREIGN KEY (routine-ID) REFERENCES ExerciseRoutinePlan(routine-ID),
-    FOREIGN KEY (exercise-ID) REFERENCES Exercise(exercise-ID)
+CREATE TABLE planned_for (
+    plan_ID INT,
+    user_ID INT,
+    start_date DATE,
+    end_date DATE,
+    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
+    PRIMARY KEY (user_ID, plan_ID),
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID),
+    FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID)
 );
 
 CREATE TABLE Exercise (
-    exercise-ID INT PRIMARY KEY AUTO_INCREMENT,
-    exercise-name VARCHAR(255) NOT NULL,
+    exercise_ID INT PRIMARY KEY AUTO_INCREMENT,
+    exercise_name VARCHAR(255) NOT NULL,
     description VARCHAR(255) DEFAULT NULL,
-    target-muscles VARCHAR(255) DEFAULT NULL,
+    target_muscles VARCHAR(255) DEFAULT NULL,
     difficulty_level INT CHECK(difficulty_level BETWEEN 1 AND 10),
-    set-size INT,
-    repeat-size INT
+    set_size INT,
+    repeat_size INT
 );
 
 CREATE TABLE ExerciseRoutinePlan (
-    routine-ID INT AUTO_INCREMENT PRIMARY KEY,
-    routine-name VARCHAR(255),
+    routine_ID INT PRIMARY KEY AUTO_INCREMENT,
+    routine_name VARCHAR(255),
     description VARCHAR(255),
     calories VARCHAR(50),
     intensity VARCHAR(255),
     duration VARCHAR(255),
     equipment VARCHAR(255),
     status VARCHAR(50),
-    exercises-list VARCHAR(255)
+    exercises_list VARCHAR(255)
+);
+
+CREATE TABLE does (
+    user_ID INT,
+    routine_ID INT,
+    exercise_ID INT,
+    start_date DATE,
+    end_date DATE,
+    planned_calories INT,
+    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
+    PRIMARY KEY (user_ID, routine_ID, exercise_ID),
+    FOREIGN KEY (user_ID) REFERENCES Trainee(user_ID),
+    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
+    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
 );
 
 CREATE TABLE PlansExercise (
-    routine-ID INT,
-    exercise-ID INT,
-    user-ID INT,
-    PRIMARY KEY (routine-ID, exercise-ID, user-ID),
-    FOREIGN KEY (routine-ID) REFERENCES ExerciseRoutinePlan(routine-ID),
-    FOREIGN KEY (exercise-ID) REFERENCES Exercise(exercise-ID),
-    FOREIGN KEY (user-ID) REFERENCES Users(user-ID)
+    routine_ID INT,
+    exercise_ID INT,
+    user_ID INT,
+    PRIMARY KEY (routine_ID, exercise_ID, user_ID),
+    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
+    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID),
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE Contains (
-    log-ID INT,
-    exercise-ID INT,
-    PRIMARY KEY (log-ID, exercise_ID),
-    FOREIGN KEY (log-ID) REFERENCES ExerciseLog(log-ID),
-    FOREIGN KEY (exercise-ID) REFERENCES Exercise(exercise-ID)
+    log_ID INT,
+    exercise_ID INT,
+    PRIMARY KEY (log_ID, exercise_ID),
+    FOREIGN KEY (log_ID) REFERENCES ExerciseLog(log_ID),
+    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
 );
 
 CREATE TABLE includes (
-    routine-ID INT,
-    exercise-ID INT,
-    PRIMARY KEY (routine-ID, exercise-ID),
-    FOREIGN KEY (routine-ID) REFERENCES ExerciseRoutinePlan(routine-ID),
-    FOREIGN KEY (exercise-ID) REFERENCES Exercise(exercise-ID)
+    routine_ID INT,
+    exercise_ID INT,
+    PRIMARY KEY (routine_ID, exercise_ID),
+    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
+    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
 );
 
 CREATE TABLE Requests (
@@ -192,90 +199,90 @@ CREATE TABLE Requests (
     user_ID INT,
     note TEXT,
     type VARCHAR(50),
-    FOREIGN KEY (user_ID) REFERENCES User(user-ID)
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
-CREATE TABLE plans-nutrition(
-	user-ID INT,
-	plan-ID INT,
-    PRIMARY KEY (user-ID, exercise-ID),
-	FOREIGN KEY (user-ID) REFERENCES Trainer,
-    FOREIGN KEY (plan-ID) REFERENCES NutritionPlan
+CREATE TABLE plans_nutrition(
+    user_ID INT,
+    plan_ID INT,
+    PRIMARY KEY (user_ID, plan_ID),
+    FOREIGN KEY (user_ID) REFERENCES Trainee(user_ID),
+    FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID)
 );
 
-INSERT INTO User (first-name, last-name, date-of-birth, age, gender, email, password, phone-no)
+INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer)
 VALUES 
-('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789'),
-('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513'),
-('Yağız', 'Soyad', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426'),
-('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234');
+('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789',1),
+('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513',1),
+('Yagiz', 'Basarn', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426',0),
+('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234',0);
 
-INSERT INTO Admin (user-ID)
+INSERT INTO Admin (user_ID)
 VALUES 
 (1);
 
-INSERT INTO Trainer (user-ID, specialization, certification, height, weight)
+INSERT INTO Trainer (user_ID, specialization, certification, height, weight)
 VALUES 
 (1, 'Strength Training', 'Certified Strength Coach', 180, 80),
 (2, 'Corssfit Training', 'Certification of Professional Crossfit Coach', 190, 83);
 
-INSERT INTO Trainee (user-ID, fitness-goals, height, weight, fat-percentage)
+INSERT INTO Trainee (user_ID, height, weight, fat_percentage)
 VALUES 
-(3, 'Weight Loss', 1.65, 90, 24.5);
-(4, 'Body Build', 1.90, 100, 14);
+(3, 1.65, 90, 24.5),
+(4, 1.90, 50, 14.2);
 
-INSERT INTO NutritionLog (meal-items, calories-consumed)
+INSERT INTO NutritionLog (meal_items, calories_consumed)
 VALUES 
 ('Chicken salad', 350),
 ('Meat Doner', 780);
 
-INSERT INTO ExerciseLog (duration, exercise-list, notes)
+INSERT INTO ExerciseLog (duration, exercise_list, notes)
 VALUES 
 (90.0, 'Running, Squats', 'Rested for 2 minutes'),
 (15, 'Triceps Pull Down', 'Superset');
 
-INSERT INTO NutritionPlan (trainee.user-ID, trainer.user-ID, plan-name, description, meal-items)
+INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
 VALUES 
-(3, 1, 'Weight Loss Basic', 'Basic plan for weight loss, low calory', 'Oatmeal, Salad, Chicken Breast'),
-(4,2,'Body Building Standard Calory', 'Rice, Chicken Breast, Salad');
+(3, 1, 'Weight Loss Basic', 'Basic plan for weight loss, low calorie', 'Oatmeal, Salad, Chicken Breast'),
+(4,2,'Body Building Standard Calorie', 'Rice, Chicken Breast', 'Salad');
 
-INSERT INTO PremiumAccount (user-ID, premiumAcc-ID, start-date, end-date, payment-method)
+INSERT INTO PremiumAccount (user_ID, premiumAcc_ID, start_date, end_date, payment_method)
 VALUES 
 (3, 101, '2023-01-01', '2024-01-01', 'Credit Card'),
 (4, 102, '2023-02-02', '2024-02-02', 'Credit Card');
 
-INSERT INTO Messages (sender-id, receiver-id, message)
+INSERT INTO Messages (sender_id, receiver_id, message)
 VALUES 
 (1, 3, 'Can you update my last program, it is hard for me'),
 (3,1, 'Please text me the part you are struggling'),
 (4,2,'This meet we could not talk. Tell me how was your exercise');
 
-INSERT INTO ate (user-id, log-id, calories-taken)
+INSERT INTO ate (user_id, log_id, calories_taken)
 VALUES 
 (2, 1, 350),
 (1,2,840);
 
-INSERT INTO done (user-ID, log-ID, calories-burned)
+INSERT INTO done (user_ID, log_ID, calories_burned)
 VALUES 
 (2, 1, 400),
 (1,2,700);
 
-INSERT INTO trains (trainee.user-ID, trainer.user-ID, start-date, end-date, recommendations)
+INSERT INTO trains (trainee_user_ID, trainer_user_ID, start_date, end_date, recommendations)
 VALUES 
 (3, 1, '2023-01-01', '2023-06-01', 'Your tend to lose weight easy'),
 (4,2,'2023-02-02', '2023-10-02','Keep doing good!');
 
-INSERT INTO planned-for (user-ID, plan-ID, start-date, end-date)
+INSERT INTO planned_for (user_ID, plan_ID, start_date, end_date)
 VALUES 
 (3, 1, '2023-01-01', '2023-03-01'),
 (4,2,'2023-02-02', '2023-03-02');
 
-INSERT INTO ExerciseRoutinePlan (routine-name, description, calories, intensity, duration, equipment, status, exercises-list)
+INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
 VALUES 
 ('Basic Strength', 'Routine for beginners', '500', 'Medium', '60 mins', 'Dumbbells', 'Active', 'Push-ups, Pull-ups'),
-('Losing Weight', 'Routine for low fat prercentage', '600', 'Advanced', '90 mins', 'Dumbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+('Losing Weight', 'Routine for low fat percentage', '600', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
 
-INSERT INTO Exercise (exercise-name, description, target-muscles, difficulty_level, set-size, repeat-size)
+INSERT INTO Exercise (exercise_name, description, target_muscles, difficulty_level, set_size, repeat_size)
 VALUES 
 ('Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
 ('Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
@@ -284,31 +291,31 @@ INSERT INTO Requests (user_ID, note, type)
 VALUES 
 (2, 'Need a custom plan', 'Nutrition');
 
-INSERT INTO plans-nutrition (user-ID, plan-ID)
+INSERT INTO plans_nutrition (user_ID, plan_ID)
 VALUES 
-(1, 1),
-(2, 2);
+(3, 1),
+(4, 2);
 
-INSERT INTO includes (routine-ID, exercise-ID)
+INSERT INTO includes (routine_ID, exercise_ID)
 VALUES 
 (1, 1),
 (1, 2),
 (2, 1),
 (2, 2);
 
-INSERT INTO Contains (log-ID, exercise-ID)
+INSERT INTO Contains (log_ID, exercise_ID)
 VALUES 
 (1, 1),
 (2, 2);
 
-INSERT INTO PlansExercise (routine-ID, exercise-ID, user-ID)
+INSERT INTO PlansExercise (routine_ID, exercise_ID, user_ID)
 VALUES 
 (1, 1, 3),
 (1, 2, 4),
 (2, 1, 3),
 (2, 2, 4);
 
-INSERT INTO does (user-ID, routine-ID, exercise-ID, start-date, end-date, planned-calories)
+INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planned_calories)
 VALUES 
 (3, 1, 1, '2023-01-01', '2023-06-01', 500),
 (4, 2, 2, '2023-02-02', '2023-10-02', 700);

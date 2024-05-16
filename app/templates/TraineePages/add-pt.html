@@ -1,23 +1,56 @@
 <html>
 
 <head>
-    <title>Add PT</title>
+    <title>Add Personal Trainer</title>
+    <link rel="stylesheet" type="text/css" href="static/css/addptstylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
 
 <body>
+
     <div class = "container">
-        
-        <div class="{{ url_for('homepage') }}">
-            <h1> FormAnalysis </h1>
+        <div class="form-analysis">
+            <a href="{{ url_for('homepage') }}"> 
+                <h1>FormAnalysis</h1> 
+            </a>
         </div>
-
-        <button>Settings</button>
-        <form action="{{url_for('profile')}}" method="get"><button>Profile Picture</button></form>
+        <div>
+            <div class= "icons"> 
+                <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+                <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <h3>Add Personal Trainer</h3>
+    <div class= "main">
+        <h1>Add Personal Trainer</h1>
+
+        <div class= "trainers-list">
+            <form action="" method="get">
+                {% for row in trainers%}
+                <div class="trainer">
+                    <img id="trainerpp" src= "/static/image/pp.png">
+                    <div>
+                        <h2>{{row.1}}</h2>
+                        <p>{{row.4}}</p>
+                        <p>{{row.5}}</p>
+                        <p>{{row.14}}</p>
+                        <p>{{row.15}}</p>
+                        <p>Height: {{row.16}}</p>
+                        <p>Weight: {{row.17}}</p>
+                        
+                        <button type="submit" class="btn btn-primary">Coaching Request</button>	
+                    </div>
+                </div>
+                {%endfor%}
+                
+            </form>
+            
+        </div>
+        
     </div>
+
 </body>
 
 </html>

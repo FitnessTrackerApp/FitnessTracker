@@ -2,21 +2,28 @@
 
 <head>
     <title>Workout Programs</title>
+    <link rel="stylesheet" type="text/css" href="static/css/workoutprogstylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
 
 <body>
-    <div class = "container">
-        
-        <div class="">
-            <h1> FormAnalysis </h1>
+    <div class="container">
+        <div class="form-analysis">
+            <a href="{{ url_for('homepage') }}"> 
+                <h1>FormAnalysis</h1> 
+            </a>
         </div>
-
-        <button>Settings</button>
-        <form action="{{url_for('profile')}}" method="get"><button>Profile Picture</button></form>
+        
+        <div class="icons">
+            <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+            <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+        </div>
+        
     </div>
 
-    <div>
-        <h3>Workout Programs</h3>
+    <div class="main">
+        <h1>My Workout Programs</h1>
     </div>
 </body>
 
