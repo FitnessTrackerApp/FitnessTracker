@@ -26,20 +26,12 @@
         <h1>My Goals</h1>
 
         <div class="goals-section"> 
-
+            {%for row in goals_data%}
             <div class="goal">
-                <p> Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
-                <p id="date"> date: </p>
+                <p> {{ row[0] }} </p>
+                <p id="date">Date: {{ row[1] }} </p>
             </div>
-
-            <div class="goal">
-                <p> Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
-            </div>
-
-            <div class="goal">
-                <p> Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
-            </div>
-
+            {%endfor%}
         </div>
     </div>
 </body>

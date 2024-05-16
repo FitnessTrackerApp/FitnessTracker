@@ -14,6 +14,6 @@ services:
       MYSQL_ROOT_PASSWORD: melih123
       MYSQL_DATABASE: fitnesstrackerdb
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql

@@ -10,7 +10,8 @@ CREATE TABLE User (
     phone_no VARCHAR(15) DEFAULT NULL,
     profile_pic VARCHAR(255) DEFAULT NULL,
     description TEXT DEFAULT NULL,
-    achievements TEXT DEFAULT NULL
+    achievements TEXT DEFAULT NULL,
+    isTrainer INT
 );
 
 CREATE TABLE Admin (
@@ -29,11 +30,18 @@ CREATE TABLE Trainer (
 
 CREATE TABLE Trainee (
     user_ID INT PRIMARY KEY,
-    fitness_goals VARCHAR(255), 
     height NUMERIC(3,2),
     weight NUMERIC(2,0),
     fat_percentage NUMERIC(4,2),
     FOREIGN KEY(user_ID) REFERENCES User(user_ID)
+);
+
+CREATE TABLE FitnessGoals (
+    goal_ID INT PRIMARY KEY AUTO_INCREMENT,
+    user_ID INT,
+    goal_description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
 );
 
 CREATE TABLE NutritionLog (
@@ -202,12 +210,12 @@ CREATE TABLE plans_nutrition(
     FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID)
 );
 
-INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no)
+INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer)
 VALUES 
-('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789'),
-('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513'),
-('Yağız', 'Soyad', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426'),
-('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234');
+('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789',1),
+('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513',1),
+('Yagiz', 'Basarn', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426',0),
+('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234',0);
 
 INSERT INTO Admin (user_ID)
 VALUES 
@@ -218,10 +226,10 @@ VALUES
 (1, 'Strength Training', 'Certified Strength Coach', 180, 80),
 (2, 'Corssfit Training', 'Certification of Professional Crossfit Coach', 190, 83);
 
-INSERT INTO Trainee (user_ID, fitness_goals, height, weight, fat_percentage)
+INSERT INTO Trainee (user_ID, height, weight, fat_percentage)
 VALUES 
-(3, 'Weight Loss', 1.65, 90, 24.5),
-(4, 'Body Build', 1.90, 50, 14.2);
+(3, 1.65, 90, 24.5),
+(4, 1.90, 50, 14.2);
 
 INSERT INTO NutritionLog (meal_items, calories_consumed)
 VALUES 
