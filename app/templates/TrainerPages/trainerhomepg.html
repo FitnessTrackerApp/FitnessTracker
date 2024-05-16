@@ -27,6 +27,19 @@
     <div class= "main">
         <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
         <h1>My Trainees and Requests</h1>
+
+        <div class="requests-list">
+            <ul>
+                {% for request in requests %}
+                <li>
+                    <p>Request ID: {{ request.request_id }}</p>
+                    <p>Trainee User ID: {{ request.trainee_user_ID }}</p>
+                    <p>Request Date: {{ request.request_date }}</p>
+                    <p>Status: {{ request.status }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
 </body>
