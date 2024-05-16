@@ -107,13 +107,6 @@ def homepage():
             mysql.connection.commit()
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, trying = trying)
         else:
-
-            #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
-            #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
-            certification = "Not uploaded"
-            specialization = "Not uploaded"
-            cursor.execute("INSERT IGNORE INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (%s, %s, %s, %s, %s)" , (userID, specialization, certification, 0, 0,)) #diğer bilgileri profilde form olarak almalıyız
-            mysql.connection.commit()
             return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
         
     return redirect(url_for('login'))
