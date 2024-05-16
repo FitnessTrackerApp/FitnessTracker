@@ -163,7 +163,7 @@ def profile():
                     fatp = -1
 
 
-                #burası doğru mu? DOĞRU
+                #burası doğru mu? -----------------DOĞRU-----------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
                 if(height < 0 or height > 300):
                     message = 'Please enter a valid height(0-300)'
@@ -192,16 +192,30 @@ def profile():
                 height = request.form['height']
                 weight = request.form['weight']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+
+                #burası doğru mu? ------------DOĞRU------------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
 
-                cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
-                mysql.connection.commit()
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                else:
+                    cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
-                data = cursor.fetchall()
+                    cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
             return render_template('TrainerPages/trainerprofile.html', fname_lname = fname_lname, data=data, message = message)#html yaz dataları çek
