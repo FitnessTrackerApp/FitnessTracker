@@ -103,8 +103,12 @@ def homepage():
             #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
             #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
 
+            # burada user ın personal trainerları fetch edilmeli
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
+            trains = cursor.fetchall()
+
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
-            return render_template('TraineePages/homepg.html', fname_lname = fname_lname)
+            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains)
         else:
 
             #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
