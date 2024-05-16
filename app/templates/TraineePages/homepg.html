@@ -36,17 +36,22 @@
                 </button>
             </form>
 
-            <form action="{{ url_for('programs') }}" method="get">
-                <button>
-                    <img id="trainerpp" src= "/static/image/pp.png">
-                    <div>
-                        <p>John Doe</p>
-                        <p>male, 23 y.o.</p>
-                    </div>
-
-                </button>
-            </form>
-            <a class="delete-button">x</a>
+            {% if trains %}
+            {% for row in trains %}
+            <div class="form-group">
+                <form action="{{ url_for('programs') }}" method="get">
+                    <button>
+                        <img id="trainerpp" src="/static/image/pp.png">
+                        <div>
+                            <p>{{ row[0] }} {{ row[1] }}</p>
+                            <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        </div>
+                    </button>
+                </form>
+                <a class="delete-button">x</a>
+            </div>
+            {% endfor %}
+            {% endif %}
         </div>
 
         <h1>My Progress</h1>
