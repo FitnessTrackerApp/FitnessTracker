@@ -5,6 +5,7 @@ import MySQLdb.cursors
 
 app = Flask(__name__)
 
+mysql = MySQL(app)
 app.secret_key = 'abcdefgh'
 
 #app.config['MYSQL_HOST'] = 'db'
@@ -12,6 +13,7 @@ app.secret_key = 'abcdefgh'
 #app.config['MYSQL_PASSWORD'] = 'melih123'
 #app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
+mysql = MySQL(app)
 mysql = MySQL(app)
 
 @app.route('/')
