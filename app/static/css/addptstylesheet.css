@@ -28,14 +28,13 @@ body {
     display: flex;
     background-color:#56ED65;
     color: white;
-    height: 72px;
-
+    height: 70px;
 }
 
 .form-analysis h1 {
     width: 210px;
     font-weight: bold;
-    padding-bottom: 5px;
+    font-size: x-large;
 }
 
 .form-analysis h1:hover {
@@ -62,7 +61,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 18px;
     text-align: right;
 }
 
@@ -79,61 +78,71 @@ body {
 }
 
 .main {
-    height: 700px;
-    display: flex;
-    margin: 50px;
+    padding-left: 15px;
 }
 
-.main img {
-    height: 250px;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-.main a {
-    border-radius: 50%;
-}
-
-.main a:hover {
-    opacity: 75%;
-}
-
-h1 {
+.main h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 15px 0px;
+    margin: 20px 0px 20px 0px;
 }
 
-.profile-section {
+.trainers-list form {
     display: flex;
-    width: 670px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 500px;
 }
 
-.trainer-section {
-    margin-left: 20px;
-
-}
-
-.line {
-    background-color: #15A723;
-    width: 3px;
+.trainer {
+    width: 400px;
     height: 250px;
-
-}
-
-button {
-    width: 160px;
-    padding: 4px;
+    padding: 8px;
     border:1px solid #ccc;
     border-radius: 15px;
-    background-color: #56ED65;
+    background-color: #D9D9D9;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    margin: 35px 35px 35px 0;
+    padding: 40px;
+    font-size: x-large;
+    justify-content: space-between;
+    text-align: right;
+    display: flex; 
+    align-items: center; 
+    cursor: pointer;
+}
+
+.trainer button {
+    width: 140px;
+    padding: 6px;
+    border:1px solid #ccc;
+    border-radius: 15px;
+    background-color: #33d043;
     color: white;
     font-weight: bold;
     font-size: small;
     cursor: pointer;
+    align-self: flex-end;
     margin-top: 10px;
+    margin-left: 60px;
+    
 }
 
-button:hover {
-    opacity: 85%;
+.trainer button:hover {
+    background-color: #15A723;
 }
+
+.trainer img {
+    height: 140px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-color: #000000;
+}
+
+.trainers-list p {
+    font-weight: normal;
+}
+
+

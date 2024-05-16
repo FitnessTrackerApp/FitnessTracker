@@ -28,14 +28,11 @@ body {
     display: flex;
     background-color:#56ED65;
     color: white;
-    height: 72px;
-
+    height: 70px;
 }
 
 .form-analysis h1 {
     width: 210px;
-    font-weight: bold;
-    padding-bottom: 5px;
 }
 
 .form-analysis h1:hover {
@@ -79,61 +76,13 @@ body {
 }
 
 .main {
-    height: 700px;
+    margin-left: 15px;
     display: flex;
-    margin: 50px;
-}
-
-.main img {
-    height: 250px;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-.main a {
-    border-radius: 50%;
-}
-
-.main a:hover {
-    opacity: 75%;
+    flex-direction: column;
 }
 
 h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 15px 0px;
-}
-
-.profile-section {
-    display: flex;
-    width: 670px;
-}
-
-.trainer-section {
-    margin-left: 20px;
-
-}
-
-.line {
-    background-color: #15A723;
-    width: 3px;
-    height: 250px;
-
-}
-
-button {
-    width: 160px;
-    padding: 4px;
-    border:1px solid #ccc;
-    border-radius: 15px;
-    background-color: #56ED65;
-    color: white;
-    font-weight: bold;
-    font-size: small;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    opacity: 85%;
+    margin: 20px 0px 20px 0px;
 }

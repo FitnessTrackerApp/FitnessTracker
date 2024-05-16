@@ -11,25 +11,28 @@
 <body>
     <div class="container">
         <div class="form-analysis">
-            <a href=""> 
+            <a href="{{ url_for('homepage') }}"> 
                 <h1>FormAnalysis</h1> 
             </a>
         </div>
         
         <div class="icons">
-            <a href=""><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
-            <a href=""><img src= "/static/image/pp.png"></a>
+            <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+            <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
         </div>
         
     </div>
 
     <div class= "main">
         <h1>Add Goal</h1>
+       
+        <form method="post">
+            <div class = "goal-form">
+                <textarea name="goal" required></textarea>
+                <button type="submit" value="Submit">Submit</button>
+            </div>
+        </form>
         
-        <div class = "goal-form">
-            <textarea type="goal" id="" size="50" spellcheck="true" placeholder="Enter your goal!"> </textarea>
-            <button type="submit">Submit</button>
-        </div>
     </div>
 </body>
 

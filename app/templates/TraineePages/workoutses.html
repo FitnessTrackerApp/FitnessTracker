@@ -2,50 +2,58 @@
 
 <head>
     <title>Workout Session</title>
+    <link rel="stylesheet" type="text/css" href="static/css/workoutsessionstylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
 
 <body>
     <div class = "container">
-        <div class="">
-            <h1> FormAnalysis </h1>
+        <div class="form-analysis">
+            <a href="{{ url_for('homepage') }}"> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
+        <div>
+            <div class= "icons"> 
+                <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+                <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>Workout Session</h1>
+
+        <div class="line"></div>
+
+        <div class="filter-section">
+            <label for="intensity">Intensity</label>
+            <select name="intensity" id="intensity">
+                <option value=""></option>
+                <option value="">Selection1</option>
+                <option value="">Selection2</option>
+            </select>
+    
+            <label for="duration">Duration</label>
+            <select name="duration" id="duration">
+                <option value=""></option>
+                <option value="">Selection1</option>
+                <option value="">Selection2</option>
+            </select>
+    
+            <label for="equipment">Equipment</label>
+            <select name="equipment" id="equipment">
+                <option value=""></option>
+                <option value="">Selection1</option>
+                <option value="">Selection2</option>
+            </select>
+    
+            <button type="submit">Filter</button>
         </div>
 
-        <button>Settings</button>
-        <form action="{{url_for('profile')}}" method="get"><button>Profile Picture</button></form>
+        <div class="line"></div>
     </div>
-
-    <div>
-        <h3>Workout Session</h3>
-    </div>
-
-    <hr>
-
-    <div>
-        <label for="intensity">Intensity</label>
-        <select name="intensity" id="intensity">
-            <option value=""></option>
-            <option value="">Selection1</option>
-            <option value="">Selection2</option>
-        </select>
-
-        <label for="duration">Duration</label>
-        <select name="duration" id="duration">
-            <option value=""></option>
-            <option value="">Selection1</option>
-            <option value="">Selection2</option>
-        </select>
-
-        <label for="equipment">Equipment</label>
-        <select name="equipment" id="equipment">
-            <option value=""></option>
-            <option value="">Selection1</option>
-            <option value="">Selection2</option>
-        </select>
-
-        <button type="submit">Filter</button>
-    </div>
-
-    <hr>
 
 </body>
 
