@@ -27,35 +27,29 @@
             <a href=""><img src= "/static/image/pp.png"></a>
 
             <div> 
-                <h1> {{fname_lname[0]}} {{fname_lname[1]}} </h1>
-
-                {% if message is defined and message %}
-                <div class="alert alert-warning">{{ message }}</div>
-                {% endif %}
+                <h1>  </h1>
                 
-                {% for row in data%}
+                
                 <form action="{{ url_for('profile') }}" method="post">
-                    <div class="form-group">Gender: {{row.1}}</div>
-                    <div class="form-group">Age: {{row.0}}</div>
-                    <div class="form-group">Height: {{row.2}} 
+                    <div class="form-group">Gender: </div>
+                    <div class="form-group">Age: </div>
+                    <div class="form-group">Height: 
                         <input type="text" class="form-control" id="height" name="height" placeholder=" Change(cm) ">
                     </div>
-                    <div class="form-group">Weight: {{row.3}} 
+                    <div class="form-group">Weight: 
                         <input type="text" class="form-control" id="weight" name="weight" placeholder=" Change(kg) ">
                     </div>
                     <button type="submit"> Change Personal Info</button>
                 </form>
-                {%endfor%}
+
             </div>
         </div>
 
         <div class="line"></div>
 
         <div class= "trainer-section">
-            {% for row in data%}
-            <h1> Certificate: {{row.4}}</h1>
-            <h1> Speciality: {{row.5}}</h1>
-            {%endfor%}
+            <h1> Certificate: </h1>
+            <h1> Speciality:</h1>
         </div>
 
     </div>
