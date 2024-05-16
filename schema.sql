@@ -30,9 +30,9 @@ CREATE TABLE Trainer (
 
 CREATE TABLE Trainee (
     user_ID INT PRIMARY KEY,
-    height NUMERIC(3,2),
-    weight NUMERIC(2,0),
-    fat_percentage NUMERIC(4,2),
+    height INT,
+    weight INT,
+    fat_percentage INT,
     FOREIGN KEY(user_ID) REFERENCES User(user_ID)
 );
 

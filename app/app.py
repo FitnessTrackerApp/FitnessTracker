@@ -145,16 +145,40 @@ def profile():
                 weight = request.form['weight']
                 fatp = request.form['fat']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+                if fatp[0] == '%' and fatp[1:].isdigit():
+                    height = int(height)
+                    weight = int(weight)
+                    fatp = int(fatp[1:])
+                    
+                else:
+                    message = 'Please enter a valid fat percentage'
+                    fatp = -1
+
+
+                #burası doğru mu? DOĞRU
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                elif(fatp < 0 or fatp > 100):
+                    message = 'Please enter a valid fat percentage (%0-100)'
+                else:
+                    cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
-                mysql.connection.commit()
+                    cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
-                data = cursor.fetchall()
-
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
 
