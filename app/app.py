@@ -116,7 +116,26 @@ def homepage():
             mysql.connection.commit()
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
         else:
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
+            # burada trainer ın trainee leri fetch edilmeli
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
+            trainees = cursor.fetchall()
+
+            # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
+            requests = cursor.fetchall()
+
+            if request.method == 'POST':
+                trainee_user_ID = None
+                if 'accept' in request.form:
+                    trainee_user_ID = int(request.form.get('accept'))
+                    # burada request silinip trainee ve trainer trains tablosuna eklenmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", ())
+                
+                elif 'deny' in request.form:
+                    trainee_user_ID = int(request.form.get('deny'))
+                    # burada sadece request silinmeli
+
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname, requests= requests, trainees = trainees)#html yaz dataları çek
         
     return redirect(url_for('login'))
 

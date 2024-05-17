@@ -24,22 +24,81 @@
         </div>
     </div>
 
+    <!--
     <div class= "main">
         <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
         <h1>My Trainees and Requests</h1>
 
         <div class="requests-list">
             <ul>
-                {% for request in requests %}
+                {% for row in requests %}
                 <li>
-                    <p>Request ID: {{ request.request_id }}</p>
-                    <p>Trainee User ID: {{ request.trainee_user_ID }}</p>
-                    <p>Request Date: {{ request.request_date }}</p>
-                    <p>Status: {{ request.status }}</p>
+                    <p>Trainee Name: {{ row[0] }}</p>
+                    <p>Trainee Surname : {{ row[1] }}</p>
+                    <p>Gender: {{ row[2] }}</p>
+                    <p>Age: {{ row[3] }}</p>
+                    <p>Height: {{ row[4] }} </p>
+                    <p>Weight: {{ row[5] }} </p>
                 </li>
                 {% endfor %}
             </ul>
         </div>
+    </div>
+    -->
+
+    <div class= "main">
+        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
+        <h1>From My Trainees</h1>
+
+        <div class= "form-group">
+            <form action="{{ url_for('') }}" method="get"> <!-- Here there should be the URL for adding a trainee-->
+                <button>
+                    <img src= "/static/image/plus.png">
+                    Add Trainee
+                </button>
+            </form>
+
+            {% if trainees %}
+            {% for row in trainees %}
+            <div class="form-group">
+                <form action="{{ url_for('') }}" method="get"> <!-- Here there should be the URL for the trainee-->
+                    <button>
+                        <img id="traineepp" src="/static/image/pp.png">
+                        <div>
+                            <p>{{ row[0] }} {{ row[1] }}</p>
+                            <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        </div>
+                    </button>
+                </form>
+                <a class="delete-button">x</a>
+            </div>
+            {% endfor %}
+            {% endif %}
+    
+        </div>
+
+        
+        <h1>Requests</h1>
+
+        <div class= "requests-list">
+            {% for row in requests%}
+            <form action="/homepage" method="post">
+                <div class="request">
+                    <img id="trainerpp" src= "/static/image/pp.png">
+                    <div>
+                        <p>{{ row[0] }} {{ row[1] }}</p>
+                        <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        <p>{{ row[4] }} cm, {{ row[5] }} kg</p>
+                        <!-- Maybe a note for request can be added in here-->
+                        <button name="accept" value="{{row.6}}" type="submit" class="btn btn-primary">Accept</button>
+                        <button name="deny" value="{{row.6}}" type="submit" class="btn btn-primary">Deny</button>	
+                    </div>
+                </div>
+            </form>
+            {%endfor%}        
+        </div>
+
+        
     </div>
 
 </body>
