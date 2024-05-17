@@ -51,17 +51,11 @@
         <h1>From My Trainees</h1>
 
         <div class= "form-group">
-            <form action="{{ url_for('') }}" method="get"> <!-- Here there should be the URL for adding a trainee-->
-                <button>
-                    <img src= "/static/image/plus.png">
-                    Add Trainee
-                </button>
-            </form>
-
+            
             {% if trainees %}
             {% for row in trainees %}
             <div class="form-group">
-                <form action="{{ url_for('') }}" method="get"> <!-- Here there should be the URL for the trainee-->
+                <form action="/homepage" method="get"> <!-- Here there should be the URL for the trainee-->
                     <button>
                         <img id="traineepp" src="/static/image/pp.png">
                         <div>
@@ -70,7 +64,12 @@
                         </div>
                     </button>
                 </form>
-                <a class="delete-button">x</a>
+
+                <form action="/homepage" method="post" class="delete-form">
+                    <input type="hidden" name="trainee_user_ID" value="{{ row[0] }}">
+                    <button name="delete" value="{{row.4}}" type="submit" class="btn btn-primary">Delete Trainee</button>
+                </form>
+
             </div>
             {% endfor %}
             {% endif %}
@@ -96,10 +95,14 @@
                 </div>
             </form>
             {%endfor%}        
-        </div>
-
-        
+        </div>    
     </div>
+
+    <script>
+        function reloadPage() {
+            location.reload();
+        }
+    </script>
 
 </body>
 </html>

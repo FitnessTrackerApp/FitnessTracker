@@ -75,7 +75,7 @@ def register():
 
 #HOMEPAGE needs to be checked for trainer and trainee users
 
-@app.route('/homepage')
+@app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
     
     if 'loggedin' in session:
@@ -117,23 +117,42 @@ def homepage():
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
         else:
             # burada trainer ın trainee leri fetch edilmeli
-            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, u.user_ID FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
             trainees = cursor.fetchall()
 
             # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
             requests = cursor.fetchall()
 
-            if request.method == 'POST':
+            # implement the delete logic from traines
+            if request.method == 'POST' and ('delete' in request.form):
+                trainee_user_ID = int(request.form.get('delete'))
+                # Trains de var mı diye kontrol et
+                cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                count = cursor.fetchone()[0]
+                if count != 0: # count == 1 de olabilir
+                    cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+            if request.method == 'POST' and ('accept' in request.form or 'deny' in request.form):
                 trainee_user_ID = None
                 if 'accept' in request.form:
                     trainee_user_ID = int(request.form.get('accept'))
                     # burada request silinip trainee ve trainer trains tablosuna eklenmeli
-                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", ())
-                
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+                    cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    count = cursor.fetchone()[0]
+                    if count == 0:
+                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
+                        mysql.connection.commit()
+
                 elif 'deny' in request.form:
                     trainee_user_ID = int(request.form.get('deny'))
                     # burada sadece request silinmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
 
             return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname, requests= requests, trainees = trainees)#html yaz dataları çek
         
@@ -220,11 +239,15 @@ def add_pt():
             cursor.execute("SELECT * FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, trainer_user_ID))
             existing_request = cursor.fetchone()
             if existing_request: 
-                print("Already exists")
+                print("Request already exists.") # instead of this we can use some kind of pop uf window in frontend (idk how)
             else:
-                cursor.execute("INSERT INTO CoachingRequests (trainee_user_ID, trainer_user_ID, request_date, status) VALUES (%s, %s, %s, %s)", (trainee_user_ID, trainer_user_ID, request_date, status))
-                mysql.connection.commit()
-        
+                cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s", (trainee_user_ID,))
+                count = cursor.fetchone()[0]
+                if count == 0:
+                    cursor.execute("INSERT INTO CoachingRequests (trainee_user_ID, trainer_user_ID, request_date, status) VALUES (%s, %s, %s, %s)", (trainee_user_ID, trainer_user_ID, request_date, status))
+                    mysql.connection.commit()
+                else:
+                    print("You already have a trainer") # instead of this we can use some kind of pop uf window in frontend (idk how)
 
         return render_template('TraineePages/add-pt.html', trainers=data)
     
@@ -304,6 +327,14 @@ def logout():
     session.pop('loggedin', None)
     #flash('You were logged out')
     return redirect(url_for('login'))
+
+# Ekledim ama emin değilim uygulamada böyle bir şeye yer vereceğimize 
+@app.route('/my_trainee')
+def my_trainees():
+    if 'loggedin' in session:
+        return render_template('TrainerPages/my-trainee.html')
+    return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
