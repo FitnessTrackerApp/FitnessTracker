@@ -24,10 +24,85 @@
         </div>
     </div>
 
+    <!--
     <div class= "main">
         <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
         <h1>My Trainees and Requests</h1>
+
+        <div class="requests-list">
+            <ul>
+                {% for row in requests %}
+                <li>
+                    <p>Trainee Name: {{ row[0] }}</p>
+                    <p>Trainee Surname : {{ row[1] }}</p>
+                    <p>Gender: {{ row[2] }}</p>
+                    <p>Age: {{ row[3] }}</p>
+                    <p>Height: {{ row[4] }} </p>
+                    <p>Weight: {{ row[5] }} </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+    -->
+
+    <div class= "main">
+        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
+        <h1>From My Trainees</h1>
+
+        <div class= "form-group">
+            
+            {% if trainees %}
+            {% for row in trainees %}
+            <div class="form-group">
+                <form action="/homepage" method="get"> <!-- Here there should be the URL for the trainee-->
+                    <button>
+                        <img id="traineepp" src="/static/image/pp.png">
+                        <div>
+                            <p>{{ row[0] }} {{ row[1] }}</p>
+                            <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        </div>
+                    </button>
+                </form>
+
+                <form action="/homepage" method="post" class="delete-form">
+                    <input type="hidden" name="trainee_user_ID" value="{{ row[0] }}">
+                    <button name="delete" value="{{row.4}}" type="submit" class="btn btn-primary">Delete Trainee</button>
+                </form>
+
+            </div>
+            {% endfor %}
+            {% endif %}
+    
+        </div>
+
+        
+        <h1>Requests</h1>
+
+        <div class= "requests-list">
+            {% for row in requests%}
+            <form action="/homepage" method="post">
+                <div class="request">
+                    <img id="trainerpp" src= "/static/image/pp.png">
+                    <div>
+                        <p>{{ row[0] }} {{ row[1] }}</p>
+                        <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        <p>{{ row[4] }} cm, {{ row[5] }} kg</p>
+                        <!-- Maybe a note for request can be added in here-->
+                        <button name="accept" value="{{row.6}}" type="submit" class="btn btn-primary">Accept</button>
+                        <button name="deny" value="{{row.6}}" type="submit" class="btn btn-primary">Deny</button>	
+                    </div>
+                </div>
+            </form>
+            {%endfor%}        
+        </div>    
+    </div>
+
+    <script>
+        function reloadPage() {
+            location.reload();
+        }
+    </script>
 
 </body>
 </html>
