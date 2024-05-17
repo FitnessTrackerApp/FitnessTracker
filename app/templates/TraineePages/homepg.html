@@ -25,7 +25,7 @@
     </div>
 
     <div class= "main">
-        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}} , {{trains}} {{last_added}} </h1>
+        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}} , {{trains}} {% for inx in last_added%} {{inx.0}}{{inx.1}}{{inx.2}}{{inx.3}} {% endfor %}</h1>
         <h1>From My Trainer</h1>
 
         <div class= "form-group">

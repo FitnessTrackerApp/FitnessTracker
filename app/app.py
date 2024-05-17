@@ -99,18 +99,17 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
             trains = cursor.fetchall()
 
-                    # Query to get the last added coaching request names
+            # Query to get the last added coaching request names
             query_last_added = """
             SELECT U1.first_name AS trainee_first_name, U1.last_name AS trainee_last_name, 
                 U2.first_name AS trainer_first_name, U2.last_name AS trainer_last_name 
             FROM CoachingRequests
             JOIN User U1 ON CoachingRequests.trainee_user_ID = U1.user_ID
             JOIN User U2 ON CoachingRequests.trainer_user_ID = U2.user_ID
-            ORDER BY CoachingRequests.request_id DESC
-            LIMIT 1;
+            ORDER BY CoachingRequests.request_id DESC;
             """
             cursor.execute(query_last_added)
-            last_added = cursor.fetchone()
+            last_added = cursor.fetchall()
 
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             mysql.connection.commit()
