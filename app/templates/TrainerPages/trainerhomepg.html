@@ -63,8 +63,8 @@
                 <ul>
                 {% for request in program_requests %}
                     <li>
-                        <strong>{{ request.first_name }} {{ request.last_name }}:</strong> 
-                        {{ request.note }} - <em>{{ request.type }}</em>
+                        <strong>{{ request.0 }} {{ request.1 }}:</strong> 
+                        {{ request.2 }} - <em>{{ request.3 }}</em>
                     </li>
                 {% endfor %}
                 </ul>

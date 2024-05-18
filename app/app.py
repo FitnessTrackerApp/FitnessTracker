@@ -130,8 +130,7 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
             requests = cursor.fetchall()
 
-            #cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
-            cursor.execute("SELECT u.first_name AS user_first_name, u.last_name AS user_last_name, t.first_name AS trainer_first_name, t.last_name AS trainer_last_name, r.note, r.type FROM Requests r JOIN User u ON r.user_ID = u.user_ID JOIN User t ON r.trainer_ID = t.user_ID WHERE t.user_ID = %s", (userID,))
+            cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
             program_requests = cursor.fetchall()
 
             # implement the delete logic from traines
@@ -163,7 +162,7 @@ def homepage():
                     cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                     mysql.connection.commit()
 
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees, program_requests=program_requests)#html yaz dataları çek
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees, program_requests = program_requests)#html yaz dataları çek
         
     return redirect(url_for('login'))
 
@@ -393,37 +392,29 @@ def nutr_prog():
 @app.route('/req-programs', methods=['GET', 'POST'])#aid
 def req_prog():
     if 'loggedin' in session:
-
         cursor = mysql.connection.cursor()
         user_id = session['userid']  # The ID of the logged-in user (trainee)
             
         cursor.execute(" SELECT trainer_user_ID FROM trains WHERE trainee_user_ID = %s", (user_id,))
-        trainer_id = cursor.fetchall()
+        trainer_id = cursor.fetchone()
 
         cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (trainer_id,))
         names = cursor.fetchone()
 
-        if request.method == 'POST' :
+        if request.method == 'POST':
 
-            workout_request = request.form.get('workout_request')
-            nutrition_request = request.form.get('nutrition_request')
+            workoutrequest = request.form.get('workout_request')
+            nutritionrequest = request.form.get('nutrition_request')
 
             # Check and insert workout and nutrition requests
-            if workout_request:
-                cursor.execute(
-                    'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
-                    (user_id, trainer_id, workout_request, 'Workout')
-                )
+            if workoutrequest != None:
+                cursor.execute("INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)", (user_id, trainer_id, workoutrequest, 'Workout',))
+                mysql.connection.commit()
+            elif nutritionrequest != None:
+                cursor.execute("INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)", (user_id, trainer_id, nutritionrequest, 'Nutrition',))
                 mysql.connection.commit()
 
-            if nutrition_request:
-                cursor.execute(
-                    'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
-                    (user_id, trainer_id, nutrition_request, 'Nutrition')
-                )
-                mysql.connection.commit()
-        
-        return render_template('TraineePages/UsersTrainerPage/req-program.html', names = names, trainer_id = trainer_id)
+        return render_template('TraineePages/UsersTrainerPage/req-program.html', names = names)
 
     return redirect(url_for('login'))
 
