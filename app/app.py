@@ -373,36 +373,9 @@ def workout_session():
 
 @app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
 def programs():
-    if 'loggedin' not in session:
-        return redirect(url_for('login'))
-
-    if request.method == 'POST':
-        user_id = session['user_id']  # The ID of the logged-in user (trainee)
-        trainer_id = request.form.get('trainer_id')  # You need to get this from the form or context
-        workout_request = request.form.get('workout_request')
-        nutrition_request = request.form.get('nutrition_request')
-
-        cursor = mysql.connection.cursor()
-
-        # Check and insert workout and nutrition requests
-        if workout_request:
-            cursor.execute(
-                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
-                (user_id, trainer_id, workout_request, 'Workout')
-            )
-
-        if nutrition_request:
-            cursor.execute(
-                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
-                (user_id, trainer_id, nutrition_request, 'Nutrition')
-            )
-
-        cursor.close()
-
-        return redirect(url_for('some_success_page'))  # Redirect to a success page
-
-    return render_template('TraineePages/UsersTrainerPage/programs.html')
-
+    if 'loggedin' in session:
+        return render_template('TraineePages/UsersTrainerPage/programs.html')
+    return redirect(url_for('login'))
 
 @app.route('/workout-program')#aid
 def work_prog():
@@ -416,10 +389,41 @@ def nutr_prog():
         return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
     return redirect(url_for('login'))
 
-@app.route('/req-programs')#aid
+@app.route('/req-programs', methods=['GET', 'POST'])#aid
 def req_prog():
     if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/req-program.html')
+
+        cursor = mysql.connection.cursor()
+        user_id = session['userid']  # The ID of the logged-in user (trainee)
+            
+        cursor.execute(" SELECT trainer_user_ID FROM trains WHERE trainee_user_ID = %s", (user_id,))
+        trainer_id = cursor.fetchall()
+
+        cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (trainer_id,))
+        names = cursor.fetchone()
+
+        if request.method == 'POST' :
+
+            workout_request = request.form.get('workout_request')
+            nutrition_request = request.form.get('nutrition_request')
+
+            # Check and insert workout and nutrition requests
+            if workout_request:
+                cursor.execute(
+                    'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                    (user_id, trainer_id, workout_request, 'Workout')
+                )
+                mysql.connection.commit()
+
+            if nutrition_request:
+                cursor.execute(
+                    'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                    (user_id, trainer_id, nutrition_request, 'Nutrition')
+                )
+                mysql.connection.commit()
+        
+        return render_template('TraineePages/UsersTrainerPage/req-program.html', names = names, trainer_id = trainer_id)
+
     return redirect(url_for('login'))
 
 @app.route('/settings')#aid

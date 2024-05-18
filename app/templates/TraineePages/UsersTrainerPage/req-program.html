@@ -25,7 +25,7 @@
     <div class="main">
 
         <h1>Request New Programs </h1>
-        <h1>From X Y</h1>
+        <h1>From {{names.0}} {{names.1}}</h1>
 
         <div class="box"> 
             <div class="sub-box1">
@@ -35,8 +35,11 @@
 
                 <h3>Request Workout Program</h3>
                 
-                <textarea > </textarea>
-                <button type="submit">Send</button>
+                <textarea name="workout_request" required> </textarea>
+                
+                <form action="" method="post">
+                    <button type="submit" value="{{trainer_id.0}}" name="trainer_id">Send</button>
+                </form>
             </div>
 
             <div class="line"> </div>
@@ -48,8 +51,10 @@
 
                 <h3>Request Nutrition Program</h3>
                 
-                <textarea > </textarea>
-                <button type="submit">Send</button>
+                <textarea name="nutrition_request" required> </textarea>
+                <form action="" method="post">
+                    <button type="submit" value="{{trainer_id.0}}" name="trainer_id">Send</button>
+                </form>
             </div>
         </div>
 
