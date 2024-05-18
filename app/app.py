@@ -418,6 +418,18 @@ def req_prog():
 
     return redirect(url_for('login'))
 
+@app.route('/mealassign')
+def mealassign():
+    if 'loggedin' in session:
+        return render_template('TrainerPages/meal-assign.html')
+    return redirect(url_for('login'))
+
+@app.route('/workoutassign')
+def workoutassign():
+    if 'loggedin' in session:
+        return render_template('TrainerPages/workout-assign.html')
+    return redirect(url_for('login'))
+
 @app.route('/settings')#aid
 def settings():
     if 'loggedin' in session:
@@ -429,14 +441,6 @@ def logout():
     session.pop('loggedin', None)
     #flash('You were logged out')
     return redirect(url_for('login'))
-
-# Ekledim ama emin değilim uygulamada böyle bir şeye yer vereceğimize 
-@app.route('/my_trainee')
-def my_trainees():
-    if 'loggedin' in session:
-        return render_template('TrainerPages/my-trainee.html')
-    return redirect(url_for('login'))
-
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
