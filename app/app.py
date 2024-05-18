@@ -130,12 +130,7 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
             requests = cursor.fetchall()
 
-            cursor.execute("""
-            SELECT u.first_name, u.last_name, r.note, r.type 
-            FROM Requests r 
-            JOIN User u ON r.user_ID = u.user_ID 
-            WHERE r.trainer_ID = %s
-            """, (userID,))
+            cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
             program_requests = cursor.fetchall()
 
             # implement the delete logic from traines
