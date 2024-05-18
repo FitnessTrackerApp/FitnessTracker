@@ -331,16 +331,6 @@ def my_goals():
     
     return redirect(url_for('login'))
 
-# @app.route('/workout-session')
-# def workout_session():
-#     if 'loggedin' in session:
-#         cursor = mysql.connection.cursor()
-
-#         cursor.execute("SELECT * FROM ExerciseRoutinePlan")
-#         exercise_plans = cursor.fetchall()
-#         return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
-#     return redirect(url_for('login'))
-
 @app.route('/workout-session', methods=['GET', 'POST'])
 def workout_session():
     if 'loggedin' in session:
@@ -348,22 +338,25 @@ def workout_session():
         query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
         filters = []
 
-        if request.method == 'POST':
+        if request.method == 'POST' and 'filter' in request.form:
             intensity = request.form.get('intensity')
             duration = request.form.get('duration')
             equipment = request.form.get('equipment')
 
             if intensity:
-                query += " AND intensity = %s"
-                filters.append(intensity)
+                query += " AND intensity LIKE %s"
+                filters.append(f"%{intensity}%")
             if duration:
-                query += " AND duration = %s"
-                filters.append(duration)
+                query += " AND duration LIKE %s"
+                filters.append(f"%{duration}%")
             if equipment:
-                query += " AND equipment = %s"
-                filters.append(equipment)
+                query += " AND equipment LIKE %s"
+                filters.append(f"%{equipment}%")
 
             cursor.execute(query, tuple(filters))
+        elif request.method == 'POST' and 'reset' in request.form:
+            query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+            cursor.execute(query)
         else:
             cursor.execute(query)
 
