@@ -179,16 +179,40 @@ def profile():
                 weight = request.form['weight']
                 fatp = request.form['fat']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+                if fatp[0] == '%' and fatp[1:].isdigit():
+                    height = int(height)
+                    weight = int(weight)
+                    fatp = int(fatp[1:])
+                    
+                else:
+                    message = 'Please enter a valid fat percentage'
+                    fatp = -1
+
+
+                #burası doğru mu? -----------------DOĞRU-----------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                elif(fatp < 0 or fatp > 100):
+                    message = 'Please enter a valid fat percentage (%0-100)'
+                else:
+                    cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
-                mysql.connection.commit()
+                    cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
-                data = cursor.fetchall()
-
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
 
@@ -202,16 +226,30 @@ def profile():
                 height = request.form['height']
                 weight = request.form['weight']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+
+                #burası doğru mu? ------------DOĞRU------------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
 
-                cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
-                mysql.connection.commit()
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                else:
+                    cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
-                data = cursor.fetchall()
+                    cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
             return render_template('TrainerPages/trainerprofile.html', fname_lname = fname_lname, data=data, message = message)#html yaz dataları çek
@@ -281,10 +319,44 @@ def my_goals():
     
     return redirect(url_for('login'))
 
-@app.route('/workout-session')
+# @app.route('/workout-session')
+# def workout_session():
+#     if 'loggedin' in session:
+#         cursor = mysql.connection.cursor()
+
+#         cursor.execute("SELECT * FROM ExerciseRoutinePlan")
+#         exercise_plans = cursor.fetchall()
+#         return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
+#     return redirect(url_for('login'))
+
+@app.route('/workout-session', methods=['GET', 'POST'])
 def workout_session():
     if 'loggedin' in session:
-        return render_template('TraineePages/workoutses.html')
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+        filters = []
+
+        if request.method == 'POST':
+            intensity = request.form.get('intensity')
+            duration = request.form.get('duration')
+            equipment = request.form.get('equipment')
+
+            if intensity:
+                query += " AND intensity = %s"
+                filters.append(intensity)
+            if duration:
+                query += " AND duration = %s"
+                filters.append(duration)
+            if equipment:
+                query += " AND equipment = %s"
+                filters.append(equipment)
+
+            cursor.execute(query, tuple(filters))
+        else:
+            cursor.execute(query)
+
+        exercise_plans = cursor.fetchall()
+        return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
     return redirect(url_for('login'))
 
 # USER'S SELECTED TRAINER PAGE

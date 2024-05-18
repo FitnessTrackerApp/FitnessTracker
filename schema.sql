@@ -30,9 +30,9 @@ CREATE TABLE Trainer (
 
 CREATE TABLE Trainee (
     user_ID INT PRIMARY KEY,
-    height NUMERIC(3,2),
-    weight NUMERIC(2,0),
-    fat_percentage NUMERIC(4,2),
+    height INT,
+    weight INT,
+    fat_percentage INT,
     FOREIGN KEY(user_ID) REFERENCES User(user_ID)
 );
 
@@ -329,3 +329,8 @@ INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planne
 VALUES 
 (3, 1, 1, '2023-01-01', '2023-06-01', 500),
 (4, 2, 2, '2023-02-02', '2023-10-02', 700);
+
+INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
+VALUES 
+('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
+('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
