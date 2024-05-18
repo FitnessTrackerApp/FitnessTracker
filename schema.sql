@@ -112,8 +112,8 @@ CREATE TABLE done (
 CREATE TABLE trains (
     trainee_user_ID INT,
     trainer_user_ID INT,
-    start_date DATE DEFAULT CURRENT_TIMESTAMP,
-    end_date DATE DEFAULT NULL,
+    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_date DEFAULT NULL,
     recommendations VARCHAR(255) DEFAULT NULL,
     CONSTRAINT check_start_before_end CHECK (start_date < end_date),
     PRIMARY KEY (trainee_user_ID, trainer_user_ID),
