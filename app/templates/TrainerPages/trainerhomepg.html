@@ -4,7 +4,6 @@
     <title>Homepage</title>
     <link rel="stylesheet" type="text/css" href="static/css/traineehomepagestylesheet.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
 </head>
 
 <body>
@@ -17,25 +16,71 @@
         </div>
         <div>
             <div class= "icons"> 
-                <a href="{{ url_for('logout') }}" style="margin-right: 10px">LOG-OUT</a>
+                <a href="{{ url_for('logout') }}" style="margin-right: 10px">LOGOUT</a>
                 <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
                 <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
             </div>
         </div>
     </div>
 
-    <div class="main">
-        <h1>Welcome back, {{ fname_lname['first_name'] }} {{ fname_lname['last_name'] }}</h1>
-        <h1>My Trainees and Requests</h1>
-        <div>
-            {% for req in requests %}
-            <div>
-                <p>Request from {{ req['first_name'] }} {{ req['last_name'] }}: {{ req['note'] }}</p>
-                <p>Type: {{ req['type'] }}</p>
+    <div class= "main">
+        <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}</h1>
+        <h1>My Trainees</h1>
+
+        <div class= "form-group" >
+            
+            {% if trainees %}
+            {% for row in trainees %}
+            <div style="display:grid; margin-left:10px;">
+            <div class="form-group">
+                <form action="/homepage" method="get"> <!-- Here there should be the URL for the trainee-->
+                    <button>
+                        <img id="traineepp" src="/static/image/pp.png">
+                        <div>
+                            <p>{{ row[0] }} {{ row[1] }}</p>
+                            <p>{{ row[2] }}, {{ row[3] }}</p>
+                            <p>H: {{row.5}}m </p>
+                            <p>W: {{row.6}}kg</p>
+                            <p>Fat %: {{row.6}}</p>
+                        </div>
+                    </button>
+                </form>
+
+                <form action="/homepage" method="post" class="delete-form">
+                    <input type="hidden" name="trainee_user_ID" value="{{ row[0] }}">
+                    <button name="delete" value="{{row.4}}" type="submit" class="btn btn-primary" style="height: 10%;">Delete Trainee</button>
+                </form>
+            </div>
             </div>
             {% endfor %}
+            {% endif %}
+    
         </div>
-    </div>
 
+        
+        <h1>Coaching Requests</h1>
+        <div class= "requests-list">
+            {% for row in requests%}
+            <form action="/homepage" method="post">
+                <div class="request" style="display: flex;">
+                    <img id="trainerpp" src= "/static/image/pp.png" style="height:10%; width: 10%;">
+                    <div style="margin-left: 10px; margin-right: 10px; font-size: large; text-align: center; ">
+                        <p>{{ row[0] }} {{ row[1] }}</p>
+                        <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                        <p>{{ row[4] }} cm, {{ row[5] }} kg</p>
+                        <p>Fat %: {{ row.7 }}</p>
+                        <!-- Maybe a note for request can be added in here-->
+                        
+                    </div>
+                    <div>
+                        <button name="accept" value="{{row.6}}" type="submit" class="btn btn-primary" style="height: 10%; background-color: lightgreen; ">Accept</button>
+                        <button name="deny" value="{{row.6}}" type="submit" class="btn btn-primary" style="height: 10%; background-color: tomato;">Deny</button>	
+                    </div>
+                </div>
+            </form>
+            {%endfor%}        
+        </div>  
+
+    </div>
 </body>
 </html>

@@ -75,7 +75,7 @@ def register():
 
 #HOMEPAGE needs to be checked for trainer and trainee users
 
-@app.route('/homepage')
+@app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
     
     if 'loggedin' in session:
@@ -99,33 +99,58 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
             trains = cursor.fetchall()
 
-                    # Query to get the last added coaching request names
+            # Query to get the last added coaching request names
             query_last_added = """
             SELECT U1.first_name AS trainee_first_name, U1.last_name AS trainee_last_name, 
                 U2.first_name AS trainer_first_name, U2.last_name AS trainer_last_name 
             FROM CoachingRequests
             JOIN User U1 ON CoachingRequests.trainee_user_ID = U1.user_ID
             JOIN User U2 ON CoachingRequests.trainer_user_ID = U2.user_ID
-            ORDER BY CoachingRequests.request_id DESC
-            LIMIT 1;
+            ORDER BY CoachingRequests.request_id DESC;
             """
             cursor.execute(query_last_added)
-            last_added = cursor.fetchone()
+            last_added = cursor.fetchall()
 
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             mysql.connection.commit()
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
-        else:
-            #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
-            #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
-            certification = "Not uploaded"
-            specialization = "Not uploaded"
-            cursor.execute("INSERT IGNORE INTO Trainer (user_ID, specialization, certification, height, weight) VALUES (%s, %s, %s, %s, %s)" , (userID, specialization, certification, 0, 0,)) #diğer bilgileri profilde form olarak almalıyız
-            # Fetch requests made to this trainer
-            cursor.execute("SELECT r.request_id, r.user_ID, r.note, r.type, u.first_name, u.last_name FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
+        else: 
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, u.user_ID, t.height, t.weight, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
+            trainees = cursor.fetchall()
+
+            # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
             requests = cursor.fetchall()
 
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname=fname_lname, requests=requests)
+            # implement the delete logic from traines
+            if request.method == 'POST' and ('delete' in request.form):
+                trainee_user_ID = int(request.form.get('delete'))
+                
+                cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                mysql.connection.commit()
+
+            if request.method == 'POST' and ('accept' in request.form or 'deny' in request.form):
+                trainee_user_ID = None
+                if 'accept' in request.form:
+                    trainee_user_ID = int(request.form.get('accept'))
+                    # burada request silinip trainee ve trainer trains tablosuna eklenmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+                    #control and adding
+                    cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    count = cursor.fetchone()[0]
+                    if count == 0:
+                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
+                        mysql.connection.commit()
+
+                elif 'deny' in request.form:
+                    trainee_user_ID = int(request.form.get('deny'))
+                    # burada sadece request silinmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees)#html yaz dataları çek
         
     return redirect(url_for('login'))
 
@@ -154,16 +179,40 @@ def profile():
                 weight = request.form['weight']
                 fatp = request.form['fat']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+                if fatp[0] == '%' and fatp[1:].isdigit():
+                    height = int(height)
+                    weight = int(weight)
+                    fatp = int(fatp[1:])
+                    
+                else:
+                    message = 'Please enter a valid fat percentage'
+                    fatp = -1
+
+
+                #burası doğru mu? -----------------DOĞRU-----------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                elif(fatp < 0 or fatp > 100):
+                    message = 'Please enter a valid fat percentage (%0-100)'
+                else:
+                    cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
-                mysql.connection.commit()
+                    cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
-                data = cursor.fetchall()
-
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
 
@@ -177,16 +226,30 @@ def profile():
                 height = request.form['height']
                 weight = request.form['weight']
 
-                #burası doğru mu?
+                if height.isdigit():
+                    height = int(height)
+                else:
+                    height = -1
+                if weight.isdigit():
+                    weight = int(weight)
+                else:
+                    weight = -1
+
+                #burası doğru mu? ------------DOĞRU------------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
 
-                cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
-                mysql.connection.commit()
+                if(height < 0 or height > 300):
+                    message = 'Please enter a valid height(0-300)'
+                elif(weight < 0 or weight > 300):
+                    message = 'Please enter a valid weight(0-300)'
+                else:
+                    cursor.execute("UPDATE Trainer SET height = %s, weight = %s WHERE Trainer.user_ID = %s",(height,weight,userID,))
+                    mysql.connection.commit()
 
-                cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
-                data = cursor.fetchall()
+                    cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
+                    data = cursor.fetchall()
 
-                cursor.close()
+                    cursor.close()
             else:
                 message = 'Please fill everything'
             return render_template('TrainerPages/trainerprofile.html', fname_lname = fname_lname, data=data, message = message)#html yaz dataları çek
@@ -210,11 +273,15 @@ def add_pt():
             cursor.execute("SELECT * FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, trainer_user_ID))
             existing_request = cursor.fetchone()
             if existing_request: 
-                print("Already exists")
+                print("Request already exists.") # instead of this we can use some kind of pop uf window in frontend (idk how)
             else:
-                cursor.execute("INSERT INTO CoachingRequests (trainee_user_ID, trainer_user_ID, request_date, status) VALUES (%s, %s, %s, %s)", (trainee_user_ID, trainer_user_ID, request_date, status))
-                mysql.connection.commit()
-        
+                cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s", (trainee_user_ID,))
+                count = cursor.fetchone()[0]
+                if count == 0:
+                    cursor.execute("INSERT INTO CoachingRequests (trainee_user_ID, trainer_user_ID, request_date, status) VALUES (%s, %s, %s, %s)", (trainee_user_ID, trainer_user_ID, request_date, status))
+                    mysql.connection.commit()
+                else:
+                    print("You already have a trainer") # instead of this we can use some kind of pop uf window in frontend (idk how)
 
         return render_template('TraineePages/add-pt.html', trainers=data)
     
@@ -252,10 +319,44 @@ def my_goals():
     
     return redirect(url_for('login'))
 
-@app.route('/workout-session')
+# @app.route('/workout-session')
+# def workout_session():
+#     if 'loggedin' in session:
+#         cursor = mysql.connection.cursor()
+
+#         cursor.execute("SELECT * FROM ExerciseRoutinePlan")
+#         exercise_plans = cursor.fetchall()
+#         return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
+#     return redirect(url_for('login'))
+
+@app.route('/workout-session', methods=['GET', 'POST'])
 def workout_session():
     if 'loggedin' in session:
-        return render_template('TraineePages/workoutses.html')
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+        filters = []
+
+        if request.method == 'POST':
+            intensity = request.form.get('intensity')
+            duration = request.form.get('duration')
+            equipment = request.form.get('equipment')
+
+            if intensity:
+                query += " AND intensity = %s"
+                filters.append(intensity)
+            if duration:
+                query += " AND duration = %s"
+                filters.append(duration)
+            if equipment:
+                query += " AND equipment = %s"
+                filters.append(equipment)
+
+            cursor.execute(query, tuple(filters))
+        else:
+            cursor.execute(query)
+
+        exercise_plans = cursor.fetchall()
+        return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
     return redirect(url_for('login'))
 
 @app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
@@ -320,6 +421,14 @@ def logout():
     session.pop('loggedin', None)
     #flash('You were logged out')
     return redirect(url_for('login'))
+
+# Ekledim ama emin değilim uygulamada böyle bir şeye yer vereceğimize 
+@app.route('/my_trainee')
+def my_trainees():
+    if 'loggedin' in session:
+        return render_template('TrainerPages/my-trainee.html')
+    return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
