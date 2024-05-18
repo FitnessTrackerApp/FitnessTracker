@@ -197,9 +197,11 @@ CREATE TABLE includes (
 CREATE TABLE Requests (
     request_id INT PRIMARY KEY AUTO_INCREMENT,
     user_ID INT,
+    trainer_ID INT,
     note TEXT,
     type VARCHAR(50),
-    FOREIGN KEY (user_ID) REFERENCES User(user_ID)
+    FOREIGN KEY (user_ID) REFERENCES User(user_ID),
+    FOREIGN KEY (trainer_ID) REFERENCES Trainer(user_ID)
 );
 
 CREATE TABLE CoachingRequests (

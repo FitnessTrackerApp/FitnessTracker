@@ -130,6 +130,14 @@ def homepage():
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
             requests = cursor.fetchall()
 
+            cursor.execute("""
+            SELECT u.first_name, u.last_name, r.note, r.type 
+            FROM Requests r 
+            JOIN User u ON r.user_ID = u.user_ID 
+            WHERE r.trainer_ID = %s
+            """, (userID,))
+            program_requests = cursor.fetchall()
+
             # implement the delete logic from traines
             if request.method == 'POST' and ('delete' in request.form):
                 trainee_user_ID = int(request.form.get('delete'))
@@ -159,7 +167,7 @@ def homepage():
                     cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                     mysql.connection.commit()
 
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees)#html yaz dataları çek
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees, program_requests=program_requests)#html yaz dataları çek
         
     return redirect(url_for('login'))
 
@@ -368,12 +376,38 @@ def workout_session():
         return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
     return redirect(url_for('login'))
 
-# USER'S SELECTED TRAINER PAGE
-@app.route('/programs')#aid
+@app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
 def programs():
-    if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/programs.html')
-    return redirect(url_for('login'))
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        user_id = session['user_id']  # The ID of the logged-in user (trainee)
+        trainer_id = request.form.get('trainer_id')  # You need to get this from the form or context
+        workout_request = request.form.get('workout_request')
+        nutrition_request = request.form.get('nutrition_request')
+
+        cursor = mysql.connection.cursor()
+
+        # Check and insert workout and nutrition requests
+        if workout_request:
+            cursor.execute(
+                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                (user_id, trainer_id, workout_request, 'Workout')
+            )
+
+        if nutrition_request:
+            cursor.execute(
+                'INSERT INTO Requests (user_ID, trainer_ID, note, type) VALUES (%s, %s, %s, %s)',
+                (user_id, trainer_id, nutrition_request, 'Nutrition')
+            )
+
+        cursor.close()
+
+        return redirect(url_for('some_success_page'))  # Redirect to a success page
+
+    return render_template('TraineePages/UsersTrainerPage/programs.html')
+
 
 @app.route('/workout-program')#aid
 def work_prog():

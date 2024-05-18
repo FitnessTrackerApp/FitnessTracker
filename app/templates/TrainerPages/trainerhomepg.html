@@ -57,6 +57,22 @@
     
         </div>
 
+        <div class="program-requests">
+            <h1>Program Requests</h1>
+            {% if program_requests %}
+                <ul>
+                {% for request in program_requests %}
+                    <li>
+                        <strong>{{ request.first_name }} {{ request.last_name }}:</strong> 
+                        {{ request.note }} - <em>{{ request.type }}</em>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No program requests at the moment.</p>
+            {% endif %}
+        </div>
+
         
         <h1>Coaching Requests</h1>
         <div class= "requests-list">
