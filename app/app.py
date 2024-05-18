@@ -114,8 +114,43 @@ def homepage():
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             mysql.connection.commit()
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
-        else: # bi dk
-            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname)#html yaz dataları çek
+        else: 
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, u.user_ID FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
+            trainees = cursor.fetchall()
+
+            # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
+            requests = cursor.fetchall()
+
+            # implement the delete logic from traines
+            if request.method == 'POST' and ('delete' in request.form):
+                trainee_user_ID = int(request.form.get('delete'))
+                
+                cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                mysql.connection.commit()
+
+            if request.method == 'POST' and ('accept' in request.form or 'deny' in request.form):
+                trainee_user_ID = None
+                if 'accept' in request.form:
+                    trainee_user_ID = int(request.form.get('accept'))
+                    # burada request silinip trainee ve trainer trains tablosuna eklenmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+                    #control and adding
+                    cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    count = cursor.fetchone()[0]
+                    if count == 0:
+                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
+                        mysql.connection.commit()
+
+                elif 'deny' in request.form:
+                    trainee_user_ID = int(request.form.get('deny'))
+                    # burada sadece request silinmeli
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    mysql.connection.commit()
+
+            return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees)#html yaz dataları çek
         
     return redirect(url_for('login'))
 
