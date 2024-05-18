@@ -94,10 +94,17 @@ def homepage():
 
             #şimdi burada eğer daha önce eklenmediyse trainee tablosuna o zaman eklenmeli
             #yoksa her homepg bastığımızda ekleyebilir sıkıntı - INSERT IGNORE ?
+            cursor.execute("SELECT * FROM trains WHERE trainee_user_ID = %s", (userID,))
+            coach_check = cursor.fetchall()
 
             # burada user ın personal trainerları fetch edilmeli
-            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, tr.trainer_user_ID FROM User u JOIN Trainer t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainer_user_ID = t.user_ID WHERE tr.trainee_user_ID = %s" , (userID,))
             trains = cursor.fetchall()
+
+            if request.method == 'POST' and 'deleteTrainer' in request.form:
+                trainerDeleted = request.form.get('deleteTrainer')
+                cursor.execute("DELETE FROM trains WHERE trainer_user_ID = %s AND trainee_user_ID = %s", (trainerDeleted, userID,))
+                mysql.connection.commit()
 
             # Query to get the last added coaching request names
             query_last_added = """
@@ -113,7 +120,8 @@ def homepage():
 
             cursor.execute("INSERT IGNORE INTO Trainee (user_ID, height, weight, fat_percentage) VALUES (%s, %s, %s, %s)" , (userID,0,0,0,)) #diğer bilgileri profilde form olarak almalıyız
             mysql.connection.commit()
-            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added)
+            return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added, coach_check = coach_check)
+        
         else: 
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, u.user_ID, t.height, t.weight, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
             trainees = cursor.fetchall()
@@ -134,7 +142,7 @@ def homepage():
                 if 'accept' in request.form:
                     trainee_user_ID = int(request.form.get('accept'))
                     # burada request silinip trainee ve trainer trains tablosuna eklenmeli
-                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
+                    cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s", (trainee_user_ID,))
                     mysql.connection.commit()
 
                     #control and adding
@@ -143,6 +151,7 @@ def homepage():
                     if count == 0:
                         cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
                         mysql.connection.commit()
+                    
 
                 elif 'deny' in request.form:
                     trainee_user_ID = int(request.form.get('deny'))

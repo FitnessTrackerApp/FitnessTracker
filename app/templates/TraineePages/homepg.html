@@ -29,12 +29,14 @@
         <h1>From My Trainer</h1>
 
         <div class= "form-group">
+            {% if not coach_check %}
             <form action="{{ url_for('add_pt') }}" method="get">
                 <button>
                     <img src= "/static/image/plus.png">
                     Add Personal Trainer
                 </button>
             </form>
+            {%endif%}
 
             {% if trains %}
             {% for row in trains %}
@@ -48,7 +50,9 @@
                         </div>
                     </button>
                 </form>
-                <a class="delete-button">x</a>
+                <form method="post">
+                    <button name="deleteTrainer" class="delete-button" type="submit" value="{{row.4}}">x</button>
+                </form>
             </div>
             {% endfor %}
             {% endif %}
