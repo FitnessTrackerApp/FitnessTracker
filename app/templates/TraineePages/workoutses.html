@@ -2,22 +2,22 @@
 
 <head>
     <title>Workout Session</title>
-    <link rel="stylesheet" type="text/css" href="static/css/workoutsessionstylesheet.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/workoutsessionstylesheet.css') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-    <div class = "container">
+    <div class="container">
         <div class="form-analysis">
-            <a href="{{ url_for('homepage') }}"> 
-                <h1>FormAnalysis</h1> 
+            <a href="{{ url_for('homepage') }}">
+                <h1>FormAnalysis</h1>
             </a>
         </div>
         <div>
-            <div class= "icons"> 
-                <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
-                <a href="{{url_for('profile')}}"><img src= "/static/image/pp.png"></a>
+            <div class="icons">
+                <a href="{{ url_for('settings') }}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+                <a href="{{ url_for('profile') }}"><img src="{{ url_for('static', filename='image/pp.png') }}"></a>
             </div>
         </div>
     </div>
@@ -27,34 +27,57 @@
 
         <div class="line"></div>
 
-        <div class="filter-section">
-            <label for="intensity">Intensity</label>
-            <select name="intensity" id="intensity">
-                <option value=""></option>
-                <option value="">Selection1</option>
-                <option value="">Selection2</option>
-            </select>
-    
-            <label for="duration">Duration</label>
-            <select name="duration" id="duration">
-                <option value=""></option>
-                <option value="">Selection1</option>
-                <option value="">Selection2</option>
-            </select>
-    
-            <label for="equipment">Equipment</label>
-            <select name="equipment" id="equipment">
-                <option value=""></option>
-                <option value="">Selection1</option>
-                <option value="">Selection2</option>
-            </select>
-    
-            <button type="submit">Filter</button>
-        </div>
+        <form method="post" action="{{ url_for('workout_session') }}">
+            <div class="filter-section">
+                <label for="intensity">Intensity</label>
+                <select name="intensity" id="intensity">
+                    <option value=""></option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+
+                <label for="duration">Duration</label>
+                <select name="duration" id="duration">
+                    <option value=""></option>
+                    <option value="30 mins">30 mins</option>
+                    <option value="60 mins">60 mins</option>
+                    <option value="90 mins">90 mins</option>
+                </select>
+
+                <label for="equipment">Equipment</label>
+                <select name="equipment" id="equipment">
+                    <option value=""></option>
+                    <option value="None">None</option>
+                    <option value="Dumbbells">Dumbbells</option>
+                    <option value="Bars">Bars</option>
+                    <option value="Resistance Bands">Resistance Bands</option>
+                </select>
+
+                <button type="submit">Filter</button>
+            </div>
+        </form>
 
         <div class="line"></div>
-    </div>
 
+        <!-- Add the exercise plans list here -->
+        <div class="exercise-plans">
+            {% for plan in exercise_plans %}
+            <div class="exercise-plan">
+                <h2>{{ plan[1] }}</h2>
+                <p><strong>Description:</strong> {{ plan[2] }}</p>
+                <p><strong>Calories:</strong> {{ plan[3] }}</p>
+                <p><strong>Intensity:</strong> {{ plan[4] }}</p>
+                <p><strong>Duration:</strong> {{ plan[5] }}</p>
+                <p><strong>Equipment:</strong> {{ plan[6] }}</p>
+                <p><strong>Status:</strong> {{ plan[7] }}</p>
+                <p><strong>Exercises List:</strong> {{ plan[8] }}</p>
+            </div>
+            <div class="line"></div>
+            {% endfor %}
+        </div>
+
+    </div>
 </body>
 
 </html>

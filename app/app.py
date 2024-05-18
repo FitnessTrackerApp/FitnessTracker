@@ -265,10 +265,44 @@ def my_goals():
     
     return redirect(url_for('login'))
 
-@app.route('/workout-session')
+# @app.route('/workout-session')
+# def workout_session():
+#     if 'loggedin' in session:
+#         cursor = mysql.connection.cursor()
+
+#         cursor.execute("SELECT * FROM ExerciseRoutinePlan")
+#         exercise_plans = cursor.fetchall()
+#         return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
+#     return redirect(url_for('login'))
+
+@app.route('/workout-session', methods=['GET', 'POST'])
 def workout_session():
     if 'loggedin' in session:
-        return render_template('TraineePages/workoutses.html')
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+        filters = []
+
+        if request.method == 'POST':
+            intensity = request.form.get('intensity')
+            duration = request.form.get('duration')
+            equipment = request.form.get('equipment')
+
+            if intensity:
+                query += " AND intensity = %s"
+                filters.append(intensity)
+            if duration:
+                query += " AND duration = %s"
+                filters.append(duration)
+            if equipment:
+                query += " AND equipment = %s"
+                filters.append(equipment)
+
+            cursor.execute(query, tuple(filters))
+        else:
+            cursor.execute(query)
+
+        exercise_plans = cursor.fetchall()
+        return render_template('TraineePages/workoutses.html', exercise_plans=exercise_plans)
     return redirect(url_for('login'))
 
 # USER'S SELECTED TRAINER PAGE

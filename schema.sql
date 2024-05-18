@@ -319,3 +319,8 @@ INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planne
 VALUES 
 (3, 1, 1, '2023-01-01', '2023-06-01', 500),
 (4, 2, 2, '2023-02-02', '2023-10-02', 700);
+
+INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
+VALUES 
+('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
+('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
