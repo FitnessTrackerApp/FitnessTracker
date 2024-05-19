@@ -154,19 +154,6 @@ CREATE TABLE ExerciseRoutinePlan (
     exercises_list VARCHAR(255)
 );
 
-CREATE TABLE does (
-    user_ID INT,
-    routine_ID INT,
-    exercise_ID INT,
-    start_date DATE,
-    end_date DATE,
-    planned_calories INT,
-    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
-    PRIMARY KEY (user_ID, routine_ID, exercise_ID),
-    FOREIGN KEY (user_ID) REFERENCES Trainee(user_ID),
-    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
-    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
-);
 
 CREATE TABLE PlansExercise (
     routine_ID INT,
@@ -222,6 +209,20 @@ CREATE TABLE plans_nutrition(
     FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID)
 );
 
+CREATE TABLE does (
+    user_ID INT,
+    routine_ID INT,
+    exercise_ID INT,
+    start_date DATE,
+    end_date DATE,
+    planned_calories INT,
+    CONSTRAINT check_start_before_end CHECK (start_date < end_date),
+    PRIMARY KEY (user_ID, routine_ID, exercise_ID),
+    FOREIGN KEY (user_ID) REFERENCES Trainee(user_ID),
+    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
+    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
+);
+
 INSERT INTO User (first_name, last_name, date_of_birth, age, gender, email, password, phone_no, isTrainer)
 VALUES 
 ('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789',1),
@@ -254,10 +255,7 @@ VALUES
 (15, 'Triceps Pull Down', 'Superset');
 
 
-INSERT INTO ExerciseRoutinePlan (routine_ID, routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
-VALUES 
-(1, 'Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
-(2, 'Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+
 
 
 INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
@@ -300,6 +298,11 @@ INSERT INTO Exercise (exercise_ID, exercise_name, description, target_muscles, d
 VALUES 
 (1, 'Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
 (2, 'Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
+
+INSERT INTO ExerciseRoutinePlan (routine_ID, routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
+VALUES 
+(1, 'Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
+(2, 'Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
 
 INSERT INTO Requests (user_ID, note, type)
 VALUES 

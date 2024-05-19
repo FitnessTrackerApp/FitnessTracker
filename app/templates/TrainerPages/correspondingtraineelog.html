@@ -1,20 +1,77 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Trainee Log</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainee Logs</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <h1>Workout Logs</h1>
-    <ul>
-        {% for log in workout_logs %}
-        <li>{{ log.date }} - {{ log.details }}</li>
-        {% endfor %}
-    </ul>
-
     <h1>Nutrition Logs</h1>
-    <ul>
-        {% for log in nutrition_logs %}
-        <li>{{ log.date }} - {{ log.meal_details }}</li>
-        {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Trainee</th>
+                <th>Plan Name</th>
+                <th>Description</th>
+                <th>Meal Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in nutrition_logs %}
+            <tr>
+                <td>{{ log.6 }} {{log.7}}</td>
+                <td>{{ log.3 }}</td>
+                <td>{{ log.4 }}</td>
+                <td>{{ log.5 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Workout Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Trainee Name</th>
+                <th>Routine Name</th>
+                <th>Description</th>
+                <th>Calories</th>
+                <th>Intensity</th>
+                <th>Duration</th>
+                <th>Equipment</th>
+                <th>Status</th>
+                <th>Exercises List</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in workout_logs %}
+            <tr>
+                <td>{{ log.9 }}{{log.10}}</td>
+                <td>{{ log.1 }}</td>
+                <td>{{ log.2 }}</td>
+                <td>{{ log.3 }}</td>
+                <td>{{ log.4 }}</td>
+                <td>{{ log.5 }}</td>
+                <td>{{ log.6 }}</td>
+                <td>{{ log.7 }}</td>
+                <td>{{ log.8 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
