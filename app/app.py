@@ -531,8 +531,9 @@ def correspondingtraineelog(trainee_id):
         return render_template('TrainerPages/correspondingtraineelog.html', workout_logs=workout_logs, nutrition_logs=nutrition_logs)
     return redirect(url_for('login'))
 
-@app.route('/mealassign/<int:trainee_user_ID>')
-def mealassign(trainee_user_ID):
+
+@app.route('/mealassign', methods= ['GET', 'POST']) 
+def mealassign():
     if 'loggedin' in session:
         # Here there will be  'add' buttons for each meal which has value as meal_item_ID (MealItem table). 
         # When the accept the meal request it should already create a (NutritionPlan) with plan name to be defined later. 
