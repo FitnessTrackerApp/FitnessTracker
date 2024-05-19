@@ -46,6 +46,7 @@
                     <div class="form-group">Fat Percentage: {{row.4}} 
                         <input type="text" class="form-control" id="fat" name="fat" placeholder=" Change(fat%) " required>
                     </div>
+                    <div>Body Mass Index (BMI) : {{bmi}}</div>
                     <button type="submit"> Change Personal Info</button>
                 </form>
                 {%endfor%}
@@ -61,6 +62,14 @@
     </div>
 
     <hr>
+    <script>
+        document.getElementById('fat').addEventListener('input', function (e) {
+            let value = e.target.value;
+            if (value && value[0] !== '%') {
+                e.target.value = '%' + value.replace(/%/g, '');
+            }
+        });
+    </script>
 </body>
 
 </html>
