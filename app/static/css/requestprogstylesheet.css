@@ -31,6 +31,19 @@ body {
     height: 70px;
 }
 
+.go-back {
+    width: 80px;
+    margin-left: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.go-back:hover {
+    text-decoration: underline;
+
+}
+
+
 .form-analysis h1 {
     width: 210px;
 }
@@ -44,7 +57,7 @@ body {
 }
 
 .form-analysis {
-    margin-left: 610px;
+    margin-left: 510px;
     width: 210px;
     font-size: xx-large;
     flex-grow: 1;
