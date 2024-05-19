@@ -490,8 +490,6 @@ def correspondingtraineelog(trainee_id):
         trainer_id = session['userid']  # Assuming the logged-in user is the trainer
         cursor = mysql.connection.cursor()
 
-
-
         # Query to fetch workout plans specific to the logged-in trainer and the selected trainee
         cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (trainee_id,))
         workout_logs = cursor.fetchall()
