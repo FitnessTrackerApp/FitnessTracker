@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <title>Trainer Extra Register</title>
+	<link rel="stylesheet" type="text/css" href="static/css/trainerextraregstylesheet.css">
+
+</head>
+
+<div class="register-box">
+	
+	<form action="{{ url_for('register') }}" method="post">
+
+		<h2> Register as Trainer </h2>
+	
+		{% if message is defined and message %}
+			<div class="alert alert-warning">{{ message }}</div>
+		{% endif %}
+        
+        <select name="specialization" id="specialization">
+            <option value="">Specialization</option>
+            <option value="">Crossfit</option>
+            <option value="">Dietist</option>
+        </select>
+
+		<form action="/action_page.php">
+            <input type="file" accept="application/pdf" id="myFile" name="filename">
+        </form>
+		
+		<div class="button-section">
+            <button type="submit" class="signup">Sign Up</button>
+        </div>		
+	</form>
+<div>
+
+</html>

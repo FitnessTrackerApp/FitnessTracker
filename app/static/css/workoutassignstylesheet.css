@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-decoration: none;
+    list-style: none;
+    border: none;
+    outline: none;
+}
+
+body {
+    background-color:rgb(255, 255, 255);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    background-color:#56ED65;
+    color: white;
+    height: 70px;
+}
+
+.form-analysis h1 {
+    width: 210px;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.form-analysis h1:hover {
+    opacity: 40%;
+}
+
+.form-analysis a {
+    width: 210px;
+}
+
+.form-analysis {
+    margin-left: 610px;
+    width: 210px;
+    font-size: xx-large;
+    flex-grow: 1;
+    text-align: center; 
+    margin-right: 500px;
+}
+
+.form-analysis div {
+    width: 100px;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    margin-right: 18px;
+    text-align: right;
+}
+
+.icons img{
+    height: 50px;
+    margin-left: 20px;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    background-color: #000000;
+}
+
+.icons a:hover{
+    opacity: 75%;
+}
+
+.main {
+    
+    padding-left: 15px;
+}
+
+.main h1 {
+    font-weight: bold;
+    font-size: x-large;
+    margin: 20px 0px 20px 0px;
+}
+
+.layout {
+    display: flex;
+    flex-direction: row;
+}
+
+.programbox .buttonsection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.programbox .buttonsection button {
+    background-color: orange;
+    color: white;
+    border-radius: 10px;
+    height: 30px;
+    width: 60px;
+    margin-top: 10px;
+    font-weight: bold;
+    
+}
+
+.programbox .buttonsection button:hover {
+    background-color: rgb(188, 122, 0);
+    
+    
+}
+
+.programlist {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+    max-height: 600px;
+    width: 300px;
+    background-color: #b6b6b6;
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-top: 20px;
+    margin-top: 10px;
+    
+}
+
+.added-workout {
+    width: 280px;
+    height: 50px;
+    background-color: #d9d9d9;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px;
+    margin-bottom: 4px
+}
+
+.added-workout img {
+    height:45px;
+    width: 45px;
+    border-radius: 10px;
+    margin: 3px;
+}
+
+.added-workout p {
+    margin-left: 5px;
+}
+
+.added-workout:hover {
+    background-color: gray;
+    cursor: pointer;
+
+}
+
+.programbox input {
+    height: 40px;
+    width: 230px;
+    margin: 5px;
+    border: 1px solid #000000;
+    padding-left: 5px;
+}
+
+.line {
+    width: 2px;
+    height: 700px;
+    background-color: #000000;
+    margin-left: 15px;
+}
+
+.workouts {
+    margin-left: 30px;
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    max-height: 700px;
+    max-width: 1000px;
+    padding: 10px;
+}
+
+.workout {
+    width: 270px;
+    height: 200px;
+    padding: 8px;
+    border:1px solid #e2e2e2;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    margin: 10px;
+    padding: 10px;
+    font-size: small;
+    justify-content: space-between;
+    text-align: right;
+    display: flex; 
+    align-items: center; 
+    cursor: pointer;
+}
+
+.workout button {
+    width: 50px;
+    height: 35px;
+    border:1px solid #ccc;
+    border-radius: 15px;
+    background-color: orange;
+    color: white;
+    font-weight: bold;
+    font-size: small;
+    cursor: pointer;
+    align-self: flex-end;
+    margin-top: 10px;
+    margin-left: 30px;
+    
+}
+
+.workout button:hover {
+    background-color: rgb(188, 122, 0);
+}
+
+.workout img {
+    height: 100px;
+
+}
+
+
+

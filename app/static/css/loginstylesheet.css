@@ -81,7 +81,7 @@ button {
 }
 
 .form-box button:hover {
-    opacity: 85%;
+    background-color: #15A723;
 }
 
 .form-box input:hover {
