@@ -463,14 +463,27 @@ def req_prog():
 @app.route('/mealassign/<int:trainee_user_ID>')
 def mealassign(trainee_user_ID):
     if 'loggedin' in session:
-        return render_template('TrainerPages/meal-assign.html', trainee_user_ID = trainee_user_ID)
+        return render_template('TrainerPages/mealassign.html', trainee_user_ID = trainee_user_ID)
     return redirect(url_for('login'))
 
 # URL den user id çekilmeli
 @app.route('/workoutassign/<int:trainee_user_ID>')
 def workoutassign(trainee_user_ID):
     if 'loggedin' in session:
-        return render_template('TrainerPages/workout-assign.html', trainee_user_ID = trainee_user_ID)
+        return render_template('TrainerPages/workoutassign.html', trainee_user_ID = trainee_user_ID)
+    return redirect(url_for('login'))
+
+
+@app.route('/personal-workout-program')#aid
+def personal_work_prog():
+    if 'loggedin' in session:
+        return render_template('TraineePages/personalworkoutprogram.html')
+    return redirect(url_for('login'))
+
+@app.route('/personal-diet-program')#aid
+def personal_diet_prog():
+    if 'loggedin' in session:
+        return render_template('TraineePages/personaldietprogram.html')
     return redirect(url_for('login'))
 
 @app.route('/settings')#aid

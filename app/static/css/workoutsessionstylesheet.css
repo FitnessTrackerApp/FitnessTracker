@@ -90,7 +90,7 @@ button {
     padding: 6px;
     border:1px solid #ccc;
     border-radius: 15px;
-    background-color: #15A723;
+    background-color: #56ED65;
     color: white;
     font-weight: bold;
     font-size: medium;
@@ -99,7 +99,7 @@ button {
 }
 
 button:hover {
-    opacity: 85%;
+    background-color: #15A723
 }
 
 .form-box button:hover {
@@ -123,4 +123,60 @@ button:hover {
 
 .filter-section label {
     margin-right: 3px;
+}
+
+.form-group {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.session-list {
+    overflow: scroll;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    max-width: 1400px;
+    margin: 20px;
+}
+
+.session {
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 3px 3px 20px #666;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.session .header {
+    height: 50px;
+    width: 298px;
+    border-radius: 10px 10px 0 0;
+    background-color: rgb(228, 148, 0);
+    border-bottom: 1px solid #000000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Caveat'; 
+    font-size: large;
+    color: white;
+}
+
+.session .paper {
+    
+    height: 300px;
+    width: 298px;
+    border-radius: 0 0 10px 10px;
+    background-color:floralwhite;
+    padding: 15px;
+
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    font-family: 'Caveat'; 
+    font-size: x-large;
+    color: rgb(0, 0, 0);
+
 }

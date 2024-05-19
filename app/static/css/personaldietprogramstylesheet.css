@@ -59,7 +59,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 18px;
+    margin-right: 30px;
     text-align: right;
 }
 
@@ -76,7 +76,9 @@ body {
 }
 
 .main {
-    padding-left: 15px;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -85,72 +87,40 @@ h1 {
     margin: 20px 0px 20px 0px;
 }
 
-.form-group {
+.program-box {
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 3px 3px 20px #666;
+}
+
+.program-box .header {
+    height: 50px;
+    width: 398px;
+    border-radius: 10px 10px 0 0;
+    background-color: #15A723;
+    border-bottom: 1px solid #000000;
+
     display: flex;
-    margin-bottom: 20px;
-}
-
-button {
-    width: 300px;
-    height: 200px;
-    padding: 8px;
-    border:1px solid #ccc;
-    border-radius: 15px;
-    background-color: #D9D9D9;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    margin-right: 35px;
-    padding: 40px;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Caveat'; 
     font-size: x-large;
-    justify-content: space-between;
-    text-align: right;
-
-    display: flex; 
-    align-items: center; 
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #a0a0a0;
-}
-
-.form-group div:hover {
-    opacity: 85%;
-}
-
-.form-group img {
-    height: 80px;
-    margin-left: -10px;
-}
-
-.form-group p {
-    margin-right: -10px;
-}
-
-
-#trainerpp {
-    border: 0.5px solid #000000;
-    border-radius: 50%;
-    background-color: #474747;
-}
-
-.delete-button {
-    background-color: red;
     color: white;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+}
+
+.program-box .paper {
+    height: 400px;
+    width: 398px;
+    border-radius: 0 0 10px 10px;
+    background-color:floralwhite;
+    padding: 15px;
+
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-left: 1px;
-    padding-bottom: 3px;
-    margin-left: -57px;
-    font-weight: bold;
+    text-align: left;
+    font-family: 'Caveat'; 
     font-size: x-large;
-}
+    color: rgb(0, 0, 0);
 
-.delete-button:hover {
-    cursor: pointer;
-    background-color:rgb(188, 14, 49);
 }

@@ -1,10 +1,13 @@
 <html>
 
 <head>
-    <title>Workout Session</title>
+    <title>BrowseWorkout Session</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/workoutsessionstylesheet.css') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -23,7 +26,7 @@
     </div>
 
     <div class="main">
-        <h1>Workout Session</h1>
+        <h1>Browse Workout Session</h1>
 
         <div class="line"></div>
 
@@ -62,10 +65,13 @@
         <div class="line"></div>
 
         <!-- Add the exercise plans list here -->
-        <div class="exercise-plans">
+        <div class="session-list">
             {% for plan in exercise_plans %}
-            <div class="exercise-plan">
-                <h2>{{ plan[1] }}</h2>
+            <div class="session">
+                <div class="header">
+                    <h2>{{ plan[1] }}</h2>
+                </div>
+                <div class="paper">
                 <p><strong>Description:</strong> {{ plan[2] }}</p>
                 <p><strong>Calories:</strong> {{ plan[3] }}</p>
                 <p><strong>Intensity:</strong> {{ plan[4] }}</p>
@@ -73,10 +79,11 @@
                 <p><strong>Equipment:</strong> {{ plan[6] }}</p>
                 <p><strong>Status:</strong> {{ plan[7] }}</p>
                 <p><strong>Exercises List:</strong> {{ plan[8] }}</p>
+                </div>
             </div>
-            <div class="line"></div>
             {% endfor %}
         </div>
+        
 
     </div>
 </body>
