@@ -6,6 +6,7 @@ import MySQLdb.cursors
 
 app = Flask(__name__)
 
+mysql = MySQL(app)
 app.secret_key = 'abcdefgh'
 
 app.config['MYSQL_HOST'] = 'db'
@@ -13,6 +14,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'melih123'
 app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
+mysql = MySQL(app)
 mysql = MySQL(app)
 
 @app.route('/')
@@ -31,7 +33,7 @@ def login():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM User  WHERE email = %s AND password = %s', (email, password, ))
         user = cursor.fetchone()
-        if user:              
+        if user:              #denem
             session['loggedin'] = True
             session['userid'] = user['user_ID']
             session['username'] = user['first_name']
@@ -190,7 +192,7 @@ def homepage():
                     cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                     count = cursor.fetchone()[0]
                     if count == 0:
-                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID, start_date) VALUES (%s, %s, CURRENT_TIMESTAMP)", (trainee_user_ID, userID))
+                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
                         mysql.connection.commit()
                     
 
@@ -221,12 +223,7 @@ def profile():
 
         bmi = "Enter values to calculate BMI"
 
-        bmitext = ""
-
         if trainer_info[0] == 0:
-
-            cursor.execute("SELECT * FROM TrainerTraineeInfo WHERE trainee_ID = %s", (userID,))
-            trainer_info = cursor.fetchall()  # Fetch the trainer data for the trainee
 
             cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
             data = cursor.fetchall()
@@ -235,15 +232,6 @@ def profile():
             weight = data[0][3]
             if height > 0 and weight > 0:
                 bmi = weight / ((height/100) ** 2)
-                if bmi < 18.4:
-                    bmitext = "Underweight"
-                elif bmi < 24.9:
-                    bmitext = "Normal"
-                elif bmi < 39.9:
-                    bmitext = "Overweight"
-                else:
-                    bmitext = "Obese"
-
 
             if request.method == 'POST' and 'height' in request.form and 'weight' in request.form and 'fat' in request.form:
                 height = request.form['height']
@@ -280,20 +268,7 @@ def profile():
                     message = 'Please enter a valid fat percentage (%0-100)'
                     bmi= "cannot be calculated"
                 else:
-                    if height > 0 and weight > 0:
-                        bmi = weight / ((height/100) ** 2)
-                    else:
-                        bmi = "cannot be calculated"
-                    
-                    if bmi != "cannot be calculated":
-                        if bmi < 18.4:
-                            bmitext = "Underweight"
-                        elif bmi < 24.9:
-                            bmitext = "Normal"
-                        elif bmi < 39.9:
-                            bmitext = "Overweight"
-                        else:
-                            bmitext = "Obese"
+                    bmi = weight / ((height/100) ** 2)
                     cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
                     mysql.connection.commit()
 
@@ -304,7 +279,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else round(bmi, 2)))
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else round(bmi, 2)))
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
@@ -400,8 +375,7 @@ def my_goals():
         userID = session['userid'] #cid = userID
         cursor = mysql.connection.cursor()
 
-        #cursor.execute("SELECT goal_description, created_at FROM FitnessGoals WHERE user_ID = %s ", (userID,))
-        cursor.execute("SELECT * FROM UserGoalsDetails WHERE user_ID = %s", (userID,))
+        cursor.execute("SELECT goal_description, created_at FROM FitnessGoals WHERE user_ID = %s ", (userID,))
         goals_data = cursor.fetchall()
 
         return render_template('TraineePages/my-goals.html', goals_data=goals_data)
