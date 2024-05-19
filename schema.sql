@@ -338,18 +338,20 @@ VALUES
 ('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
 
 DELIMITER //
+
 CREATE TRIGGER before_user_insert BEFORE INSERT ON User FOR EACH ROW
 BEGIN
     SET NEW.age = YEAR(CURDATE()) - YEAR(NEW.date_of_birth);
 END;
 //
+
 CREATE TRIGGER after_user_delete AFTER DELETE ON User FOR EACH ROW
 BEGIN
     DELETE FROM Trainee WHERE user_ID = OLD.user_ID;
     DELETE FROM Trainer WHERE user_ID = OLD.user_ID;
-    ...
 END;
 //
+
 DELIMITER ;
 
 CREATE VIEW TrainerTraineeInfo AS

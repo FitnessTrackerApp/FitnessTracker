@@ -190,7 +190,7 @@ def homepage():
                     cursor.execute("SELECT COUNT(*) FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                     count = cursor.fetchone()[0]
                     if count == 0:
-                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
+                        cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID, start_date) VALUES (%s, %s, CURRENT_TIMESTAMP)", (trainee_user_ID, userID))
                         mysql.connection.commit()
                     
 
