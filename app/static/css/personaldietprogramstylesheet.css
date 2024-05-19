@@ -117,6 +117,7 @@ h1 {
     padding: 15px;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: left;
     font-family: 'Caveat'; 

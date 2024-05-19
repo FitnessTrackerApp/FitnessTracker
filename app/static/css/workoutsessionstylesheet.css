@@ -173,10 +173,14 @@ button:hover {
     padding: 15px;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: left;
     font-family: 'Caveat'; 
-    font-size: x-large;
+    font-size: large;
     color: rgb(0, 0, 0);
+
+    
+
 
 }
