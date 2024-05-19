@@ -122,23 +122,61 @@ def homepage():
             mysql.connection.commit()
             return render_template('TraineePages/homepg.html', fname_lname = fname_lname, trains = trains, last_added = last_added, coach_check = coach_check)
         
-        else: 
+        else:
+
+            # MY TRAINEES
             cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, u.user_ID, t.height, t.weight, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN trains tr ON tr.trainee_user_ID = t.user_ID WHERE tr.trainer_user_ID = %s" , (userID,))
             trainees = cursor.fetchall()
 
-            # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
-            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
-            requests = cursor.fetchall()
-
-            cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
-            program_requests = cursor.fetchall()
-
-            # implement the delete logic from traines
             if request.method == 'POST' and ('delete' in request.form):
                 trainee_user_ID = int(request.form.get('delete'))
                 
                 cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                 mysql.connection.commit()
+
+            # PROGRAM REQUEST
+            cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type, r.request_ID, r.user_ID FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
+            program_requests = cursor.fetchall()
+
+            if request.method == 'POST' and ('acceptpr' in request.form or 'denypr' in request.form):
+                # burada program requesti Requests den delete edilcek && type ına göre başka sayfalara yönlendirilcek (trainee user id sini paslamak lazım ki datayı kaydedelim)
+                trainee_user_ID = None
+                request_id = None
+                if 'acceptpr' in request.form:
+
+                    accept_value = request.form['acceptpr']
+                    request_id, trainee_user_ID, type = accept_value.split('|')
+                    request_id = int(request_id)
+                    trainee_user_ID = int(trainee_user_ID)
+
+                    # delete from the Requests
+                    cursor.execute("DELETE FROM Requests WHERE user_ID = %s AND trainer_ID = %s AND request_id = %s", (trainee_user_ID, userID, request_id))
+                    mysql.connection.commit()
+                    if type == 'Workout':
+                        return redirect(url_for('workoutassign', trainee_user_ID = trainee_user_ID))
+                        
+                    elif type == 'Nutrition':
+                        return redirect(url_for('mealassign', trainee_user_ID = trainee_user_ID))
+            
+                elif 'denypr' in request.form:
+
+                    deny_value = request.form['denypr']
+                    request_id, trainee_user_ID, type = deny_value.split('|')
+                    request_id = int(request_id)
+                    trainee_user_ID = int(trainee_user_ID)
+
+                    # delete from the Requests
+                    cursor.execute("DELETE FROM Requests WHERE user_ID = %s AND trainer_ID = %s AND request_id = %s", (trainee_user_ID, userID, request_id))
+                    mysql.connection.commit()
+
+                    
+            #COACHING REQUEST
+            # burada trainer a gelen istekler fetch edilmeli (trainee nin userID si de paslanmalı)
+            cursor.execute("SELECT u.first_name, u.last_name, u.gender, u.age, t.height, t.weight, u.user_ID, t.fat_percentage FROM User u JOIN Trainee t ON u.user_ID = t.user_ID JOIN CoachingRequests CR ON CR.trainee_user_ID = t.user_ID WHERE CR.trainer_user_ID = %s", (userID,))
+            requests = cursor.fetchall()
+
+            # implement the delete logic from traines
+            
 
             if request.method == 'POST' and ('accept' in request.form or 'deny' in request.form):
                 trainee_user_ID = None
@@ -422,16 +460,17 @@ def req_prog():
 
     return redirect(url_for('login'))
 
-@app.route('/mealassign')
-def mealassign():
+@app.route('/mealassign/<int:trainee_user_ID>')
+def mealassign(trainee_user_ID):
     if 'loggedin' in session:
-        return render_template('TrainerPages/meal-assign.html')
+        return render_template('TrainerPages/meal-assign.html', trainee_user_ID = trainee_user_ID)
     return redirect(url_for('login'))
 
-@app.route('/workoutassign')
-def workoutassign():
+# URL den user id çekilmeli
+@app.route('/workoutassign/<int:trainee_user_ID>')
+def workoutassign(trainee_user_ID):
     if 'loggedin' in session:
-        return render_template('TrainerPages/workout-assign.html')
+        return render_template('TrainerPages/workout-assign.html', trainee_user_ID = trainee_user_ID)
     return redirect(url_for('login'))
 
 @app.route('/settings')#aid
