@@ -64,10 +64,26 @@ CREATE TABLE NutritionPlan (
     trainer_user_ID INT,
     plan_name VARCHAR(255),
     description VARCHAR(255),
-    meal_items VARCHAR(255),
     FOREIGN KEY (trainee_user_ID) REFERENCES Trainee(user_ID),
     FOREIGN KEY (trainer_user_ID) REFERENCES Trainer(user_ID)
 );
+
+CREATE TABLE MealItem (
+    meal_item_ID INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    calories INT NOT NULL
+);
+
+CREATE TABLE PlanIncludesMealItem (
+    plan_ID INT,
+    meal_item_ID INT,
+    quantity INT,
+    PRIMARY KEY (plan_ID, meal_item_ID),
+    FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID),
+    FOREIGN KEY (meal_item_ID) REFERENCES MealItem(meal_item_ID)
+);
+
 
 CREATE TABLE PremiumAccount (
     user_ID INT,
