@@ -289,11 +289,6 @@ VALUES
 (3, 1, '2023-01-01', '2023-03-01'),
 (4,2,'2023-02-02', '2023-03-02');
 
-INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
-VALUES 
-('Basic Strength', 'Routine for beginners', '500', 'Medium', '60 mins', 'Dumbbells', 'Active', 'Push-ups, Pull-ups'),
-('Losing Weight', 'Routine for low fat percentage', '600', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
-
 INSERT INTO Exercise (exercise_name, description, target_muscles, difficulty_level, set_size, repeat_size)
 VALUES 
 ('Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
@@ -332,10 +327,10 @@ VALUES
 (3, 1, 1, '2023-01-01', '2023-06-01', 500),
 (4, 2, 2, '2023-02-02', '2023-10-02', 700);
 
-INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
+INSERT INTO ExerciseRoutinePlan (routine_ID, routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
 VALUES 
-('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
-('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+(1, 'Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
+(2, 'Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
 
 DELIMITER //
 

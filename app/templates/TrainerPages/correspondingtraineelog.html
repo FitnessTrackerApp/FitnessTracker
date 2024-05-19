@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Trainee Log</title>
+</head>
+<body>
+    <h1>Workout Logs</h1>
+    <ul>
+        {% for log in workout_logs %}
+        <li>{{ log.date }} - {{ log.details }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Nutrition Logs</h1>
+    <ul>
+        {% for log in nutrition_logs %}
+        <li>{{ log.date }} - {{ log.meal_details }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
