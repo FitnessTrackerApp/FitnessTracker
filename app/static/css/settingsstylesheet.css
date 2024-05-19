@@ -108,3 +108,8 @@ body {
     display: flex;
     align-items: center;
 }
+
+.settings-box a {
+    font-size: large;
+    font-weight: bold;
+}

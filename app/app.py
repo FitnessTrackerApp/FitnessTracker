@@ -18,7 +18,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # if 'loggedin' in session:
-        return redirect(url_for('homepage'))
+        return render_template('TrainerPages/trainerhomepg.html')
     # else:
         # return redirect(url_for('login'))
 
@@ -82,6 +82,13 @@ def register():
     return render_template('RegisterLogin/register.html', message = message)
 
 #HOMEPAGE needs to be checked for trainer and trainee users
+
+
+@app.route('/trainer-extra-reg') 
+def trainer_extra_reg():
+    
+    return render_template('RegisterLogin/trainerextrareg.html')
+    
 
 @app.route('/homepage')
 def homepage():

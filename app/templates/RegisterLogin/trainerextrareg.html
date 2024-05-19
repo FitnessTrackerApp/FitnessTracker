@@ -2,7 +2,7 @@
 
 <head>
     <title>Trainer Extra Register</title>
-	<link rel="stylesheet" type="text/css" href="static/css/registerstylesheet.css">
+	<link rel="stylesheet" type="text/css" href="static/css/trainerextraregstylesheet.css">
 
 </head>
 
@@ -10,51 +10,25 @@
 	
 	<form action="{{ url_for('register') }}" method="post">
 
-		<h2> Sign Up </h2>
+		<h2> Register as Trainer </h2>
 	
 		{% if message is defined and message %}
 			<div class="alert alert-warning">{{ message }}</div>
 		{% endif %}
-		<div class="form-group">
-			<input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" required>
-		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" required>
-		</div>
-		<div class="form-group">
-			<input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
-		</div>
-		<div class="form-group">
-			<p>Date of Birth:</p>
-			<input type="date" name="date" id="date" placeholder="Enter your birthday" required>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm" placeholder="Enter password again" required>
-		</div>  
+        
+        <select name="specialization" id="specialization">
+            <option value="">Specialization</option>
+            <option value="">Crossfit</option>
+            <option value="">Dietist</option>
+        </select>
 
-		<div class="radio-forms"> 
-			<div class="radio-form" >
-				
-				<input type="radio" id="trainee" name="typeOfUser" value="trainee" required>
-				<label for="trainee">Trainee</label>
-				<br>
-				<input type="radio" id="trainer" name="typeOfUser" value="trainer" required>	
-				<label for="trainer">Trainer</label>
-			</div>
-			<div class="line"></div>
-			<div class="radio-form">
-				<input type="radio" id="male" name="genderOfUser" value="male" required>
-				<label for="male">Male</label>
-				<br>
-				<input type="radio" id="female" name="genderOfUser" value="female" required>	
-				<label for="female">Female</label>
-			</div>
-		</div>
-	
-		<button type="submit" class="signup">Sign Up</button>		
+		<form action="/action_page.php">
+            <input type="file" accept="application/pdf" id="myFile" name="filename">
+        </form>
+		
+		<div class="button-section">
+            <button type="submit" class="signup">Sign Up</button>
+        </div>		
 	</form>
 <div>
 

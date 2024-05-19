@@ -1,0 +1,82 @@
+body {
+    background-color: #56ED65;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-box {
+    width: 350px;
+    height: 250px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.4);
+}
+
+form {
+    flex-direction: column;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+}
+
+.register-box input {
+    background-image: linear-gradient(to bottom right, rgb(199, 199, 199), rgb(244, 244, 244));
+    border-radius: 5px;
+    width: 300px;
+    height: 30px;
+    padding: 5px;
+    border: 0.2px solid #b5b5b5;
+    font-size: medium;
+    margin-top: 20px;
+    box-shadow: inset #ddd 0px 0px 5px 5px;
+}
+
+.register-box select {
+    width: 300px;
+    height: 30px;
+    background-color: #E6E6E6;
+    border-radius: 15px;
+    border: none;
+    margin-top: 10px;
+}
+
+.signup {
+    width: 90px;
+    padding: 8px;
+    border:1px solid #ccc;
+    border-radius: 15px;
+    background-color: #56ED65;
+    color: white;
+    font-weight: bold;
+    font-size: medium;
+    cursor: pointer;
+    align-self: flex-end;
+    margin-right: 25px;
+    margin-top: 10px;
+}
+
+.signup:hover {
+    background-color: #15A723
+}
+
+.radio-form {
+    margin: 30px;
+}
+
+label{
+    font-size: medium;
+}
+
+.button-section {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
