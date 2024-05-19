@@ -377,7 +377,7 @@ def my_goals():
         cursor = mysql.connection.cursor()
 
         #cursor.execute("SELECT goal_description, created_at FROM FitnessGoals WHERE user_ID = %s ", (userID,))
-        cursor.execute("SELECT * FROM UserGoalsDetails WHERE trainee_ID = %s", (userID,))
+        cursor.execute("SELECT * FROM UserGoalsDetails WHERE user_ID = %s", (userID,))
         goals_data = cursor.fetchall()
 
         return render_template('TraineePages/my-goals.html', goals_data=goals_data)
