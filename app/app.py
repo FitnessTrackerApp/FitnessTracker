@@ -14,9 +14,6 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'melih123'
 app.config['MYSQL_DB'] = 'fitnesstrackerdb'
 
-mysql = MySQL(app)
-mysql = MySQL(app)
-
 @app.route('/')
 def index():
     if 'loggedin' in session:
