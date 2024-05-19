@@ -277,8 +277,8 @@ VALUES
 
 INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
 VALUES 
-(3, 1, '', '', ''),
-(4,2,'', '', '');
+(3, 1, 'Footballer Plan', '', ''),
+(4,2,'Basketballer Plan', '', '');
 
 INSERT INTO PremiumAccount (user_ID, premiumAcc_ID, start_date, end_date, payment_method)
 VALUES 
@@ -370,6 +370,13 @@ INSERT INTO MealItem (name, description, calories) VALUES
 ('Mixed Nuts', 'A small portion of assorted nuts.', 175),
 ('Smoothie Bowl', 'A bowl of blended fruits topped with granola and nuts.', 300),
 ('Egg White Omelette', 'An omelette made with egg whites and vegetables.', 100);
+
+INSERT INTO PlanIncludesMealItem (plan_ID, meal_item_ID, quantity) VALUES
+(1,3,1),
+(1,4,1),
+(1,1,1),
+(2,6,1),
+(2,7,1);
 
 DELIMITER //
 
