@@ -1,49 +1,46 @@
 <html>
-
 <head>
     <title>Profile</title>
     <link rel="stylesheet" type="text/css" href="static/css/traineeprofilestylesheet.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-    <div class = "container">
+    <div class="container">
         <div class="form-analysis">
             <a href="{{ url_for('homepage') }}"> 
                 <h1>FormAnalysis</h1> 
             </a>
         </div>
         <div>
-            <div class= "icons"> 
+            <div class="icons"> 
                 <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
             </div>
         </div>
     </div>
 
     <div class="main">
-
-        <div class= "profile-section">
-            <a href=""><img src= "/static/image/pp.png"></a>
-
+        <div class="profile-section">
+            <a href=""><img src="/static/image/pp.png"></a>
             <div> 
                 <h1> {{fname_lname[0]}} {{fname_lname[1]}} </h1>
 
                 {% if message is defined and message %}
                 <div class="alert alert-warning">{{ message }}</div>
                 {% endif %}
-                
+
                 {% for row in data%}
                 <form action="{{ url_for('profile') }}" method="post">
-                    <div class="form-group">Gender: {{row.1}}</div>
-                    <div class="form-group">Age: {{row.0}}</div>
-                    <div class="form-group">Height: {{row.2}} 
+                    <div class="form-group">Gender: {{row[1]}}</div>
+                    <div class="form-group">Age: {{row[0]}}</div>
+                    <div class="form-group">Height: {{row[2]}} 
                         <input type="text" class="form-control" id="height" name="height" placeholder=" Change(cm) " required>
                     </div>
-                    <div class="form-group">Weight: {{row.3}} 
+                    <div class="form-group">Weight: {{row[3]}} 
                         <input type="text" class="form-control" id="weight" name="weight" placeholder=" Change(kg) " required>
                     </div>
-                    <div class="form-group">Fat Percentage: {{row.4}} 
+                    <div class="form-group">Fat Percentage: {{row[4]}} 
                         <input type="text" class="form-control" id="fat" name="fat" placeholder=" Change(fat%) " required>
                     </div>
                     <div>Body Mass Index (BMI) : {{bmi}}</div>
@@ -68,7 +65,66 @@
                 <p>You currently do not have a trainer assigned.</p>
             {% endif %}
         </div>
-        
+
+        <!-- Nutrition Log Section -->
+        <div class="nutrition-section">
+            <h1>Nutrition Log:</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Trainer</th>
+                        <th>Plan Name</th>
+                        <th>Description</th>
+                        <th>Meal Items</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in nutrition_plans %}
+                    <tr>
+                        <td>{{ log.6 }} {{log.7}}</td>
+                        <td>{{ log.3 }}</td>
+                        <td>{{ log.4 }}</td>
+                        <td>{{ log.5 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Workout Log Section -->
+        <div class="workout-section">
+            <h1>Workout Log:</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Trainer Name</th>
+                        <th>Routine Name</th>
+                        <th>Description</th>
+                        <th>Calories</th>
+                        <th>Intensity</th>
+                        <th>Duration</th>
+                        <th>Equipment</th>
+                        <th>Status</th>
+                        <th>Exercises List</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in workout_plans %}
+                    <tr>
+                        <td>{{ log.9 }}{{log.10}}</td>
+                        <td>{{ log.1 }}</td>
+                        <td>{{ log.2 }}</td>
+                        <td>{{ log.3 }}</td>
+                        <td>{{ log.4 }}</td>
+                        <td>{{ log.5 }}</td>
+                        <td>{{ log.6 }}</td>
+                        <td>{{ log.7 }}</td>
+                        <td>{{ log.8 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
     </div>
 
@@ -82,5 +138,4 @@
         });
     </script>
 </body>
-
 </html>

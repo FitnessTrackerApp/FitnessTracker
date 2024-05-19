@@ -243,6 +243,12 @@ def profile():
             cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
             data = cursor.fetchall()
 
+            cursor.execute("SELECT np.plan_ID, np.plan_name, np.description, u.first_name AS trainer_first_name, u.last_name AS trainer_last_name FROM NutritionPlan np JOIN User u ON np.trainer_user_ID = u.user_ID WHERE np.trainee_user_ID = %s", (userID,))
+            nutrition_plans = cursor.fetchall()
+
+            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,))
+            workout_plans = cursor.fetchall()
+
             height = data[0][2]
             weight = data[0][3]
             if height > 0 and weight > 0:
@@ -315,7 +321,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")))
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")),nutrition_plans=nutrition_plans, workout_plans=workout_plans)
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
