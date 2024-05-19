@@ -246,6 +246,16 @@ def profile():
             cursor.execute("SELECT np.plan_ID, np.plan_name, np.description, u.first_name AS trainer_first_name, u.last_name AS trainer_last_name FROM NutritionPlan np JOIN User u ON np.trainer_user_ID = u.user_ID WHERE np.trainee_user_ID = %s", (userID,))
             nutrition_plans = cursor.fetchall()
 
+            # Replace meal_items with detailed meal items for each nutrition plan
+            detailed_nutrition_plans = []
+            for log in nutrition_plans:
+                plan_ID = log[0]
+                cursor.execute("SELECT M.name, P.quantity FROM PlanIncludesMealItem P JOIN MealItem M ON P.meal_item_ID = M.meal_item_ID WHERE P.plan_ID = %s", (plan_ID,))
+                meal_items = cursor.fetchall()
+                detailed_log = list(log)
+                detailed_log.append(meal_items)  # Add the meal items as the last element
+                detailed_nutrition_plans.append(detailed_log)
+
             cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,))
             workout_plans = cursor.fetchall()
 
@@ -321,7 +331,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")),nutrition_plans=nutrition_plans, workout_plans=workout_plans)
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")),nutrition_plans=detailed_nutrition_plans, workout_plans=workout_plans)
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
@@ -534,7 +544,17 @@ def correspondingtraineelog(trainee_id):
         cursor.execute("SELECT np.*, u.first_name, u.last_name FROM NutritionPlan np JOIN User u ON np.trainee_user_ID = u.user_ID WHERE np.trainee_user_ID = %s AND np.trainer_user_ID = %s", (trainee_id, trainer_id))
         nutrition_logs = cursor.fetchall()
 
-        return render_template('TrainerPages/correspondingtraineelog.html', workout_logs=workout_logs, nutrition_logs=nutrition_logs)
+        # Replace meal_items with detailed meal items for each nutrition plan
+        detailed_nutrition_logs = []
+        for log in nutrition_logs:
+            plan_ID = log[0]
+            cursor.execute("SELECT M.name, P.quantity FROM PlanIncludesMealItem P JOIN MealItem M ON P.meal_item_ID = M.meal_item_ID WHERE P.plan_ID = %s", (plan_ID,))
+            meal_items = cursor.fetchall()
+            detailed_log = list(log)
+            detailed_log.append(meal_items)  # Add the meal items as the last element
+            detailed_nutrition_logs.append(detailed_log)
+
+        return render_template('TrainerPages/correspondingtraineelog.html', workout_logs=workout_logs, nutrition_logs=detailed_nutrition_logs)
     return redirect(url_for('login'))
 
 
@@ -577,6 +597,8 @@ def mealassign():
             if 'done' in request.form:
                 plan_name = request.form.get('plan_name') #butondan çekecez
                 cursor.execute("UPDATE NutritionPlan SET plan_name = %s WHERE plan_ID = %s", (plan_name, plan_ID))
+                mysql.connection.commit()
+                cursor.execute("UPDATE NutritionPlan SET description = %s WHERE plan_ID = %s", (plan_name, plan_ID))
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             

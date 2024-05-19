@@ -50,7 +50,9 @@
                 <td>{{ log.6 }} {{log.7}}</td>
                 <td>{{ log.3 }}</td>
                 <td>{{ log.4 }}</td>
-                <td>{{ log.5 }}</td>
+                {% for meallog in log.8 %}
+                    <td>{{ meallog }}</td>
+                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>
