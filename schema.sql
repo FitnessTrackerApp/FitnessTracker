@@ -360,10 +360,9 @@ SELECT
     u1.first_name AS trainer_first_name,
     u1.last_name AS trainer_last_name,
     tn.user_ID AS trainee_ID,
+    t.specialization AS trainer_specialization,
     u2.first_name AS trainee_first_name,
     u2.last_name AS trainee_last_name,
-    tr.start_date,
-    tr.end_date,
     tr.recommendations
 FROM
     User u1

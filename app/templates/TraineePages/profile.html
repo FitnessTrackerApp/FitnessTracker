@@ -55,21 +55,20 @@
 
         <div class="line"></div>
 
-        <div class= "trainer-section">
+        <div class="trainer-section">
             <h1> My Trainer: </h1>
             {% if trainer_info %}
                 {% for trainer in trainer_info %}
                     <div class="trainer-details">
-                        <p>Name: {{ trainer.trainer_first_name }} {{ trainer.trainer_last_name }}</p>
-                        <p>Specialization: {{ trainer.specialization }}</p>
-                        <p>Start Date: {{ trainer.start_date.strftime('%Y-%m-%d') }}</p>
-                        <p>End Date: {{ trainer.end_date.strftime('%Y-%m-%d') if trainer.end_date else 'Ongoing' }}</p>
+                        <p>Name: {{ trainer[1] }} {{ trainer[2] }}</p>
+                        <p>Specialization: {{ trainer[4] }}</p>
                     </div>
                 {% endfor %}
             {% else %}
                 <p>You currently do not have a trainer assigned.</p>
             {% endif %}
         </div>
+        
 
     </div>
 
