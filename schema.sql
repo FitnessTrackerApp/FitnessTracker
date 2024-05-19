@@ -354,6 +354,18 @@ VALUES
 ('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
 ('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
 
+INSERT INTO MealItem (name, description, calories) VALUES
+('Grilled Chicken Breast', 'A succulent piece of grilled chicken breast.', 165),
+('Quinoa Salad', 'A healthy salad made with quinoa, vegetables, and a light vinaigrette.', 220),
+('Oatmeal with Fruits', 'A bowl of oatmeal topped with fresh fruits.', 150),
+('Protein Shake', 'A nutritious shake with protein powder, milk, and a banana.', 250),
+('Vegetable Stir-fry', 'A mix of fresh vegetables stir-fried with a light soy sauce.', 180),
+('Greek Yogurt with Honey', 'A serving of Greek yogurt drizzled with honey.', 120),
+('Salmon Fillet', 'A perfectly cooked salmon fillet.', 200),
+('Mixed Nuts', 'A small portion of assorted nuts.', 175),
+('Smoothie Bowl', 'A bowl of blended fruits topped with granola and nuts.', 300),
+('Egg White Omelette', 'An omelette made with egg whites and vegetables.', 100);
+
 DELIMITER //
 
 CREATE TRIGGER before_user_insert BEFORE INSERT ON User FOR EACH ROW

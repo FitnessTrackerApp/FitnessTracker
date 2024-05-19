@@ -161,11 +161,12 @@ def homepage():
                         #default bir plan oluşturuyoruz
                         cursor.execute("INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description) VALUES (%s, %s, %s, %s)", (trainee_user_ID, userID, "Plan", "description",))
                         mysql.connection.commit()
-                        # plan_ID yi çekmemiz lazım
+                        # plan_ID yi çekmemiz lazım                       
                         cursor.execute("SELECT plan_ID FROM NutritionPlan WHERE trainee_user_ID = %s AND trainer_user_ID = %s ORDER BY plan_ID DESC", (trainee_user_ID, userID,))
                         plan_ID = cursor.fetchone()[0]
+                        session['plan_ID'] = plan_ID
                         
-                        return redirect(url_for('mealassign', plan_ID = plan_ID))
+                        return redirect(url_for('mealassign'))
             
                 elif 'denypr' in request.form:
 
@@ -466,6 +467,7 @@ def work_prog():
 @app.route('/nutr-program')#aid
 def nutr_prog():
     if 'loggedin' in session:
+        
         return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
     return redirect(url_for('login'))
 
@@ -500,23 +502,24 @@ def req_prog():
 
 # We can also pass the plan id as we have already created a NutritionPlan
 # trainee_user_ID yerine plan_ID yi vermek daha mantıklı
-@app.route('/mealassign/<int:plan_ID>', methods= ['GET', 'POST']) 
-def mealassign(plan_ID):
+@app.route('/mealassign', methods= ['GET', 'POST']) 
+def mealassign():
     if 'loggedin' in session:
         # Here there will be  'add' buttons for each meal which has value as meal_item_ID (MealItem table). 
         # When the accept the meal request it should already create a (NutritionPlan) with plan name to be defined later. 
         # When we tap to add Button it will insert to the PlanIncludesMealItem table (we can insert the same meal for multiple times if we want to by keeping the quantity (if - else statement)). 
         # Finally when we write the name of the program and tap 'Done' it will update the plan_name.
+        plan_ID = session['plan_ID']
         cursor = mysql.connection.cursor()
-        user_id = session['userid'] # this is trainerID
+        #user_id = session['userid'] # this is trainerID
 
-        cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
-        trainee_user_ID = cursor.fetchone()[1]
+        #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
+        #trainee_user_ID = cursor.fetchone()[1]
 
         if request.method == 'POST':
             if 'addmeal' in request.form:
                 # Eğer meal item plande hiç yoksa ekle, varsa quantity i arttır.
-                meal_item_ID = request.form['meal_item_ID'] #butondan çekecez
+                meal_item_ID = request.form.get('addmeal') #butondan çekecez
                 cursor.execute("SELECT COUNT(*) FROM PlanIncludesMealItem WHERE plan_ID = %s AND meal_item_ID = %s", (plan_ID, meal_item_ID,))
                 count_of_meal = cursor.fetchone()[0]
                 if count_of_meal == 0:
@@ -525,22 +528,32 @@ def mealassign(plan_ID):
                 else:
                     cursor.execute("UPDATE PlanIncludesMealItem SET quantity = %s WHERE plan_ID = %s", (count_of_meal + 1, plan_ID,))
                     mysql.connection.commit()
+                # we can do return redirect here
+                return redirect(url_for('mealassign'))
+            
+            if 'removemeal' in request.form:
+                meal_item_ID = request.form.get('removemeal') #butondan çekecez
+                cursor.execute("DELETE FROM PlanIncludesMealItem WHERE plan_ID = %s AND meal_item_ID = %s ",(plan_ID, meal_item_ID,))
+                mysql.connection.commit()
+                return redirect(url_for('mealassign'))
+
                 
-            elif 'done' in request.form:
-                plan_name = request.form['plan_name'] #butondan çekecez
+            if 'done' in request.form:
+                plan_name = request.form.get('plan_name') #butondan çekecez
                 cursor.execute("UPDATE NutritionPlan SET plan_name = %s WHERE plan_ID = %s", (plan_name, plan_ID))
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
+            
         
         # Burada databasedeki bütün mealları çekmemiz lazım 
         cursor.execute("SELECT * FROM MealItem")
         meal_items = cursor.fetchall()
 
         # Burada mevcut plana eklediğimiz mealları çekmek lazım
-        cursor.execute("SELECT meal_item_ID, quantity FROM PlanIncludesMealItem WHERE plan_ID = %s", (plan_ID,))
+        cursor.execute("SELECT P.meal_item_ID, P.quantity, M.name FROM PlanIncludesMealItem P, MealItem M WHERE P.plan_ID = %s AND P.meal_item_ID = M.meal_item_ID", (plan_ID,))
         current_meal_items = cursor.fetchall()
 
-        return render_template('TrainerPages/mealassign.html', plan_ID = plan_ID)
+        return render_template('TrainerPages/mealassign.html', meal_items = meal_items, current_meal_items = current_meal_items, )
     return redirect(url_for('login'))
 
 # URL den user id çekilmeli

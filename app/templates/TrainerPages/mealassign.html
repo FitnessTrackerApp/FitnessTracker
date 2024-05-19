@@ -23,6 +23,8 @@
         </div>
     </div>
 
+    
+
     <div class= "main">
         <h1>Meal Assign for: X</h1>
 
@@ -30,184 +32,60 @@
 
             <div class="programbox">
                 <div class= "programlist">
+                    <form action="" method="post">    
+                        {%for row in current_meal_items%}
+                        <button name = "removemeal" value="{{row.0}}" type = "submit" class="added-meal">
+                            <img src= "/static/image/meal.jpg">
+                            <p> {{row[2]}} </p>
+                        </button>
+                        {%endfor%}
+                    </form>
                     
-                    <button class="added-meal">
-                        <img src= "/static/image/meal.jpg">
-                        <p> Meal Name </p>
-                    </button>
                     
                 </div>
 
                 <div class="buttonsection">
+                    
+                    <form action="" method="get">
+                    <input name = "plan_name" placeholder="Enter name of program"></input>
+                    </form>
 
-                    <input placeholder="Enter name of program"> </input>
-                    <button> 
+                    <form action="" method="post">
+                    <button name = "done" value> 
                         Done
                     </button>
+                </form>
                 </div>
                 
                 
             </div>
             
-
+            
+            
 
             <div class="line"> </div>
 
             <div class="meals">
                 
-                    
+                {%for row in meal_items%}    
                 <div class="meal">
                     <img src= "/static/image/meal.jpg">
                     <div>
-                        <h2>Meal Name</h2>
+                        <h2>{{row[1]}}</h2>
                         <p></p>
                         <p></p>
                         <p></p>
                         <p></p>
-                        <p>Calories(kcal): 444 </p>
+                        <p>Calories(kcal): {{row[3]}} </p>
                         <p>: </p>
                         
-                        <button type="submit" class="btn btn-primary">add</button>	
+                        <form action="" method="post">
+                        <button name="addmeal" value="{{row.0}}" type="submit" class="btn btn-primary">add</button>	
+                        </form>
                     </div>
                 </div>
+                {%endfor%}
 
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-
-                <div class="meal">
-                    <img src= "/static/image/meal.jpg">
-                    <div>
-                        <h2></h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
-                        
-                        <button type="submit" class="btn btn-primary">add</button>	
-                    </div>
-                </div>
-                    
-                    
-                </form>
             </div>
     
             
