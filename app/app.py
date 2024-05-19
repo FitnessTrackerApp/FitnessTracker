@@ -223,6 +223,9 @@ def profile():
 
         if trainer_info[0] == 0:
 
+            cursor.execute("SELECT * FROM TrainerTraineeInfo WHERE trainee_ID = %s", (userID,))
+            trainer_info = cursor.fetchall()  # Fetch the trainer data for the trainee
+
             cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
             data = cursor.fetchall()
 
@@ -277,7 +280,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else round(bmi, 2)))
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else round(bmi, 2)))
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))

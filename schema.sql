@@ -336,3 +336,47 @@ INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity,
 VALUES 
 ('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
 ('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+
+DELIMITER //
+CREATE TRIGGER before_user_insert BEFORE INSERT ON User FOR EACH ROW
+BEGIN
+    SET NEW.age = YEAR(CURDATE()) - YEAR(NEW.date_of_birth);
+END;
+//
+CREATE TRIGGER after_user_delete AFTER DELETE ON User FOR EACH ROW
+BEGIN
+    DELETE FROM Trainee WHERE user_ID = OLD.user_ID;
+    DELETE FROM Trainer WHERE user_ID = OLD.user_ID;
+    ...
+END;
+//
+DELIMITER ;
+
+CREATE VIEW TrainerTraineeInfo AS
+SELECT
+    t.user_ID AS trainer_ID,
+    u1.first_name AS trainer_first_name,
+    u1.last_name AS trainer_last_name,
+    tn.user_ID AS trainee_ID,
+    u2.first_name AS trainee_first_name,
+    u2.last_name AS trainee_last_name,
+    tr.start_date,
+    tr.end_date,
+    tr.recommendations
+FROM
+    User u1
+JOIN Trainer t ON u1.user_ID = t.user_ID
+JOIN trains tr ON t.user_ID = tr.trainer_user_ID
+JOIN Trainee tn ON tr.trainee_user_ID = tn.user_ID
+JOIN User u2 ON tn.user_ID = u2.user_ID;
+
+CREATE VIEW UserGoalsDetails AS
+SELECT
+    u.user_ID,
+    u.first_name,
+    u.last_name,
+    fg.goal_description,
+    fg.created_at
+FROM
+    User u
+JOIN FitnessGoals fg ON u.user_ID = fg.user_ID;
