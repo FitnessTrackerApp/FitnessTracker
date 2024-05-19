@@ -68,9 +68,27 @@
             <form action="{{url_for('workout_session')}}" method="get"> 
                 <button>
                     <img src= "/static/image/dumbbell.png" style= "rotate: 135deg;"> 
-                    Workout Session
+                    Browse Workout Sessions
                 </button> 
             </form>
+        </div>
+
+        <h1>Personalized Programs</h1>
+        <div class= "form-group">
+            <form action="{{url_for('personal_work_prog')}}" method="get">    
+                <button>
+                    <img src= "/static/image/dumbbell.png" style= "rotate: 135deg;">   
+                    Personal Workout Program
+                </button> 
+            </form>
+
+            <form action="{{url_for('personal_diet_prog')}}" method="get"> 
+                <button>
+                    <img src= "/static/image/forkknife.png">  
+                    Personal Diet Program
+                </button> 
+            </form>
+            
         </div>
         
     </div>

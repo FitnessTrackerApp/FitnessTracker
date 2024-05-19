@@ -97,7 +97,7 @@ body {
 
 .settings-box {
     width: 350px;
-    height: 570px;
+    height: 400px;
     background-color: #D9D9D9;
     border-radius: 20px;
     padding: 25px;
@@ -106,7 +106,5 @@ body {
 
     flex-direction: column;
     display: flex;
-    justify-items: center;
     align-items: center;
-    align-content: center;
 }

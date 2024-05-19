@@ -11,7 +11,7 @@ body {
 
 .register-box {
     width: 350px;
-    height: 570px;
+    height: 600px;
     background-color: white;
     border-radius: 20px;
     padding: 30px;
@@ -40,7 +40,7 @@ form {
     font-size: medium;
 }
 
-button {
+.signup {
     width: 90px;
     padding: 8px;
     border:1px solid #ccc;
@@ -55,8 +55,8 @@ button {
     
 }
 
-.form-box button:hover {
-    opacity: 85%;
+.signup:hover {
+    background-color: #15A723
 }
 
 .radio-form {

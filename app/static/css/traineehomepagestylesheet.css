@@ -87,6 +87,7 @@ h1 {
 
 .form-group {
     display: flex;
+    margin-bottom: 20px;
 }
 
 button {
@@ -147,11 +148,9 @@ button:hover {
     margin-left: -57px;
     font-weight: bold;
     font-size: x-large;
-    border: 1px solid #000000;
 }
 
 .delete-button:hover {
     cursor: pointer;
-    opacity: 85%;
-    border: 2.5px solid #000000;
+    background-color:rgb(188, 14, 49);
 }

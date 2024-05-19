@@ -33,8 +33,6 @@ body {
 
 .form-analysis h1 {
     width: 210px;
-    font-weight: bold;
-    font-size: x-large;
 }
 
 .form-analysis h1:hover {
@@ -61,7 +59,7 @@ body {
 .icons {
     display: flex;
     align-items: center;
-    margin-right: 18px;
+    margin-right: 30px;
     text-align: right;
 }
 
@@ -77,96 +75,43 @@ body {
     opacity: 75%;
 }
 
-.main h1 {
-    
+.main {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
     font-weight: bold;
     font-size: x-large;
-    margin: 20px 0px 10px 15px;
+    margin: 20px 0px 20px 0px;
 }
 
-
-button {
-    width: 75px;
-    padding: 6px;
-    border:1px solid #ccc;
-    border-radius: 15px;
-    background-color: #56ED65;
-    color: white;
-    font-weight: bold;
-    font-size: medium;
-    cursor: pointer;
-    
-}
-
-button:hover {
-    background-color: #15A723
-}
-
-.form-box button:hover {
-    opacity: 85%;
-}
-
-.line {
-    height: 2px;
-    width: 100%;
-    background-color: #000000;
-    margin: 15px 0 15px 0;
-}
-
-.filter-section {
-    margin-left: 15px;
-}
-
-.filter-section select{
-    margin-right: 27px;
-}
-
-.filter-section label {
-    margin-right: 3px;
-}
-
-.form-group {
-    display: flex;
-    margin-bottom: 20px;
-}
-
-.session-list {
-    overflow: scroll;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    overflow-x: auto;
-    max-width: 1400px;
-    margin: 20px;
-}
-
-.session {
+.program-box {
     border: 1px solid #000000;
     border-radius: 10px;
-    width: 300px;
+    width: 400px;
     box-shadow: 3px 3px 20px #666;
-    margin-bottom: 20px;
-    margin-right: 20px;
 }
 
-.session .header {
+.program-box .header {
     height: 50px;
-    width: 298px;
+    width: 398px;
     border-radius: 10px 10px 0 0;
-    background-color: rgb(228, 148, 0);
+    background-color: #15A723;
     border-bottom: 1px solid #000000;
 
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Caveat'; 
-    font-size: large;
+    font-size: x-large;
     color: white;
 }
 
-.session .paper {
-    height: 300px;
-    width: 298px;
+.program-box .paper {
+    height: 400px;
+    width: 398px;
     border-radius: 0 0 10px 10px;
     background-color:floralwhite;
     padding: 15px;

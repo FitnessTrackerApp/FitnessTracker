@@ -254,6 +254,33 @@ def req_prog():
         return render_template('TraineePages/UsersTrainerPage/req-program.html')
     # return redirect(url_for('login'))
 
+
+@app.route('/personal-workout-program')#aid
+def personal_work_prog():
+    # if 'loggedin' in session:
+        return render_template('TraineePages/personalworkoutprogram.html')
+    # return redirect(url_for('login'))
+
+@app.route('/personal-diet-program')#aid
+def personal_diet_prog():
+    # if 'loggedin' in session:
+        return render_template('TraineePages/personaldietprogram.html')
+    # return redirect(url_for('login'))
+
+@app.route('/workout-assign')#aid
+def workout_assign():
+    # if 'loggedin' in session:
+        return render_template('TrainerPages/workoutassign.html')
+    # return redirect(url_for('login'))
+
+@app.route('/meal-assign')#aid
+def meal_assign():
+    # if 'loggedin' in session:
+        return render_template('TrainerPages/mealassign.html')
+    # return redirect(url_for('login'))
+
+
+
 @app.route('/settings')#aid
 def settings():
     # if 'loggedin' in session:
