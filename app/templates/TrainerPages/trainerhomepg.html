@@ -57,21 +57,30 @@
     
         </div>
 
-        <div class="program-requests">
-            <h1>Program Requests</h1>
-            {% if program_requests %}
-                <ul>
+        
+        <h1>Program Requests</h1>
+        {% if program_requests %}
+            <div class="prequests-list">
                 {% for request in program_requests %}
-                    <li>
-                        <strong>{{ request.0 }} {{ request.1 }}:</strong> 
-                        {{ request.2 }} - <em>{{ request.3 }}</em>
-                    </li>
+                    <form action="/homepage" method="post"> <!-- Might not be homepage-->
+                        <div class="request" style="display: flex;">
+                            <img src="/static/image/pp.png" style="height:10%; width: 10%;">
+                            <div class="request-details">
+                                <p><strong>{{ request[0] }} {{ request[1] }}</strong></p>
+                                <p>{{ request[2] }} - <em>{{ request[3] }}</em></p>
+                            </div>
+                            <div class="request-actions">
+                                <button name="acceptpr" value="{{request.4}}|{{request.5}}|{{request.3}}" type="submit" class="btn btn-accept" style="height: 10%; background-color: lightgreen; ">Accept</button>
+                                <button name="denypr" value="{{request.4}}|{{request.5}}|{{request.3}}" type="submit" class="btn btn-deny" style="height: 10%; background-color: tomato;">Deny</button>
+                            </div>
+                        </div>
+                    </form>
                 {% endfor %}
-                </ul>
-            {% else %}
-                <p>No program requests at the moment.</p>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <p>No program requests at the moment.</p>
+        {% endif %}
+        
 
         
         <h1>Coaching Requests</h1>
