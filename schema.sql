@@ -272,8 +272,8 @@ VALUES
 
 INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
 VALUES 
-(3, 1, 'Weight Loss Basic', 'Basic plan for weight loss, low calorie', 'Oatmeal, Salad, Chicken Breast'),
-(4,2,'Body Building Standard Calorie', 'Rice, Chicken Breast', 'Salad');
+(3, 1, '', '', ''),
+(4,2,'', '', '');
 
 INSERT INTO PremiumAccount (user_ID, premiumAcc_ID, start_date, end_date, payment_method)
 VALUES 

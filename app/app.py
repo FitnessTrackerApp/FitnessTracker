@@ -467,8 +467,22 @@ def work_prog():
 @app.route('/nutr-program')#aid
 def nutr_prog():
     if 'loggedin' in session:
-        
-        return render_template('TraineePages/UsersTrainerPage/nutritionprog.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+
+        # Fetch all nutrition plans for the logged-in user
+        cursor.execute("SELECT plan_ID, plan_name FROM NutritionPlan WHERE trainee_user_ID = %s", (userID,))
+        plans = cursor.fetchall()
+
+        # Create a dictionary to store the meals for each plan
+        plans_with_meals = {}
+        for plan in plans:
+            plan_id, plan_name = plan
+            cursor.execute("SELECT M.name, M.calories, P.quantity FROM PlanIncludesMealItem P JOIN MealItem M ON P.meal_item_ID = M.meal_item_ID WHERE P.plan_ID = %s", (plan_id,))
+            meals = cursor.fetchall()
+            plans_with_meals[plan_name] = meals
+
+        return render_template('TraineePages/UsersTrainerPage/nutritionprog.html', plans_with_meals=plans_with_meals)
     return redirect(url_for('login'))
 
 @app.route('/req-programs', methods=['GET', 'POST'])#aid
