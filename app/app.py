@@ -104,6 +104,7 @@ def homepage():
                 trainerDeleted = request.form.get('deleteTrainer')
                 cursor.execute("DELETE FROM trains WHERE trainer_user_ID = %s AND trainee_user_ID = %s", (trainerDeleted, userID,))
                 mysql.connection.commit()
+                return redirect(url_for('homepage'))
 
             # Query to get the last added coaching request names
             query_last_added = """
@@ -132,6 +133,7 @@ def homepage():
                 
                 cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                 mysql.connection.commit()
+                return redirect(url_for('homepage'))
 
             # PROGRAM REQUEST
             cursor.execute("SELECT u.first_name, u.last_name, r.note, r.type, r.request_ID, r.user_ID FROM Requests r JOIN User u ON r.user_ID = u.user_ID WHERE r.trainer_ID = %s", (userID,))
@@ -167,6 +169,7 @@ def homepage():
                     # delete from the Requests
                     cursor.execute("DELETE FROM Requests WHERE user_ID = %s AND trainer_ID = %s AND request_id = %s", (trainee_user_ID, userID, request_id))
                     mysql.connection.commit()
+                    return redirect(url_for('homepage'))
 
                     
             #COACHING REQUEST
@@ -191,6 +194,7 @@ def homepage():
                     if count == 0:
                         cursor.execute("INSERT INTO trains (trainee_user_ID, trainer_user_ID) VALUES (%s, %s)", (trainee_user_ID, userID,))
                         mysql.connection.commit()
+                        return redirect(url_for('homepage'))
                     
 
                 elif 'deny' in request.form:
@@ -198,6 +202,7 @@ def homepage():
                     # burada sadece request silinmeli
                     cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s AND trainer_user_ID = %s", (trainee_user_ID, userID,))
                     mysql.connection.commit()
+                    return redirect(url_for('homepage'))
 
             return render_template('TrainerPages/trainerhomepg.html', fname_lname = fname_lname ,requests=requests, trainees = trainees, program_requests = program_requests)#html yaz dataları çek
         
@@ -385,6 +390,7 @@ def add_goal():
             cursor.execute("INSERT INTO FitnessGoals (user_ID, goal_description) VALUES (%s, %s)", (userID, text_goal,))
 
             mysql.connection.commit()
+            return redirect(url_for('my_goals'))
 
         return render_template('TraineePages/add-goal.html')
     
