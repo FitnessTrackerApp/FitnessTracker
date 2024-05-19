@@ -533,14 +533,14 @@ def mealassign(plan_ID):
                 return redirect(url_for('homepage'))
         
         # Burada databasedeki bütün mealları çekmemiz lazım 
-        cursor.execute("SELECT * FROM MealItem WHERE MealItem")
+        cursor.execute("SELECT * FROM MealItem")
         meal_items = cursor.fetchall()
 
         # Burada mevcut plana eklediğimiz mealları çekmek lazım
         cursor.execute("SELECT meal_item_ID, quantity FROM PlanIncludesMealItem WHERE plan_ID = %s", (plan_ID,))
         current_meal_items = cursor.fetchall()
 
-        return render_template('TrainerPages/meal-assign.html', plan_ID = plan_ID)
+        return render_template('TrainerPages/mealassign.html', plan_ID = plan_ID)
     return redirect(url_for('login'))
 
 # URL den user id çekilmeli

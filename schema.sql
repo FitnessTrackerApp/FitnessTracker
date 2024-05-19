@@ -63,6 +63,7 @@ CREATE TABLE NutritionPlan (
     trainee_user_ID INT,
     trainer_user_ID INT,
     plan_name VARCHAR(255),
+    meal_items VARCHAR(255),
     description VARCHAR(255),
     FOREIGN KEY (trainee_user_ID) REFERENCES Trainee(user_ID),
     FOREIGN KEY (trainer_user_ID) REFERENCES Trainer(user_ID)
