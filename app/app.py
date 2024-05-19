@@ -31,7 +31,7 @@ def login():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM User  WHERE email = %s AND password = %s', (email, password, ))
         user = cursor.fetchone()
-        if user:              
+        if user:              #denem
             session['loggedin'] = True
             session['userid'] = user['user_ID']
             session['username'] = user['first_name']
