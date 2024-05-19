@@ -181,10 +181,17 @@ def profile():
 
         message = ''
 
+        bmi = "Enter values to calculate BMI"
+
         if trainer_info[0] == 0:
 
             cursor.execute("SELECT age, gender, height, weight, fat_percentage FROM User, Trainee WHERE User.user_ID=%s AND User.user_ID=Trainee.user_ID",(userID,))
             data = cursor.fetchall()
+
+            height = data[0][2]
+            weight = data[0][3]
+            if height > 0 and weight > 0:
+                bmi = weight / ((height/100) ** 2)
 
             if request.method == 'POST' and 'height' in request.form and 'weight' in request.form and 'fat' in request.form:
                 height = request.form['height']
@@ -207,17 +214,21 @@ def profile():
                 else:
                     message = 'Please enter a valid fat percentage'
                     fatp = -1
-
-
+    
+                
                 #burası doğru mu? -----------------DOĞRU-----------------
                 #weight ve height de sınır var hata veriyor oraya farklı handle lazım
                 if(height < 0 or height > 300):
                     message = 'Please enter a valid height(0-300)'
+                    bmi= "cannot be calculated"
                 elif(weight < 0 or weight > 300):
                     message = 'Please enter a valid weight(0-300)'
+                    bmi= "cannot be calculated"
                 elif(fatp < 0 or fatp > 100):
                     message = 'Please enter a valid fat percentage (%0-100)'
+                    bmi= "cannot be calculated"
                 else:
+                    bmi = weight / ((height/100) ** 2)
                     cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
                     mysql.connection.commit()
 
@@ -228,7 +239,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message)
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else round(bmi, 2)))
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
