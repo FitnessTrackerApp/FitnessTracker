@@ -219,6 +219,7 @@ def profile():
         message = ''
 
         bmi = "Enter values to calculate BMI"
+        bmitext = ""
 
         if trainer_info[0] == 0:
 
@@ -229,6 +230,14 @@ def profile():
             weight = data[0][3]
             if height > 0 and weight > 0:
                 bmi = weight / ((height/100) ** 2)
+                if bmi < 18.4:
+                    bmitext = "Underweight"
+                elif bmi < 24.9:
+                    bmitext = "Normal"
+                elif bmi < 39.9:
+                    bmitext = "Overweight"
+                else:
+                    bmitext = "Obese"
 
             if request.method == 'POST' and 'height' in request.form and 'weight' in request.form and 'fat' in request.form:
                 height = request.form['height']
@@ -265,7 +274,20 @@ def profile():
                     message = 'Please enter a valid fat percentage (%0-100)'
                     bmi= "cannot be calculated"
                 else:
-                    bmi = weight / ((height/100) ** 2)
+                    if height > 0 and weight > 0:
+                        bmi = weight / ((height/100) ** 2)
+                    else:
+                        bmi = "cannot be calculated"
+
+                    if bmi != "cannot be calculated":
+                        if bmi < 18.4:
+                            bmitext = "Underweight"
+                        elif bmi < 24.9:
+                            bmitext = "Normal"
+                        elif bmi < 39.9:
+                            bmitext = "Overweight"
+                        else:
+                            bmitext = "Obese"
                     cursor.execute("UPDATE Trainee SET height = %s, weight = %s, fat_percentage = %s WHERE Trainee.user_ID = %s",(height,weight,fatp,userID,))
                     mysql.connection.commit()
 
