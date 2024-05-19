@@ -21,6 +21,7 @@ body {
     display: flex;
     height: 100vh;
     flex-direction: column;
+    width:100%;
 }
 
 .container {
@@ -88,6 +89,7 @@ h1 {
 .goals-section {
     margin-top: 20px;
     display: flex;
+
 }
 
 .goal {
@@ -98,5 +100,6 @@ h1 {
     border: 2px solid #000000;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
     margin-right: 20px;
+    word-wrap: break-word;
 }
 
