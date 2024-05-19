@@ -491,24 +491,11 @@ def correspondingtraineelog(trainee_id):
         cursor = mysql.connection.cursor()
 
         # Query to fetch workout plans specific to the logged-in trainer and the selected trainee
-        cursor.execute("""
-            SELECT erp.* 
-            FROM ExerciseRoutinePlan erp
-            JOIN does d ON erp.routine_ID = d.routine_ID
-            WHERE d.user_ID = %s AND d.routine_ID IN (
-                SELECT routine_ID 
-                FROM trains
-                WHERE trainee_user_ID = %s AND trainer_user_ID = %s
-            )
-        """, (trainee_id, trainee_id, trainer_id))
+        cursor.execute("SELECT erp.* FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID WHERE d.user_ID = %s AND d.routine_ID IN (SELECT routine_ID FROM trains WHERE trainee_user_ID = %s AND trainer_user_ID = %s)", (trainee_id, trainee_id, trainer_id))
         workout_logs = cursor.fetchall()
         
         # Query to fetch nutrition plans specific to the logged-in trainer and the selected trainee
-        cursor.execute("""
-            SELECT np.* 
-            FROM NutritionPlan np
-            WHERE np.trainee_user_ID = %s AND np.trainer_user_ID = %s
-        """, (trainee_id, trainer_id))
+        cursor.execute("SELECT np.* FROM NutritionPlan np WHERE np.trainee_user_ID = %s AND np.trainer_user_ID = %s", (trainee_id, trainer_id))
         nutrition_logs = cursor.fetchall()
         
         return render_template('TrainerPages/correspondingtraineelog.html', workout_logs=workout_logs, nutrition_logs=nutrition_logs)
