@@ -63,11 +63,28 @@ CREATE TABLE NutritionPlan (
     trainee_user_ID INT,
     trainer_user_ID INT,
     plan_name VARCHAR(255),
-    description VARCHAR(255),
     meal_items VARCHAR(255),
+    description VARCHAR(255),
     FOREIGN KEY (trainee_user_ID) REFERENCES Trainee(user_ID),
     FOREIGN KEY (trainer_user_ID) REFERENCES Trainer(user_ID)
 );
+
+CREATE TABLE MealItem (
+    meal_item_ID INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    calories INT NOT NULL
+);
+
+CREATE TABLE PlanIncludesMealItem (
+    plan_ID INT,
+    meal_item_ID INT,
+    quantity INT,
+    PRIMARY KEY (plan_ID, meal_item_ID),
+    FOREIGN KEY (plan_ID) REFERENCES NutritionPlan(plan_ID),
+    FOREIGN KEY (meal_item_ID) REFERENCES MealItem(meal_item_ID)
+);
+
 
 CREATE TABLE PremiumAccount (
     user_ID INT,
@@ -260,8 +277,8 @@ VALUES
 
 INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
 VALUES 
-(3, 1, 'Weight Loss Basic', 'Basic plan for weight loss, low calorie', 'Oatmeal, Salad, Chicken Breast'),
-(4,2,'Body Building Standard Calorie', 'Rice, Chicken Breast', 'Salad');
+(3, 1, '', '', ''),
+(4,2,'', '', '');
 
 INSERT INTO PremiumAccount (user_ID, premiumAcc_ID, start_date, end_date, payment_method)
 VALUES 
@@ -336,6 +353,23 @@ INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planne
 VALUES 
 (3, 1, 1, '2023-01-01', '2023-06-01', 500),
 (4, 2, 2, '2023-02-02', '2023-10-02', 700);
+
+INSERT INTO ExerciseRoutinePlan (routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
+VALUES 
+('Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
+('Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+
+INSERT INTO MealItem (name, description, calories) VALUES
+('Grilled Chicken Breast', 'A succulent piece of grilled chicken breast.', 165),
+('Quinoa Salad', 'A healthy salad made with quinoa, vegetables, and a light vinaigrette.', 220),
+('Oatmeal with Fruits', 'A bowl of oatmeal topped with fresh fruits.', 150),
+('Protein Shake', 'A nutritious shake with protein powder, milk, and a banana.', 250),
+('Vegetable Stir-fry', 'A mix of fresh vegetables stir-fried with a light soy sauce.', 180),
+('Greek Yogurt with Honey', 'A serving of Greek yogurt drizzled with honey.', 120),
+('Salmon Fillet', 'A perfectly cooked salmon fillet.', 200),
+('Mixed Nuts', 'A small portion of assorted nuts.', 175),
+('Smoothie Bowl', 'A bowl of blended fruits topped with granola and nuts.', 300),
+('Egg White Omelette', 'An omelette made with egg whites and vegetables.', 100);
 
 DELIMITER //
 
