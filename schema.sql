@@ -346,10 +346,10 @@ VALUES
 
 INSERT INTO PlansExercise (routine_ID, exercise_ID)
 VALUES 
-(1, 1)
-(1, 2)
-(2, 1)
-(2, 2)
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 2);
 
 INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planned_calories)
 VALUES 
