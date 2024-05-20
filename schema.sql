@@ -367,9 +367,21 @@ VALUES
 
 DELIMITER //
 
-CREATE TRIGGER before_user_insert BEFORE INSERT ON User FOR EACH ROW
+CREATE TRIGGER after_user_delete AFTER DELETE ON User FOR EACH ROW
 BEGIN
-    SET NEW.age = YEAR(CURDATE()) - YEAR(NEW.date_of_birth);
+    IF EXISTS (SELECT * FROM Trainer WHERE user_ID = OLD.user_ID) THEN
+        DELETE FROM trains WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM NutritionPlan WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM ExerciseRoutinePlan WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM Trainer WHERE user_ID = OLD.user_ID;
+    END IF;
+
+    IF EXISTS (SELECT * FROM Trainee WHERE user_ID = OLD.user_ID) THEN
+        DELETE FROM NutritionPlan WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM ExerciseRoutinePlan WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM trains WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM Trainee WHERE user_ID = OLD.user_ID;
+    END IF;
 END;
 //
 
