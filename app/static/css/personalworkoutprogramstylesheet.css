@@ -81,6 +81,12 @@ body {
     flex-direction: column;
 }
 
+.layout {
+    display: flex;
+    flex-direction: row;
+
+}
+
 h1 {
     font-weight: bold;
     font-size: x-large;
@@ -92,6 +98,7 @@ h1 {
     border-radius: 10px;
     width: 400px;
     box-shadow: 3px 3px 20px #666;
+    margin-right: 10px;
 }
 
 .program-box .header {

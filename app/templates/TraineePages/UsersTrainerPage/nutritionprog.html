@@ -25,7 +25,8 @@
     <div class = "main">
         <h1>My Nutrition Programs</h1>
 
-        {% for plan_name, meals in plans_with_meals.items() %}
+        <div class="layout">
+            {% for plan_name, meals in plans_with_meals.items() %}
             <div class="program-box">
 
                 <div class="header">
@@ -39,7 +40,10 @@
                 </div>
                 {% endfor %}
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+
+        
 
     </div>
 </body>

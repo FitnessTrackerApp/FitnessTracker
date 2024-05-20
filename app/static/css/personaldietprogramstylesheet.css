@@ -92,6 +92,7 @@ h1 {
     border-radius: 10px;
     width: 400px;
     box-shadow: 3px 3px 20px #666;
+    margin-right: 10px;
 }
 
 .program-box .header {
@@ -123,5 +124,11 @@ h1 {
     font-family: 'Caveat'; 
     font-size: x-large;
     color: rgb(0, 0, 0);
+
+}
+
+.layout {
+    display: flex;
+    flex-direction: row;
 
 }

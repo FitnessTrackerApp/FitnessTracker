@@ -27,21 +27,23 @@
 
     <div class="main">
         <h1>Personal Diet Program Assigned by the System</h1>
+        <div class="layout">
+            {% for plan in nutrition_plans %}
+            <div class="program-box">
 
-        {% for plan in nutrition_plans %}
-        <div class="program-box">
-
-            <div class="header">
-                {{person[0]}} {{person[1]}}'s Personal Diet Program
+                <div class="header">
+                    {{person[0]}} {{person[1]}}'s Personal Diet Program
+                </div>
+                <div class="paper">
+                    <p><strong>Name:</strong> {{ plan[1] }}</p>
+                    <p><strong>Description:</strong> {{ plan[2] }}</p>
+                    <p><strong>Calories:</strong> {{ plan[4] }}</p>
+                    <p><strong>Meal List:</strong> {{ plan[3] }}</p>
+                </div>
             </div>
-            <div class="paper">
-                <p><strong>Name:</strong> {{ plan[1] }}</p>
-                <p><strong>Description:</strong> {{ plan[2] }}</p>
-                <p><strong>Calories:</strong> {{ plan[4] }}</p>
-                <p><strong>Meal List:</strong> {{ plan[3] }}</p>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        
     </div>
 </body>
 

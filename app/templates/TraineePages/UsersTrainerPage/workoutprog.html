@@ -28,7 +28,8 @@
     <div class = "main">
         <h1>My Exercise Programs</h1>
 
-        {% for routine_name, exercises in routines_with_exercises.items() %}
+        <div class="layout">
+            {% for routine_name, exercises in routines_with_exercises.items() %}
             <div class="program-box">
 
                 <div class="header">
@@ -51,7 +52,11 @@
                 </div>
                 {% endfor %}
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        
+
+        
 
     </div>
 </body>
