@@ -765,6 +765,57 @@ def personal_diet_prog():
         return render_template('TraineePages/personaldietprogram.html', nutrition_plans = nutrition_plans, person = person)
     return redirect(url_for('login'))
 
+@app.route('/adminlogwatch/<int:user_ID>')
+def adminlogwatch(user_ID):
+    if 'loggedin' in session:
+
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("SELECT isTrainer FROM User WHERE user_ID = %s", (user_ID,))
+        is_trainer = cursor.fetchone()
+
+        if is_trainer[0] == 0:
+            # Query to fetch workout plans specific to the logged-in trainer and the selected trainee
+            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (user_ID,)) #mümkünse does yerine diğer 3 workout table ı kullanalım.
+            workout_logs = cursor.fetchall()
+            
+            # Query to fetch nutrition plans specific to the logged-in trainer and the selected trainee
+            cursor.execute("SELECT np.*, u.first_name, u.last_name FROM NutritionPlan np JOIN User u ON np.trainee_user_ID = u.user_ID WHERE np.trainee_user_ID = %s AND np.trainer_user_ID = %s", (user_ID, user_ID))
+            nutrition_logs = cursor.fetchall()
+
+            # Replace meal_items with detailed meal items for each nutrition plan
+            detailed_nutrition_logs = []
+            for log in nutrition_logs:
+                plan_ID = log[0]
+                cursor.execute("SELECT M.name, P.quantity FROM PlanIncludesMealItem P JOIN MealItem M ON P.meal_item_ID = M.meal_item_ID WHERE P.plan_ID = %s", (plan_ID,))
+                meal_items = cursor.fetchall()
+                detailed_log = list(log)
+                detailed_log.append(meal_items)  # Add the meal items as the last element
+                detailed_nutrition_logs.append(detailed_log)
+        
+        else:
+                # Fetch all workout plans given by the trainer
+            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE erp.trainer_user_ID = %s", (user_ID,))
+            workout_logs = cursor.fetchall()
+
+            # Fetch all nutrition plans given by the trainer
+            cursor.execute("SELECT np.*, u.first_name, u.last_name FROM NutritionPlan np JOIN User u ON np.trainee_user_ID = u.user_ID WHERE np.trainer_user_ID = %s", (user_ID,))
+            nutrition_logs = cursor.fetchall()
+
+            # Replace meal_items with detailed meal items for each nutrition plan
+            detailed_nutrition_logs = []
+            for plan in nutrition_logs:
+                plan_ID = plan[0]
+                cursor.execute("SELECT M.name, P.quantity FROM PlanIncludesMealItem P JOIN MealItem M ON P.meal_item_ID = M.meal_item_ID WHERE P.plan_ID = %s", (plan_ID,))
+                meal_items = cursor.fetchall()
+                detailed_log = list(plan)
+                detailed_log.append(meal_items)  # Add the meal items as the last element
+                detailed_nutrition_logs.append(detailed_log)
+
+
+        return render_template('AdminPages/adminlogwatch.html', workout_logs = workout_logs, nutrition_logs = detailed_nutrition_logs)
+    return redirect(url_for('login'))
+
 @app.route('/settings')#aid
 def settings():
     if 'loggedin' in session:

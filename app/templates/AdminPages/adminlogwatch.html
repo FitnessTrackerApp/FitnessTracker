@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainee Logs</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class = "container">
+        <div class="form-analysis">
+            <a href=""> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
+        <div>
+            <div class= "icons"> 
+                <a href="{{ url_for('logout') }}" style="margin-right: 10px">LOGOUT</a>
+                <a href="{{url_for('settings')}}"><i class="fa-solid fa-gear fa-2xl" style="color: #000000;"></i></a>
+            </div>
+        </div>
+    </div>
+    <h1>Nutrition Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Plan Name</th>
+                <th>Description</th>
+                <th>Meal Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in nutrition_logs %}
+            <tr>
+                <td>{{ log.6 }} {{log.7}}</td>
+                <td>{{ log.3 }}</td>
+                <td>{{ log.4 }}</td>
+                {% for meallog in log.8 %}
+                    <td>{{ meallog }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Workout Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Routine Name</th>
+                <th>Description</th>
+                <th>Calories</th>
+                <th>Intensity</th>
+                <th>Duration</th>
+                <th>Equipment</th>
+                <th>Status</th>
+                <th>Exercises List</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in workout_logs %}
+            <tr>
+                <td>{{ log.11 }} {{log.12}}</td>
+                <td>{{ log.3 }}</td>
+                <td>{{ log.4 }}</td>
+                <td>{{ log.5 }}</td>
+                <td>{{ log.6 }}</td>
+                <td>{{ log.7 }}</td>
+                <td>{{ log.8 }}</td>
+                <td>{{ log.9 }}</td>
+                <td>{{ log.10 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -339,7 +339,16 @@ VALUES
 INSERT INTO ExerciseRoutinePlan (routine_name, trainee_user_ID, trainer_user_ID, description, calories, intensity, duration, equipment, status, exercises_list)
 VALUES 
 ('Weight Loss Routine', 3, 1, 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
-('Muscle Building Routine', 3, 1, 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
+('Muscle Building Routine', 3, 1, 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown'),
+('Upper Body Strength', 3, 1, 'Strength training for upper body muscles', '400', 'Intermediate', '60 mins', 'Dumbbells, Bars', 'Active', 'Bench Press, Bicep Curls'),
+('Lower Body Strength', 3, 1, 'Strength training for lower body muscles', '450', 'Intermediate', '60 mins', 'Dumbbells, Squat Rack', 'Active', 'Squats, Lunges'),
+('Full Body Strength', 3, 1, 'Comprehensive strength training for entire body', '600', 'Advanced', '90 mins', 'Dumbbells, Bars, Resistance Bands', 'Active', 'Deadlifts, Pull-ups, Push-ups'),
+('HIIT Cardio', 3, 1, 'High-intensity interval training for cardiovascular health', '700', 'Advanced', '45 mins', 'None', 'Active', 'Sprints, Burpees, Jumping Jacks'),
+('Yoga Stretching', 3, 1, 'Yoga routine for flexibility and relaxation', '250', 'Beginner', '30 mins', 'Yoga Mat, Blocks', 'Active', 'Sun Salutations, Warrior Poses'),
+('Core Stability', 3, 1, 'Exercises to strengthen core muscles and improve stability', '350', 'Intermediate', '45 mins', 'Exercise Ball, Mat', 'Active', 'Planks, Russian Twists'),
+('Pilates Workout', 3, 1, 'Pilates routine for core strength and body alignment', '300', 'Intermediate', '60 mins', 'Resistance Bands, Pilates Reformer', 'Active', 'Hundreds, Leg Circles'),
+('CrossFit Challenge', 3, 1, 'CrossFit workout for functional fitness and strength', '800', 'Advanced', '60 mins', 'Barbells, Kettlebells', 'Active', 'Clean and Jerk, Snatch'),
+('Functional Training', 3, 1, 'Functional exercises for everyday movements and strength', '500', 'Intermediate', '45 mins', 'Bodyweight, Medicine Ball', 'Active', 'Squats, Lunges, Push-ups');
 
 INSERT INTO MealItem (name, description, calories) VALUES
 ('Grilled Chicken Breast', 'A succulent piece of grilled chicken breast.', 165),
