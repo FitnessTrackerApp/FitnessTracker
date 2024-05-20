@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <title>Admin Homepage</title>
+    <link rel="stylesheet" type="text/css" href="static/css/traineehomepagestylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
+</head>
+
+<body>
+
+    <div class = "container">
+        <div class="form-analysis">
+            <a href=""> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
+        <div>
+            <div class= "icons"> 
+                <a href="{{ url_for('logout') }}" style="margin-right: 10px">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+
+    <div class= "main">
+        <h1>Welcome back, {{fname_lname[0]}}</h1>
+        <h1>All Users </h1>
+    </div>
+
+        
+</body>
+</html>

@@ -88,6 +88,9 @@ def homepage():
         trainer_info = cursor.fetchone()
 
         #cursor.close()
+        if userID == 5:
+            
+            return render_template('AdminPages/adminhome.html', fname_lname = fname_lname)
 
         if trainer_info[0] == 0:
 
@@ -596,7 +599,7 @@ def mealassign():
         # Finally when we write the name of the program and tap 'Done' it will update the plan_name.
         plan_ID = session['plan_ID']
         cursor = mysql.connection.cursor()
-        plan_name = 'Plan'
+        # plan_name = 'Plan'
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -632,9 +635,9 @@ def mealassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
-        if plan_name == 'Plan':
-            cursor.execute("DELETE FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
-            mysql.connection.commit()
+        # if plan_name == 'Plan':
+        #     cursor.execute("DELETE FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
+        #     mysql.connection.commit()
         
         # Burada databasedeki bütün mealları çekmemiz lazım 
         cursor.execute("SELECT * FROM MealItem")
@@ -652,7 +655,7 @@ def workoutassign():
     if 'loggedin' in session:
         routine_ID = session['routine_ID']
         cursor = mysql.connection.cursor()
-        routine_name = 'ExercisePlan'
+        # routine_name = 'ExercisePlan'
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -692,9 +695,9 @@ def workoutassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
-        if routine_name == 'ExercisePlan':
-            cursor.execute("DELETE FROM ExerciseRoutinePlan WHERE routine_ID = %s", (routine_ID,))
-            mysql.connection.commit()
+        # if routine_name == 'ExercisePlan':
+        #     cursor.execute("DELETE FROM ExerciseRoutinePlan WHERE routine_ID = %s", (routine_ID,))
+        #     mysql.connection.commit()
         
         # Burada databasedeki bütün exerciseları çekmemiz lazım 
         cursor.execute("SELECT * FROM Exercise")
