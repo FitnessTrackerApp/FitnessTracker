@@ -241,11 +241,12 @@ VALUES
 ('Melih', 'Guven', '2002-04-01', 22, 'Male', 'melihhguvenn@gmail.com', 'asd123', '05056542789',1),
 ('Kaan', 'Soyad', '2003-07-08', 20, 'Male', 'kaan@gmail.com', 'dsa321', '05050055513',1),
 ('Yagiz', 'Basarn', '2002-01-01', 22, 'Male', 'yagiz@gmail.com', 'yagiz', '05556557426',0),
-('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234',0);
+('Bartu', 'Soyad', '2000-01-04', 24, 'Male', 'bartu@gmail.com', 'bartu123', '05357861234',0),
+('ADMIN', '1',    '2024-05-05',   1, 'Female', 'admin@ft.com',    '123',       '1',       2);
 
 INSERT INTO Admin (user_ID)
 VALUES 
-(1);
+(5);
 
 INSERT INTO Trainer (user_ID, specialization, certification, height, weight)
 VALUES 
@@ -381,8 +382,19 @@ END;
 
 CREATE TRIGGER after_user_delete AFTER DELETE ON User FOR EACH ROW
 BEGIN
-    DELETE FROM Trainee WHERE user_ID = OLD.user_ID;
-    DELETE FROM Trainer WHERE user_ID = OLD.user_ID;
+    IF EXISTS (SELECT * FROM Trainer WHERE user_ID = OLD.user_ID) THEN
+        DELETE FROM trains WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM NutritionPlan WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM ExerciseRoutinePlan WHERE trainer_user_ID = OLD.user_ID;
+        DELETE FROM Trainer WHERE user_ID = OLD.user_ID;
+    END IF;
+
+    IF EXISTS (SELECT * FROM Trainee WHERE user_ID = OLD.user_ID) THEN
+        DELETE FROM NutritionPlan WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM ExerciseRoutinePlan WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM trains WHERE trainee_user_ID = OLD.user_ID;
+        DELETE FROM Trainee WHERE user_ID = OLD.user_ID;
+    END IF;
 END;
 //
 

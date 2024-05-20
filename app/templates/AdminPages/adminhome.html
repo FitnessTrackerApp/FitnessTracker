@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <title>Admin Homepage</title>
+    <link rel="stylesheet" type="text/css" href="static/css/traineehomepagestylesheet.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
+</head>
+
+<body>
+
+    <div class = "container">
+        <div class="form-analysis">
+            <a href=""> 
+                <h1>FormAnalysis</h1> 
+            </a>
+        </div>
+        <div>
+            <div class= "icons"> 
+                <a href="{{ url_for('logout') }}" style="margin-right: 10px">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+
+    <div class= "main">
+        <h1>Welcome back, {{fname_lname[0]}}</h1>
+        <h1>All Users </h1>
+
+        {% for row in allusers%}
+        <div style="display:grid; margin-left:10px;">
+            <div class="form-group">
+                <form action="{{ url_for('correspondingtraineelog', trainee_id=row[4]) }}" method="get">
+                    <button type="submit" style="width: 100%;">
+                        <img id="traineepp" src="/static/image/pp.png">
+                        <div>
+                            <p> {{ row[1] }}, {{ row[2] }} </p>
+                            <p> {{row.3}} </p>
+                            <p> {{row.4}} </p>
+                            <p> {{row.5}} </p>
+                            <p> {{row.6}}</p>
+                        </div>
+                    </button>
+                </form>
+
+                <form action="/homepage" method="post" class="delete-form">
+                    <input type="hidden" name="delete_user_ID" value="{{ row[0] }}">
+                    <button name="deleteUser" value="{{row.0}}" type="submit" class="btn btn-primary" style="height: 10%; margin-left: 10px; background-color: tomato;">BAN USER</button>
+                </form>
+            </div>
+            </div>
+        {%endfor%}
+
+        
+    </div>
+
+
+        
+</body>
+</html>
