@@ -596,7 +596,7 @@ def mealassign():
         # Finally when we write the name of the program and tap 'Done' it will update the plan_name.
         plan_ID = session['plan_ID']
         cursor = mysql.connection.cursor()
-        plan_name = 'Plan'
+        
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -632,9 +632,6 @@ def mealassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
-        if plan_name == 'Plan':
-            cursor.execute("DELETE FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
-            mysql.connection.commit()
         
         # Burada databasedeki bütün mealları çekmemiz lazım 
         cursor.execute("SELECT * FROM MealItem")
@@ -652,7 +649,6 @@ def workoutassign():
     if 'loggedin' in session:
         routine_ID = session['routine_ID']
         cursor = mysql.connection.cursor()
-        routine_name = 'ExercisePlan'
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -692,9 +688,6 @@ def workoutassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
-        if routine_name == 'ExercisePlan':
-            cursor.execute("DELETE FROM ExerciseRoutinePlan WHERE routine_ID = %s", (routine_ID,))
-            mysql.connection.commit()
         
         # Burada databasedeki bütün exerciseları çekmemiz lazım 
         cursor.execute("SELECT * FROM Exercise")
@@ -711,13 +704,31 @@ def workoutassign():
 @app.route('/personal-workout-program')#aid
 def personal_work_prog():
     if 'loggedin' in session:
-        return render_template('TraineePages/personalworkoutprogram.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+        query = "SELECT erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status, GROUP_CONCAT(e.exercise_name SEPARATOR ', ') as exercises_list FROM ExerciseRoutinePlan erp LEFT JOIN PlansExercise pe ON erp.routine_ID = pe.routine_ID LEFT JOIN Exercise e ON pe.exercise_ID = e.exercise_ID WHERE 1=1 AND erp.intensity LIKE 'Intermediate'"
+        query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
+        cursor.execute(query)
+
+        exercise_plans = cursor.fetchall()
+
+        cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (userID,))
+        person = cursor.fetchone()
+        return render_template('TraineePages/personalworkoutprogram.html', plans = exercise_plans, person = person)
     return redirect(url_for('login'))
 
 @app.route('/personal-diet-program')#aid
 def personal_diet_prog():
     if 'loggedin' in session:
-        return render_template('TraineePages/personaldietprogram.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+        query = "SELECT np.plan_ID, np.plan_name, np.description, GROUP_CONCAT(m.name SEPARATOR ', ') as nutritions_list, SUM(m.calories) AS total_calories FROM NutritionPlan np LEFT JOIN PlanIncludesMealItem pm ON np.plan_ID = pm.plan_ID LEFT JOIN MealItem m ON pm.meal_item_ID = m.meal_item_ID WHERE 1=1 AND m.calories BETWEEN 0 AND 200"
+        query += " GROUP BY np.plan_ID, np.plan_name, np.description"
+        cursor.execute(query)
+        nutrition_plans = cursor.fetchall()
+        cursor.execute("SELECT first_name, last_name FROM User WHERE user_ID = %s", (userID,))
+        person = cursor.fetchone()
+        return render_template('TraineePages/personaldietprogram.html', nutrition_plans = nutrition_plans, person = person)
     return redirect(url_for('login'))
 
 @app.route('/settings')#aid
