@@ -274,8 +274,8 @@ VALUES
 
 INSERT INTO NutritionPlan (trainee_user_ID, trainer_user_ID, plan_name, description, meal_items)
 VALUES 
-(3, 1, 'Footballer Plan', '', ''),
-(4,2,'Basketballer Plan', '', '');
+(3, 1, 'Footballer Plan', 'Sportive plan for football players', ''),
+(4,2,'Basketballer Plan', 'Sportive plan for basketball players', '');
 
 INSERT INTO PremiumAccount (user_ID, premiumAcc_ID, start_date, end_date, payment_method)
 VALUES 
@@ -311,7 +311,14 @@ VALUES
 INSERT INTO Exercise (exercise_ID, exercise_name, description, target_muscles, difficulty_level, set_size, repeat_size)
 VALUES 
 (1, 'Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
-(2, 'Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
+(2, 'Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12),
+(3, 'Squats', 'Standard squats', 'Quadriceps, Hamstrings, Glutes', 6, 3, 12),
+(4, 'Deadlifts', 'Conventional deadlifts', 'Hamstrings, Glutes, Lower back', 9, 3, 10),
+(5, 'Bench Press', 'Standard bench press', 'Chest, Shoulders, Triceps', 7, 3, 10),
+(6, 'Dumbbell Rows', 'Standard dumbbell rows', 'Back, Biceps', 6, 3, 12),
+(7, 'Plank', 'Standard plank exercise', 'Core', 4, 3, 60),
+(8, 'Lunges', 'Standard lunges', 'Quadriceps, Hamstrings, Glutes', 7, 3, 12),
+(9, 'Dumbbell Shoulder Press', 'Standard dumbbell shoulder press', 'Shoulders', 7, 3, 10);
 
 INSERT INTO Requests (user_ID, note, type)
 VALUES 

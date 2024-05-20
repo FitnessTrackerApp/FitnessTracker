@@ -26,9 +26,10 @@
     </div>
 
     <div class = "main">
-        <h1>My Nutrition Programs</h1>
+        <h1>My Exercise Programs</h1>
 
-        {% for routine_name, exercises in routines_with_exercises.items() %}
+        <div class="layout">
+            {% for routine_name, exercises in routines_with_exercises.items() %}
             <div class="program-box">
 
                 <div class="header">
@@ -45,14 +46,17 @@
                             <strong>Target Muscles:</strong> {{ exercise[2] }}<br>
                             <strong>Difficulty Level:</strong> {{ exercise[3] }}<br>
                             <strong>Set Size:</strong> {{ exercise[4] }}<br>
-                            <strong>Repeat Size:</strong> {{ exercise[5] }}<br>
-                            <strong>Quantity:</strong> {{ exercise[6] }}<br>  
+                            <strong>Repeat Size:</strong> {{ exercise[5] }}<br> 
                         </li>    
                     </ul>
                 </div>
                 {% endfor %}
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        
+
+        
 
     </div>
 </body>

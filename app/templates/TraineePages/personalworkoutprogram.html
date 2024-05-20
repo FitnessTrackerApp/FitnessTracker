@@ -26,25 +26,27 @@
     </div>
 
     <div class="main">
-        <h1>Personal Workout Program Assigned by the System</h1>
+        <h1>Personal Workout Program Assigned by the System</h1> 
+        <div class="layout">
+            {% for plan in plans %}
+            <div class="program-box">
 
-        <div class="program-box">
-
-            <div class="header">
-                X's Personal Workout Program
+                <div class="header">
+                    {{person[0]}} {{person[1]}}'s Personal Workout Program
+                </div>
+                <div class="paper">
+                    <p><strong>Description:</strong> {{ plan[2] }}</p>
+                    <p><strong>Calories:</strong> {{ plan[3] }}</p>
+                    <p><strong>Intensity:</strong> {{ plan[4] }}</p>
+                    <p><strong>Duration:</strong> {{ plan[5] }}</p>
+                    <p><strong>Equipment:</strong> {{ plan[6] }}</p>
+                    <p><strong>Status:</strong> {{ plan[7] }}</p>
+                    <p><strong>Exercises List:</strong> {{ plan[8] }}</p>
+                </div>
             </div>
-            <div class="paper">
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaa
-                aaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaa
-                aaaaaaaaaaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaaa
-            </div>
+            {% endfor %}
         </div>
+        
     </div>
 </body>
 

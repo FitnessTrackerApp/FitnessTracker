@@ -81,6 +81,7 @@ body {
 .main {
     height: 700px;
     display: flex;
+    flex-direction: column;
     margin: 50px;
 }
 
@@ -96,6 +97,18 @@ body {
 
 .main a:hover {
     opacity: 75%;
+}
+
+.upper {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.lower {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
 }
 
 h1 {
