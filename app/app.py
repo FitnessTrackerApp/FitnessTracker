@@ -96,6 +96,26 @@ def homepage():
             if request.method == 'POST' and 'deleteUser' in request.form:
                 deleted_user = request.form.get('delete_user_ID')
 
+                # First, delete from all dependent tables
+                
+                cursor.execute("DELETE FROM FitnessGoals WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM PremiumAccount WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM Messages WHERE sender_id = %s OR receiver_id = %s", (deleted_user, deleted_user))
+                cursor.execute("DELETE FROM ate WHERE user_id = %s", (deleted_user,))
+                cursor.execute("DELETE FROM done WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM trains WHERE trainee_user_ID = %s OR trainer_user_ID = %s", (deleted_user, deleted_user))
+                cursor.execute("DELETE FROM planned_for WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM Requests WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM CoachingRequests WHERE trainee_user_ID = %s OR trainer_user_ID = %s", (deleted_user, deleted_user))
+                cursor.execute("DELETE FROM plans_nutrition WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM does WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM PlanIncludesMealItem WHERE plan_ID IN (SELECT plan_ID FROM NutritionPlan WHERE trainee_user_ID = %s OR trainer_user_ID = %s)", (deleted_user, deleted_user))
+                cursor.execute("DELETE FROM PlansExercise WHERE routine_ID IN (SELECT routine_ID FROM ExerciseRoutinePlan WHERE trainee_user_ID = %s OR trainer_user_ID = %s)", (deleted_user, deleted_user))
+                cursor.execute("DELETE FROM NutritionPlan WHERE trainee_user_ID = %s OR trainer_user_ID = %s", (deleted_user,deleted_user))
+                cursor.execute("DELETE FROM ExerciseRoutinePlan WHERE trainee_user_ID = %s OR trainer_user_ID = %s", (deleted_user,deleted_user))
+                cursor.execute("DELETE FROM Trainer WHERE user_ID = %s", (deleted_user,))
+                cursor.execute("DELETE FROM Trainee WHERE user_ID = %s", (deleted_user,))
+                # Finally, delete from the User table
                 cursor.execute("DELETE FROM User WHERE user_ID = %s", (deleted_user,))
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))

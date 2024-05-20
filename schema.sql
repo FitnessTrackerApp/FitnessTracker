@@ -371,6 +371,7 @@ CREATE TRIGGER before_user_insert BEFORE INSERT ON User FOR EACH ROW
 BEGIN
     SET NEW.age = YEAR(CURDATE()) - YEAR(NEW.date_of_birth);
 END;
+
 //
 
 CREATE TRIGGER after_user_delete AFTER DELETE ON User FOR EACH ROW
