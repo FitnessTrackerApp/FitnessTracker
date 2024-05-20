@@ -28,7 +28,7 @@
         <h1>Welcome back, {{fname_lname[0]}} {{fname_lname[1]}}  {% for inx in last_added%} {{inx.0}}{{inx.1}}{{inx.2}}{{inx.3}} {% endfor %}</h1>
         <h1>From My Trainer</h1>
 
-        <div class= "form-group">
+        <div class= "form-group" id="uppergroup">
             {% if not coach_check %}
             <form action="{{ url_for('add_pt') }}" method="get">
                 <button>
@@ -42,19 +42,23 @@
             {% for row in trains %}
             <div class="form-group">
                 <form action="{{ url_for('programs') }}" method="get">
-                    <button>
-                        <img id="trainerpp" src="/static/image/pp.png">
-                        <div>
-                            <p>{{ row[0] }} {{ row[1] }}</p>
-                            <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                    <button id="trainer">
+                        <div class="upper">
+                            <img id="trainerpp" src="/static/image/pp.png">
+                            <div>
+                                <p>{{ row[0] }} {{ row[1] }}</p>
+                                <p>{{ row[2] }}, {{ row[3] }} y.o.</p>
+                            </div>
                         </div>
+
+                        
                     </button>
                 </form>
+
                 <form method="post">
-                    <button name="deleteTrainer" class="delete-button" type="submit" value="{{row.4}}">
-                        <p>x</p>
-                    </button>
+                    <button name="deleteTrainer" class="delete-button" type="submit" value="{{row.4}}"></button>
                 </form>
+                
             </div>
             {% endfor %}
             {% endif %}

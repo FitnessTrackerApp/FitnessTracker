@@ -372,7 +372,7 @@ def profile():
             else:
                 message = 'Please fill everything'
 
-            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")),nutrition_plans=detailed_nutrition_plans, workout_plans=workout_plans)
+            return render_template('TraineePages/profile.html', fname_lname = fname_lname, data = data, message=message, trainer_info=trainer_info, bmi= "cannot be calculated" if bmi == "cannot be calculated" else ("Enter values to calculate BMI" if bmi == "Enter values to calculate BMI" else (str(round(bmi, 2)) + " (" + bmitext + ")")),nutrition_plans=detailed_nutrition_plans, workout_plans=workout_plans,)#html yaz dataları çek
         
         else:
             cursor.execute("SELECT age, gender, height, weight, specialization, certification FROM User, Trainer WHERE User.user_ID=%s AND User.user_ID=Trainer.user_ID",(userID,))
