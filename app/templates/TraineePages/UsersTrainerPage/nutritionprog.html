@@ -33,14 +33,9 @@
                 </div>
                 {% for meal in meals %}
 
-                <div class="paper">
-                    <ul>
-                        
-                        <li>
-                            <strong>Meal Name:</strong> {{ meal[0] }}<br>
-                            <strong>Calories:</strong> {{ meal[1] }}<br>  
-                        </li>    
-                    </ul>
+                <div class="paper">            
+                    <strong>Meal Name:</strong> {{ meal[0] }}
+                    <strong>Calories:</strong> {{ meal[1] }}
                 </div>
                 {% endfor %}
             </div>
