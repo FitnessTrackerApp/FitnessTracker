@@ -596,6 +596,7 @@ def mealassign():
         # Finally when we write the name of the program and tap 'Done' it will update the plan_name.
         plan_ID = session['plan_ID']
         cursor = mysql.connection.cursor()
+        plan_name = 'Plan'
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -631,6 +632,9 @@ def mealassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
+        if plan_name == 'Plan':
+            cursor.execute("DELETE FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
+            mysql.connection.commit()
         
         # Burada databasedeki bütün mealları çekmemiz lazım 
         cursor.execute("SELECT * FROM MealItem")
@@ -648,6 +652,7 @@ def workoutassign():
     if 'loggedin' in session:
         routine_ID = session['routine_ID']
         cursor = mysql.connection.cursor()
+        routine_name = 'ExercisePlan'
         #user_id = session['userid'] # this is trainerID
 
         #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
@@ -679,6 +684,7 @@ def workoutassign():
             # Exercise için kalori tutup programda total kalori hesabı olabilir.    
             if 'done' in request.form:
                 routine_name = request.form.get('routine_name') #butondan çekecez
+                    
                 cursor.execute("UPDATE ExerciseRoutinePlan SET routine_name = %s WHERE routine_ID = %s", (routine_name, routine_ID))
                 mysql.connection.commit()
                 # description, calories, intensity, duration, equipment, status
@@ -686,6 +692,9 @@ def workoutassign():
                 mysql.connection.commit()
                 return redirect(url_for('homepage'))
             
+        if routine_name == 'ExercisePlan':
+            cursor.execute("DELETE FROM ExerciseRoutinePlan WHERE routine_ID = %s", (routine_ID,))
+            mysql.connection.commit()
         
         # Burada databasedeki bütün exerciseları çekmemiz lazım 
         cursor.execute("SELECT * FROM Exercise")
