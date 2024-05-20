@@ -88,9 +88,20 @@ def homepage():
         trainer_info = cursor.fetchone()
 
         #cursor.close()
-        if userID == 5:
+        if userID == 5: #ADMIN USER HERE
+
+            cursor.execute("SELECT * FROM User WHERE user_ID != %s", (userID,))
+            allusers = cursor.fetchall()
+
+            if request.method == 'POST' and 'deleteUser' in request.form:
+                deleted_user = request.form.get('delete_user_ID')
+
+                cursor.execute("DELETE FROM User WHERE user_ID = %s", (deleted_user,))
+                mysql.connection.commit()
+                return redirect(url_for('homepage'))
+                
             
-            return render_template('AdminPages/adminhome.html', fname_lname = fname_lname)
+            return render_template('AdminPages/adminhome.html', fname_lname = fname_lname, allusers = allusers)
 
         if trainer_info[0] == 0:
 
