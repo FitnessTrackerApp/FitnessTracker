@@ -179,6 +179,7 @@ CREATE TABLE ExerciseRoutinePlan (
 CREATE TABLE PlansExercise (
     routine_ID INT,
     exercise_ID INT,
+    quantity INT,
     PRIMARY KEY (routine_ID, exercise_ID),
     FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
     FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
@@ -192,13 +193,6 @@ CREATE TABLE Contains (
     FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
 );
 
-CREATE TABLE includes (
-    routine_ID INT,
-    exercise_ID INT,
-    PRIMARY KEY (routine_ID, exercise_ID),
-    FOREIGN KEY (routine_ID) REFERENCES ExerciseRoutinePlan(routine_ID),
-    FOREIGN KEY (exercise_ID) REFERENCES Exercise(exercise_ID)
-);
 
 CREATE TABLE Requests (
     request_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -318,11 +312,6 @@ VALUES
 (1, 'Push-up', 'Standard push-ups', 'Chest, Shoulders, Triceps', 5, 3, 15),
 (2, 'Pull-up', 'Standard', 'Shoulders, Chest, Back', 8, 3, 12);
 
-INSERT INTO ExerciseRoutinePlan (routine_ID, routine_name, description, calories, intensity, duration, equipment, status, exercises_list)
-VALUES 
-(1, 'Weight Loss Routine', 'Routine for weight loss', '500', 'Intermediate', '60 mins', 'Dumbbells and resistance bands', 'Active', 'Squats, Lunges, Push-ups'),
-(2, 'Muscle Building Routine', 'Routine for muscle building', '800', 'Advanced', '90 mins', 'Dumbbells and bars', 'Active', 'Barbell curl, Triceps Pushdown');
-
 INSERT INTO Requests (user_ID, note, type)
 VALUES 
 (2, 'Need a custom plan', 'Nutrition');
@@ -332,29 +321,12 @@ VALUES
 (3, 1),
 (4, 2);
 
-INSERT INTO includes (routine_ID, exercise_ID)
-VALUES 
-(1, 1),
-(1, 2),
-(2, 1),
-(2, 2);
 
 INSERT INTO Contains (log_ID, exercise_ID)
 VALUES 
 (1, 1),
 (2, 2);
 
-INSERT INTO PlansExercise (routine_ID, exercise_ID)
-VALUES 
-(1, 1),
-(1, 2),
-(2, 1),
-(2, 2);
-
-INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planned_calories)
-VALUES 
-(3, 1, 1, '2023-01-01', '2023-06-01', 500),
-(4, 2, 2, '2023-02-02', '2023-10-02', 700);
 
 INSERT INTO ExerciseRoutinePlan (routine_name, trainee_user_ID, trainer_user_ID, description, calories, intensity, duration, equipment, status, exercises_list)
 VALUES 
@@ -379,6 +351,18 @@ INSERT INTO PlanIncludesMealItem (plan_ID, meal_item_ID, quantity) VALUES
 (1,1,1),
 (2,6,1),
 (2,7,1);
+
+INSERT INTO PlansExercise (routine_ID, exercise_ID, quantity)
+VALUES 
+(1, 1, 1),
+(1, 2, 1),
+(2, 1, 1),
+(2, 2, 1);
+
+INSERT INTO does (user_ID, routine_ID, exercise_ID, start_date, end_date, planned_calories)
+VALUES 
+(3, 1, 1, '2023-01-01', '2023-06-01', 500),
+(4, 2, 2, '2023-02-02', '2023-10-02', 700);
 
 DELIMITER //
 
