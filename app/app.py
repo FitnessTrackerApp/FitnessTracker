@@ -256,7 +256,7 @@ def profile():
                 detailed_log.append(meal_items)  # Add the meal items as the last element
                 detailed_nutrition_plans.append(detailed_log)
 
-            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,))
+            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,)) 
             workout_plans = cursor.fetchall()
 
             height = data[0][2]
