@@ -25,26 +25,35 @@
         
     </div>
 
-    <div class="main">
-        <h1>My Workout Programs from John Doe</h1>
+    <div class = "main">
+        <h1>My Nutrition Programs</h1>
 
-        <div class="program-box">
+        {% for routine_name, exercises in routines_with_exercises.items() %}
+            <div class="program-box">
 
-            <div class="header">
-                Workout Program
+                <div class="header">
+                    <h2>{{ routine_name }}</h2>
+                </div>
+                {% for exercise in exercises %}
+
+                <div class="paper">
+                    <ul>
+                        
+                        <li>
+                            <strong>Exercise Name:</strong> {{ exercise[0] }}<br>
+                            <strong>Description:</strong> {{ exercise[1] }}<br>
+                            <strong>Target Muscles:</strong> {{ exercise[2] }}<br>
+                            <strong>Difficulty Level:</strong> {{ exercise[3] }}<br>
+                            <strong>Set Size:</strong> {{ exercise[4] }}<br>
+                            <strong>Repeat Size:</strong> {{ exercise[5] }}<br>
+                            <strong>Quantity:</strong> {{ exercise[6] }}<br>  
+                        </li>    
+                    </ul>
+                </div>
+                {% endfor %}
             </div>
-            <div class="paper">
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaa
-                aaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaa
-                aaaaaaaaaaaaaaaaa
-                aaaaaaaaaaaaaaaaaa
-                aaaaaaaaaa
-            </div>
-        </div>
+        {% endfor %}
+
     </div>
 </body>
 

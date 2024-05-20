@@ -26,20 +26,24 @@
         <h1>My Nutrition Programs</h1>
 
         {% for plan_name, meals in plans_with_meals.items() %}
-            <div class="plan">
-                <h2>{{ plan_name }}</h2>
-                <ul>
-                    {% for meal in meals %}
+            <div class="program-box">
+
+                <div class="header">
+                    <h2>{{ plan_name }}</h2>
+                </div>
+                {% for meal in meals %}
+
+                <div class="paper">
+                    <ul>
+                        
                         <li>
                             <strong>Meal Name:</strong> {{ meal[0] }}<br>
-                            <strong>Calories:</strong> {{ meal[1] }}<br>
-                            
-                        </li>
-                    {% endfor %}
-                    
-                </ul>
+                            <strong>Calories:</strong> {{ meal[1] }}<br>  
+                        </li>    
+                    </ul>
+                </div>
+                {% endfor %}
             </div>
-            <p>-------------------------------</p>
         {% endfor %}
 
     </div>

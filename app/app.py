@@ -446,7 +446,7 @@ def my_goals():
 def workout_session():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor()
-        query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+        query = "SELECT erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status, GROUP_CONCAT(e.exercise_name SEPARATOR ', ') as exercises_list FROM ExerciseRoutinePlan erp LEFT JOIN PlansExercise pe ON erp.routine_ID = pe.routine_ID LEFT JOIN Exercise e ON pe.exercise_ID = e.exercise_ID WHERE 1=1"
         filters = []
 
         if request.method == 'POST' and 'filter' in request.form:
@@ -464,11 +464,14 @@ def workout_session():
                 query += " AND equipment LIKE %s"
                 filters.append(f"%{equipment}%")
 
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query, tuple(filters))
         elif request.method == 'POST' and 'reset' in request.form:
-            query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+            query = "SELECT erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status, GROUP_CONCAT(e.exercise_name SEPARATOR ', ') as exercises_list FROM ExerciseRoutinePlan erp LEFT JOIN PlansExercise pe ON erp.routine_ID = pe.routine_ID LEFT JOIN Exercise e ON pe.exercise_ID = e.exercise_ID WHERE 1=1"
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query)
         else:
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query)
 
         exercise_plans = cursor.fetchall()
@@ -478,13 +481,32 @@ def workout_session():
 @app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
 def programs():
     if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/programs.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT U.first_name, U.last_name FROM User U, trains t WHERE t.trainee_user_ID = %s AND t.trainer_user_ID = U.user_ID", (userID, ))
+        trainer_fname_lname = cursor.fetchone()
+        return render_template('TraineePages/UsersTrainerPage/programs.html', trainer_fname_lname = trainer_fname_lname)
     return redirect(url_for('login'))
 
 @app.route('/workout-program')#aid
 def work_prog():
     if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/workoutprog.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+
+        # Fetch all workout programs for the logged-in user
+        cursor.execute("SELECT routine_ID, routine_name FROM ExerciseRoutinePlan WHERE trainee_user_ID = %s", (userID,))
+        routines = cursor.fetchall()
+
+        # Create a dictionary to store the meals for each plan
+        routines_with_exercises = {}
+        for routine in routines:
+            routine_id, routine_name = routine
+            cursor.execute("SELECT E.exercise_name, E.description, E.target_muscles, E.difficulty_level, E.set_size, E.repeat_size, P.quantity FROM PlansExercise P JOIN Exercise E ON P.exercise_ID = E.exercise_ID WHERE P.routine_ID = %s", (routine_id,))
+            routines = cursor.fetchall()
+            routines_with_exercises[routine_name] = routines
+
+        return render_template('TraineePages/UsersTrainerPage/workoutprog.html' , routines_with_exercises = routines_with_exercises)
     return redirect(url_for('login'))
 
 @app.route('/nutr-program')#aid
