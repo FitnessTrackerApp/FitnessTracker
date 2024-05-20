@@ -30,53 +30,59 @@
 
             <div class="programbox">
                 <div class= "programlist">
-                    <button class="added-workout">
-                        <img src= "/static/image/workout.jpeg">
-                        <p> Workout Name </p>
-                    </button>
-
-                    
+                    <form action="" method="post">    
+                        {%for row in current_exercises%}
+                        <button name = "removeexercise" value="{{row.0}}" type = "submit" class="added-workout">
+                            <img src= "/static/image/workout.jpeg">
+                            <p> {{row[2]}} </p>
+                        </button>
+                        {%endfor%}
+                    </form>
                     
                     
                 </div>
 
                 <div class="buttonsection">
-                    <input placeholder="Enter name of program"> </input>
+                    
+                    <form action="" method="post">
+                    <textarea name = "routine_name" placeholder="Enter name of program"></textarea>
+                    
 
-                    <button> 
+                    
+                    <button name = "done" value> 
                         Done
                     </button>
+                    </form>
                 </div>
                 
                 
             </div>
             
-
+            
+            
 
             <div class="line"> </div>
 
             <div class="workouts">
                 
-                    
+                {%for row in exercises%}    
                 <div class="workout">
                     <img src= "/static/image/workout.jpeg">
                     <div>
-                        <h2>Meal Name</h2>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p>Calories(kcal): 444 </p>
-                        <p>: </p>
+                        <h2>Name: {{row[1]}}</h2>
+                        <p>Description: {{row[2]}}</p>
+                        <p>Target Muscles: {{row[3]}}</p>
+                        <p>Difficulty Level: {{row[4]}}</p>
+                        <p>Set Size: {{row[5]}}</p>
+                        <p>Repeat Size: {{row[6]}}</p>
                         
-                        <button type="submit" class="btn btn-primary">add</button>	
+                        <form action="" method="post">
+                        <button name="addexercise" value="{{row.0}}" type="submit" class="btn btn-primary">add</button>	
+                        </form>
                     </div>
                 </div>
+                {%endfor%}
 
-                
-                    
-                    
-                </form>
             </div>
     
             
@@ -85,6 +91,7 @@
         
         
     </div>
+
 
 </body>
 

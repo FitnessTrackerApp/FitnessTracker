@@ -154,8 +154,15 @@ def homepage():
                     cursor.execute("DELETE FROM Requests WHERE user_ID = %s AND trainer_ID = %s AND request_id = %s", (trainee_user_ID, userID, request_id))
                     mysql.connection.commit()
                     if type == 'Workout':
-                        # Same for workout will be done (like below)
-                        return redirect(url_for('workoutassign', trainee_user_ID = trainee_user_ID)) #yine planID verelim
+                        
+                        #default bir plan oluşturuyoruz
+                        cursor.execute("INSERT INTO ExerciseRoutinePlan (trainee_user_ID, trainer_user_ID, routine_name, description, calories, intensity, duration, equipment, status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (trainee_user_ID, userID, "ExercisePlan", "description", "0", "Default", "Duration", "Equipment", "Status", ))
+                        mysql.connection.commit()
+                        # plan_ID yi çekmemiz lazım
+                        cursor.execute("SELECT routine_ID FROM ExerciseRoutinePlan WHERE trainee_user_ID = %s AND trainer_user_ID = %s ORDER BY routine_ID DESC", (trainee_user_ID, userID,))
+                        routine_ID = cursor.fetchone()[0]
+                        session['routine_ID'] = routine_ID
+                        return redirect(url_for('workoutassign'))
                         
                     elif type == 'Nutrition':
                         #default bir plan oluşturuyoruz
@@ -256,7 +263,7 @@ def profile():
                 detailed_log.append(meal_items)  # Add the meal items as the last element
                 detailed_nutrition_plans.append(detailed_log)
 
-            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,))
+            cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (userID,))  #mümkünse does yerine diğer 3 Workout ile alakalı olanları kullanalım
             workout_plans = cursor.fetchall()
 
             height = data[0][2]
@@ -439,7 +446,7 @@ def my_goals():
 def workout_session():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor()
-        query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+        query = "SELECT erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status, GROUP_CONCAT(e.exercise_name SEPARATOR ', ') as exercises_list FROM ExerciseRoutinePlan erp LEFT JOIN PlansExercise pe ON erp.routine_ID = pe.routine_ID LEFT JOIN Exercise e ON pe.exercise_ID = e.exercise_ID WHERE 1=1"
         filters = []
 
         if request.method == 'POST' and 'filter' in request.form:
@@ -457,11 +464,14 @@ def workout_session():
                 query += " AND equipment LIKE %s"
                 filters.append(f"%{equipment}%")
 
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query, tuple(filters))
         elif request.method == 'POST' and 'reset' in request.form:
-            query = "SELECT * FROM ExerciseRoutinePlan WHERE 1=1"
+            query = "SELECT erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status, GROUP_CONCAT(e.exercise_name SEPARATOR ', ') as exercises_list FROM ExerciseRoutinePlan erp LEFT JOIN PlansExercise pe ON erp.routine_ID = pe.routine_ID LEFT JOIN Exercise e ON pe.exercise_ID = e.exercise_ID WHERE 1=1"
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query)
         else:
+            query += " GROUP BY erp.routine_ID, erp.routine_name, erp.description, erp.calories, erp.intensity, erp.duration, erp.equipment, erp.status"
             cursor.execute(query)
 
         exercise_plans = cursor.fetchall()
@@ -471,13 +481,32 @@ def workout_session():
 @app.route('/programs', methods=['GET', 'POST'])  # Updated to handle POST for form submission
 def programs():
     if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/programs.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT U.first_name, U.last_name FROM User U, trains t WHERE t.trainee_user_ID = %s AND t.trainer_user_ID = U.user_ID", (userID, ))
+        trainer_fname_lname = cursor.fetchone()
+        return render_template('TraineePages/UsersTrainerPage/programs.html', trainer_fname_lname = trainer_fname_lname)
     return redirect(url_for('login'))
 
 @app.route('/workout-program')#aid
 def work_prog():
     if 'loggedin' in session:
-        return render_template('TraineePages/UsersTrainerPage/workoutprog.html')
+        userID = session['userid'] #cid = userID
+        cursor = mysql.connection.cursor()
+
+        # Fetch all workout programs for the logged-in user
+        cursor.execute("SELECT routine_ID, routine_name FROM ExerciseRoutinePlan WHERE trainee_user_ID = %s", (userID,))
+        routines = cursor.fetchall()
+
+        # Create a dictionary to store the meals for each plan
+        routines_with_exercises = {}
+        for routine in routines:
+            routine_id, routine_name = routine
+            cursor.execute("SELECT E.exercise_name, E.description, E.target_muscles, E.difficulty_level, E.set_size, E.repeat_size, P.quantity FROM PlansExercise P JOIN Exercise E ON P.exercise_ID = E.exercise_ID WHERE P.routine_ID = %s", (routine_id,))
+            routines = cursor.fetchall()
+            routines_with_exercises[routine_name] = routines
+
+        return render_template('TraineePages/UsersTrainerPage/workoutprog.html' , routines_with_exercises = routines_with_exercises)
     return redirect(url_for('login'))
 
 @app.route('/nutr-program')#aid
@@ -537,7 +566,7 @@ def correspondingtraineelog(trainee_id):
         cursor = mysql.connection.cursor()
 
         # Query to fetch workout plans specific to the logged-in trainer and the selected trainee
-        cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (trainee_id,))
+        cursor.execute("SELECT erp.*, u.first_name, u.last_name FROM ExerciseRoutinePlan erp JOIN does d ON erp.routine_ID = d.routine_ID JOIN User u ON d.user_ID = u.user_ID WHERE d.user_ID = %s", (trainee_id,)) #mümkünse does yerine diğer 3 workout table ı kullanalım.
         workout_logs = cursor.fetchall()
         
         # Query to fetch nutrition plans specific to the logged-in trainer and the selected trainee
@@ -614,11 +643,59 @@ def mealassign():
         return render_template('TrainerPages/mealassign.html', meal_items = meal_items, current_meal_items = current_meal_items, )
     return redirect(url_for('login'))
 
-# URL den user id çekilmeli
-@app.route('/workoutassign/<int:trainee_user_ID>')
-def workoutassign(trainee_user_ID):
+@app.route('/workoutassign', methods= ['GET', 'POST'])
+def workoutassign():
     if 'loggedin' in session:
-        return render_template('TrainerPages/workoutassign.html', trainee_user_ID = trainee_user_ID)
+        routine_ID = session['routine_ID']
+        cursor = mysql.connection.cursor()
+        #user_id = session['userid'] # this is trainerID
+
+        #cursor.execute("SELECT * FROM NutritionPlan WHERE plan_ID = %s", (plan_ID,))
+        #trainee_user_ID = cursor.fetchone()[1]
+
+        if request.method == 'POST':
+            if 'addexercise' in request.form:
+                # Eğer exercise item plande hiç yoksa ekle, varsa quantity i arttır.
+                exercise_ID = request.form.get('addexercise') #butondan çekecez
+                cursor.execute("SELECT COUNT(*) FROM PlansExercise WHERE routine_ID = %s AND exercise_ID = %s", (routine_ID, exercise_ID,))
+                count_of_exercise = cursor.fetchone()[0]
+                if count_of_exercise == 0:
+                    cursor.execute("INSERT INTO PlansExercise (routine_ID, exercise_ID, quantity) VALUES (%s, %s, %s)", (routine_ID, exercise_ID, count_of_exercise,))
+                    mysql.connection.commit()
+                else:
+                    cursor.execute("UPDATE PlansExercise SET quantity = %s WHERE routine_ID = %s", (count_of_exercise + 1, routine_ID,))
+                    mysql.connection.commit()
+                # we can do return redirect here
+                return redirect(url_for('workoutassign'))
+            
+            if 'removeexercise' in request.form:
+                exercise_ID = request.form.get('removeexercise') #butondan çekecez
+                cursor.execute("DELETE FROM PlansExercise WHERE routine_ID = %s AND exercise_ID = %s ",(routine_ID, exercise_ID,))
+                mysql.connection.commit()
+                return redirect(url_for('workoutassign'))
+
+            # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! BURAYA BAKMAK LAZIM (FARKLI INPUT ALACAK MIYIZ???)
+            # zorluk seviyesine göre kalori çarpanı olabilir.
+            # Exercise için kalori tutup programda total kalori hesabı olabilir.    
+            if 'done' in request.form:
+                routine_name = request.form.get('routine_name') #butondan çekecez
+                cursor.execute("UPDATE ExerciseRoutinePlan SET routine_name = %s WHERE routine_ID = %s", (routine_name, routine_ID))
+                mysql.connection.commit()
+                # description, calories, intensity, duration, equipment, status
+                cursor.execute("UPDATE ExerciseRoutinePlan SET description = %s WHERE routine_ID = %s", (routine_name, routine_ID))
+                mysql.connection.commit()
+                return redirect(url_for('homepage'))
+            
+        
+        # Burada databasedeki bütün exerciseları çekmemiz lazım 
+        cursor.execute("SELECT * FROM Exercise")
+        exercises = cursor.fetchall()
+
+        # Burada mevcut routine eklediğimiz exerciseları çekmek lazım
+        cursor.execute("SELECT P.exercise_ID, P.quantity, E.exercise_name FROM PlansExercise P, Exercise E WHERE P.routine_ID = %s AND P.exercise_ID = E.exercise_ID", (routine_ID,))
+        current_exercises = cursor.fetchall()
+
+        return render_template('TrainerPages/workoutassign.html', exercises = exercises, current_exercises = current_exercises, )
     return redirect(url_for('login'))
 
 

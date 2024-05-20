@@ -161,12 +161,13 @@ body {
 
 }
 
-.programbox input {
+.programbox textarea {
     height: 40px;
     width: 230px;
     margin: 5px;
     border: 1px solid #000000;
     padding-left: 5px;
+    resize: none;
 }
 
 .line {
